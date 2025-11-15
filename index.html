@@ -20,12 +20,18 @@
     <!-- Google Fonts - Chunky Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* ===================================================================
-           RESET & BASE
-           =================================================================== */
+        :root {
+            --card-radius: 28px;
+            --blur: 28px;
+            --shadow-soft: 0 30px 80px rgba(10, 20, 40, 0.25);
+            --text-dark: #0f172a;
+            --text-light: rgba(255, 255, 255, 0.92);
+            --cta-gradient: linear-gradient(120deg, #8c5bff 0%, #c946ff 50%, #ff89d6 100%);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -33,210 +39,316 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(135deg, #f8e7ff 0%, #dff5ff 50%, #e7f0ff 100%);
+            transition: background 0.9s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             position: relative;
+            padding: 3rem 1.5rem;
+            color: var(--text-light);
         }
 
-        /* ===================================================================
-           ANSWER STATE GRADIENTS (Pastel-Punk Edition)
-           =================================================================== */
-        body.yes {
-            /* Purple Rain - Bring umbrella vibes */
-            background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 50%, #5B21B6 100%);
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
+            background-size: 120px 120px;
+            opacity: 0.45;
+            pointer-events: none;
         }
 
-        body.no {
-            /* Peach Sunshine - You're good vibes */
-            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #F97316 100%);
-        }
-
-        body.maybe {
-            /* Sky Blues - Could go either way */
-            background: linear-gradient(135deg, #7DD3FC 0%, #38BDF8 50%, #0EA5E9 100%);
+        body.idle {
+            background: linear-gradient(135deg, #fdf1ff 0%, #dbe8ff 50%, #e0ffe7 100%);
         }
 
         body.loading {
-            /* Soft neutral loading state */
-            background: linear-gradient(135deg, #FDE68A 0%, #FCD34D 50%, #FBBF24 100%);
+            background: linear-gradient(135deg, #d7f2ff 0%, #d0d8ff 50%, #f0d7ff 100%);
         }
 
-        /* ===================================================================
-           CONTAINER & LAYOUT
-           =================================================================== */
+        body.yes {
+            background: linear-gradient(135deg, #120c2b 0%, #5b21b6 40%, #f472b6 100%);
+        }
+
+        body.maybe {
+            background: linear-gradient(135deg, #e0f7fa 0%, #7bd3ea 45%, #5f5ae0 100%);
+        }
+
+        body.no {
+            background: linear-gradient(135deg, #fff8f1 0%, #ffd6c4 45%, #ff9a8b 100%);
+        }
+
+        .brand-anchor {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            padding: 0.65rem 1.25rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.65);
+            color: #0f172a;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            border: 1px solid rgba(15, 23, 42, 0.08);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
+            display: flex;
+            gap: 0.35rem;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .floating-drops {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .floating-drops span {
+            position: absolute;
+            width: clamp(24px, 3vw, 46px);
+            aspect-ratio: 1 / 1.6;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50% 50% 40% 40%;
+            filter: blur(0.3px);
+            animation: drift 12s ease-in-out infinite;
+        }
+
+        .floating-drops .drop-1 { top: 12%; left: 15%; animation-delay: 0s; }
+        .floating-drops .drop-2 { top: 30%; right: 10%; animation-duration: 15s; }
+        .floating-drops .drop-3 { bottom: 18%; left: 25%; animation-duration: 10s; }
+        .floating-drops .drop-4 { bottom: 30%; right: 18%; animation-delay: 0.6s; }
+
         .container {
             text-align: center;
-            padding: 2rem;
-            max-width: 700px;
             width: 100%;
+            max-width: 720px;
+            position: relative;
+            z-index: 2;
         }
 
-        /* ===================================================================
-           ANSWER DISPLAY (The Big Moment)
-           =================================================================== */
-        .answer {
-            font-family: 'Space Grotesk', -apple-system, sans-serif;
-            font-size: clamp(5rem, 12vw, 10rem);
-            font-weight: 900;
-            color: white;
-            text-shadow:
-                6px 6px 0 rgba(0, 0, 0, 0.3),
-                0 0 40px rgba(255, 255, 255, 0.3);
-            margin-bottom: 3rem;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            opacity: 0;
-            transform: scale(0.85);
-            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        .card {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: var(--card-radius);
+            padding: clamp(2rem, 4vw, 3.5rem);
+            box-shadow: var(--shadow-soft);
+            backdrop-filter: blur(var(--blur));
+            color: var(--text-light);
         }
 
-        .answer.show {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        /* ===================================================================
-           LOCATION & DETAILS
-           =================================================================== */
-        .location {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.95);
-            margin-bottom: 1rem;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
-        }
-
-        .location.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .details {
-            font-size: clamp(0.95rem, 2vw, 1.1rem);
-            color: rgba(255, 255, 255, 0.85);
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.35s;
-        }
-
-        .details.show {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* ===================================================================
-           BUTTON (Pastel-Punk Style)
-           =================================================================== */
-        .refresh {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            color: white;
-            padding: 1rem 2.5rem;
-            font-size: clamp(1rem, 2vw, 1.15rem);
-            font-weight: 700;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        .eyebrow {
+            font-size: 0.95rem;
+            letter-spacing: 0.25em;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            min-height: 48px; /* Touch target accessibility */
+            color: rgba(255, 255, 255, 0.75);
+            margin-bottom: 1rem;
         }
 
-        .refresh.show {
-            opacity: 1;
-            transform: translateY(0);
+        .hero-title {
+            font-size: clamp(2.8rem, 6vw, 4.8rem);
+            letter-spacing: -0.02em;
+            line-height: 1.05;
+            margin-bottom: 1rem;
         }
 
-        .refresh:hover {
-            background: rgba(255, 255, 255, 0.95);
-            color: #1F2937;
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+        .hero-copy {
+            font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+            color: rgba(255, 255, 255, 0.85);
+            line-height: 1.5;
+            margin-bottom: 2.5rem;
         }
 
-        .refresh:active {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        .cta-button {
+            border: none;
+            border-radius: 999px;
+            padding: 1.1rem 2.5rem;
+            font-size: 1.1rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: white;
+            background-image: var(--cta-gradient);
+            box-shadow: 0 25px 45px rgba(172, 103, 255, 0.35);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            min-height: 56px;
         }
 
-        .refresh:focus-visible {
-            outline: 3px solid rgba(255, 255, 255, 0.6);
+        .cta-button:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(172, 103, 255, 0.45);
+        }
+
+        .cta-button:active {
+            transform: translateY(0px) scale(0.98);
+        }
+
+        .cta-button:focus-visible {
+            outline: 3px solid rgba(255, 255, 255, 0.7);
             outline-offset: 4px;
         }
 
-        /* ===================================================================
-           LOADING STATE
-           =================================================================== */
+        .loading-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .loading-orb {
+            width: clamp(120px, 30vw, 200px);
+            aspect-ratio: 1 / 1;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.2));
+            position: relative;
+            animation: orbPulse 2.5s ease-in-out infinite;
+            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.6), 0 20px 50px rgba(15, 23, 42, 0.2);
+        }
+
+        .loading-orb::after {
+            content: "";
+            position: absolute;
+            inset: 25%;
+            border-radius: 50%;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            animation: spin 6s linear infinite;
+        }
+
         .loading-text {
-            font-size: clamp(1.5rem, 4vw, 2.5rem);
-            color: white;
+            font-size: clamp(1.3rem, 3vw, 2rem);
             font-weight: 700;
-            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% {
-                opacity: 0.7;
-                transform: scale(1.02);
-            }
-        }
-
-        /* ===================================================================
-           ERROR STATE
-           =================================================================== */
-        .error {
-            color: white;
-            font-size: clamp(1.2rem, 3vw, 1.75rem);
-            font-weight: 600;
+        .loading-sub {
+            font-size: 1.05rem;
+            color: rgba(255, 255, 255, 0.8);
             line-height: 1.5;
-            margin-bottom: 2rem;
         }
 
-        /* ===================================================================
-           RESPONSIVE ADJUSTMENTS
-           =================================================================== */
+        .answer {
+            font-size: clamp(4rem, 12vw, 8rem);
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+            text-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
+            opacity: 0;
+            transform: scale(0.9);
+            animation: answerPop 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .location {
+            font-size: clamp(1rem, 2.4vw, 1.5rem);
+            margin-top: 1.25rem;
+            font-weight: 600;
+        }
+
+        .details {
+            margin-top: 1.5rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .detail-main {
+            font-size: 1.15rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .detail-secondary {
+            margin-top: 0.5rem;
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.75);
+        }
+
+        .refresh {
+            background: rgba(255, 255, 255, 0.9);
+            color: #0f172a;
+            border: none;
+            border-radius: 16px;
+            padding: 0.95rem 2rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+            min-height: 52px;
+        }
+
+        .refresh:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
+        }
+
+        .refresh:focus-visible {
+            outline: 3px solid rgba(15, 23, 42, 0.6);
+            outline-offset: 4px;
+        }
+
+        .error-card .error {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-chip {
+            margin-top: 2.5rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.75);
+            text-align: center;
+            z-index: 2;
+        }
+
+        .footer-chip strong {
+            font-weight: 700;
+        }
+
+        @keyframes drift {
+            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.65; }
+            50% { transform: translate3d(0, -25px, 0) scale(1.1); opacity: 0.5; }
+            100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.65; }
+        }
+
+        @keyframes orbPulse {
+            0%, 100% { transform: scale(0.9); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes answerPop {
+            50% { opacity: 1; transform: scale(1.08); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
         @media (max-width: 768px) {
-            .container {
-                padding: 1.5rem;
+            body {
+                padding: 2rem 1.25rem 3rem;
             }
 
-            .answer {
-                margin-bottom: 2rem;
+            .brand-anchor {
+                position: static;
+                margin-bottom: 1.5rem;
+                justify-content: center;
             }
 
-            .details {
-                margin-bottom: 2rem;
-            }
-
-            .refresh {
-                padding: 1.25rem 2rem;
-                width: 100%;
-                max-width: 280px;
+            .footer-chip {
+                font-size: 0.8rem;
             }
         }
 
-        /* ===================================================================
-           ACCESSIBILITY - REDUCED MOTION
-           =================================================================== */
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation-duration: 0.01ms !important;
@@ -246,27 +358,61 @@
         }
     </style>
 </head>
-<body class="loading">
-    <div class="container">
-        <div id="content">
-            <div class="loading-text">Checking the sky...</div>
-        </div>
+<body class="idle">
+    <div class="brand-anchor">isitgoingtorain.app <span aria-hidden="true">☂️</span></div>
+    <div class="floating-drops" aria-hidden="true">
+        <span class="drop-1"></span>
+        <span class="drop-2"></span>
+        <span class="drop-3"></span>
+        <span class="drop-4"></span>
     </div>
+    <div class="container">
+        <div id="content"></div>
+    </div>
+    <footer class="footer-chip">
+        Powered by <strong>wttr.in</strong> + <strong>ipinfo</strong> · Built for humans, not forecasts
+    </footer>
 
     <script>
-        // ===================================================================
-        // CONFIG
-        // ===================================================================
-
         const RAIN_THRESHOLD = {
-            YES: 60,        // 60%+ chance = YES
-            MAYBE_HIGH: 30, // 30-60% = MAYBE
-            NO: 30          // <30% = NO
+            YES: 60,
+            MAYBE_HIGH: 30
         };
 
-        // ===================================================================
-        // GET LOCATION FROM IP
-        // ===================================================================
+        const content = document.getElementById('content');
+        let isChecking = false;
+
+        function renderIntro() {
+            document.body.className = 'idle';
+            content.innerHTML = `
+                <div class="card hero-card">
+                    <p class="eyebrow">One vibe check away</p>
+                    <h1 class="hero-title">Is it going to rain?</h1>
+                    <p class="hero-copy">
+                        We sniff your sky using wttr.in + ipinfo, then give you a single, definitive answer.
+                        One tap. One vibe check. Zero bullshit.
+                    </p>
+                    <button class="cta-button" id="checkButton">
+                        <span>Check the sky</span>
+                        <span aria-hidden="true">✨</span>
+                    </button>
+                </div>
+            `;
+
+            const button = document.getElementById('checkButton');
+            button.addEventListener('click', startCheck, { once: true });
+        }
+
+        function showLoading() {
+            document.body.className = 'loading';
+            content.innerHTML = `
+                <div class="card loading-card">
+                    <div class="loading-orb" aria-hidden="true"></div>
+                    <p class="loading-text">Sniffing the clouds...</p>
+                    <p class="loading-sub">Hold tight babe—dialing up the sky gods.</p>
+                </div>
+            `;
+        }
 
         async function getLocation() {
             const response = await fetch('https://ipinfo.io/json?token=demo');
@@ -279,23 +425,14 @@
             };
         }
 
-        // ===================================================================
-        // GET WEATHER (using wttr.in - no API key needed!)
-        // ===================================================================
-
         async function getWeather(city) {
-            // wttr.in returns format: %C (condition) %p (precipitation)
             const response = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
             const data = await response.json();
-
-            // Get current and next few hours
             const current = data.current_condition[0];
             const today = data.weather[0];
-
-            // Check precipitation probability
-            const precipChance = parseInt(current.precipMM || 0) > 0 ?
-                parseInt(current.humidity || 0) :
-                parseInt(today.hourly[0].chanceofrain || 0);
+            const precipChance = parseInt(current.precipMM || 0, 10) > 0
+                ? parseInt(current.humidity || 0, 10)
+                : parseInt(today.hourly[0].chanceofrain || 0, 10);
 
             return {
                 precipChance,
@@ -304,108 +441,76 @@
             };
         }
 
-        // ===================================================================
-        // DETERMINE ANSWER
-        // ===================================================================
-
         function determineAnswer(precipChance) {
             if (precipChance >= RAIN_THRESHOLD.YES) {
                 return 'YES';
             } else if (precipChance >= RAIN_THRESHOLD.MAYBE_HIGH) {
                 return 'MAYBE';
-            } else {
-                return 'NO';
             }
+            return 'NO';
         }
-
-        // ===================================================================
-        // RENDER ANSWER
-        // ===================================================================
 
         function renderAnswer(answer, location, weather) {
-            const container = document.getElementById('content');
-            const body = document.body;
+            document.body.className = answer.toLowerCase();
 
-            // Set body class for gradient
-            body.className = answer.toLowerCase();
+            const emoji = answer === 'YES' ? '☔' : answer === 'MAYBE' ? '🌥️' : '🌞';
+            const vibeCopy = {
+                YES: 'Grab the cutest umbrella you own. Storm energy is on deck.',
+                MAYBE: 'Keep it close. Clouds are gossiping and could spill.',
+                NO: 'Sun is clocked in. Go live your life, no rain tax today.'
+            }[answer];
 
-            // Build details text with personality
-            let details = `${weather.precipChance}% chance of rain`;
-            if (answer === 'MAYBE') {
-                details += ' · Could go either way';
-            } else if (answer === 'YES') {
-                details += ' · Bring an umbrella!';
-            } else {
-                details += ' · You\'re all good';
-            }
-
-            // Render
-            container.innerHTML = `
-                <div class="answer">${answer}</div>
-                <div class="location">${location.city}${location.country ? ', ' + location.country : ''}</div>
-                <div class="details">${details}</div>
-                <button class="refresh" onclick="location.reload()">Check Again</button>
+            content.innerHTML = `
+                <div class="card answer-card">
+                    <p class="eyebrow answer-label">Sky verdict</p>
+                    <div class="answer">${emoji} ${answer}</div>
+                    <p class="location">📍 ${location.city || 'Unknown'}${location.country ? ', ' + location.country : ''}</p>
+                    <div class="details">
+                        <p class="detail-main">${weather.precipChance}% chance · ${weather.condition} · ${weather.temp}°C</p>
+                        <p class="detail-secondary">${vibeCopy}</p>
+                    </div>
+                    <button class="refresh" id="againButton">Check again</button>
+                </div>
             `;
 
-            // Trigger animations with proper timing
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    document.querySelector('.answer').classList.add('show');
-                    document.querySelector('.location').classList.add('show');
-                    document.querySelector('.details').classList.add('show');
-                    document.querySelector('.refresh').classList.add('show');
-                });
-            });
+            document.getElementById('againButton').addEventListener('click', renderIntro);
         }
-
-        // ===================================================================
-        // ERROR HANDLING
-        // ===================================================================
 
         function showError(message) {
-            const container = document.getElementById('content');
-            container.innerHTML = `
-                <div class="error">${message}</div>
-                <button class="refresh" onclick="location.reload()">Try Again</button>
+            document.body.className = 'idle';
+            content.innerHTML = `
+                <div class="card error-card">
+                    <div class="error">${message}</div>
+                    <button class="refresh" id="retryButton">Try again</button>
+                </div>
             `;
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    document.querySelector('.refresh').classList.add('show');
-                });
-            });
+            document.getElementById('retryButton').addEventListener('click', renderIntro);
         }
 
-        // ===================================================================
-        // MAIN
-        // ===================================================================
+        async function startCheck() {
+            if (isChecking) return;
+            isChecking = true;
+            showLoading();
 
-        async function init() {
             try {
-                // Get location
                 const location = await getLocation();
-
                 if (!location.city) {
-                    showError('Could not detect your location');
+                    showError('We could not detect your location. Pop VPN off and try again.');
                     return;
                 }
 
-                // Get weather
                 const weather = await getWeather(location.city);
-
-                // Determine answer
                 const answer = determineAnswer(weather.precipChance);
-
-                // Render
                 renderAnswer(answer, location, weather);
-
             } catch (error) {
                 console.error('Error:', error);
-                showError('Something went wrong. Try again?');
+                showError('Something blew away in the wind. Try again?');
+            } finally {
+                isChecking = false;
             }
         }
 
-        // Run on load
-        init();
+        renderIntro();
     </script>
 </body>
 </html>
