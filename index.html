@@ -4,236 +4,270 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Is it going to rain?</title>
-    <meta name="description" content="Just tell me if it's going to rain. Yes, no, or maybe.">
+    <meta name="description" content="Just tell me if it's going to rain. One tap, one answer.">
 
-    <!-- Open Graph -->
     <meta property="og:title" content="Is it going to rain?">
-    <meta property="og:description" content="Just tell me if it's going to rain. Yes, no, or maybe.">
+    <meta property="og:description" content="Just tell me if it's going to rain. One tap, one answer.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://isitgoingtorain.app">
 
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Is it going to rain?">
-    <meta name="twitter:description" content="Just tell me if it's going to rain. Yes, no, or maybe.">
+    <meta name="twitter:description" content="Just tell me if it's going to rain. One tap, one answer.">
 
-    <!-- Google Fonts - Chunky Display -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --card-radius: 28px;
-            --blur: 28px;
-            --shadow-soft: 0 30px 80px rgba(10, 20, 40, 0.25);
-            --text-dark: #0f172a;
-            --text-light: rgba(255, 255, 255, 0.92);
-            --cta-gradient: linear-gradient(120deg, #8c5bff 0%, #c946ff 50%, #ff89d6 100%);
+            --ink: #111322;
+            --ink-soft: rgba(17, 19, 34, 0.7);
+            --ink-muted: rgba(17, 19, 34, 0.55);
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-border: rgba(17, 19, 34, 0.08);
+            --cta-gradient: linear-gradient(120deg, #6f5bff 0%, #a33bff 40%, #ff66c4 80%);
+            --cta-gradient-hover: linear-gradient(120deg, #8a8eff 0%, #ff54b0 60%, #ffc877 100%);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
+        *, *::before, *::after {
             box-sizing: border-box;
         }
 
         body {
-            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Sora', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: linear-gradient(135deg, #f8e7ff 0%, #dff5ff 50%, #e7f0ff 100%);
-            transition: background 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+            background: radial-gradient(circle at 15% 20%, #f5f0ff, #e2f5ff 45%, #c6f7ec 85%);
+            background-size: 220% 220%;
+            animation: auroraShift 30s ease-in-out infinite;
+            transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             position: relative;
-            padding: 3rem 1.5rem;
-            color: var(--text-light);
+            padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+            color: var(--ink);
+        }
+
+        body.idle {
+            background: radial-gradient(circle at 20% 20%, #fff4f9, #e2f2ff 45%, #ccf8ed 90%);
+        }
+
+        body.loading {
+            background: radial-gradient(circle at 15% 20%, #dfe7ff, #f5d0ff 55%, #ffe1cf 100%);
+        }
+
+        body.yes {
+            background: radial-gradient(circle at 20% 15%, #120623, #4f32ff 40%, #ff6ad3 95%);
+        }
+
+        body.maybe {
+            background: radial-gradient(circle at 20% 25%, #dff8ff, #5ecae9 45%, #4f58e6 95%);
+        }
+
+        body.no {
+            background: radial-gradient(circle at 20% 20%, #fff3e7, #ffcdc8 45%, #f9bae9 95%);
         }
 
         body::before {
             content: "";
             position: fixed;
             inset: 0;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.18) 1px, transparent 1px);
-            background-size: 120px 120px;
-            opacity: 0.45;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px);
+            background-size: 140px 140px;
+            opacity: 0.5;
             pointer-events: none;
+            z-index: -1;
         }
 
-        body.idle {
-            background: linear-gradient(135deg, #fdf1ff 0%, #dbe8ff 50%, #e0ffe7 100%);
-        }
-
-        body.loading {
-            background: linear-gradient(135deg, #d7f2ff 0%, #d0d8ff 50%, #f0d7ff 100%);
-        }
-
-        body.yes {
-            background: linear-gradient(135deg, #120c2b 0%, #5b21b6 40%, #f472b6 100%);
-        }
-
-        body.maybe {
-            background: linear-gradient(135deg, #e0f7fa 0%, #7bd3ea 45%, #5f5ae0 100%);
-        }
-
-        body.no {
-            background: linear-gradient(135deg, #fff8f1 0%, #ffd6c4 45%, #ff9a8b 100%);
-        }
-
-        .brand-anchor {
+        body::after {
+            content: "";
             position: fixed;
-            top: 2rem;
-            left: 2rem;
-            padding: 0.65rem 1.25rem;
-            border-radius: 999px;
-            background: rgba(255, 255, 255, 0.65);
-            color: #0f172a;
-            font-weight: 600;
-            font-size: 0.95rem;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            border: 1px solid rgba(15, 23, 42, 0.08);
-            backdrop-filter: blur(12px);
-            box-shadow: 0 12px 30px rgba(15, 23, 42, 0.15);
-            display: flex;
-            gap: 0.35rem;
-            align-items: center;
-            z-index: 10;
+            inset: -15%;
+            background: conic-gradient(from 160deg, #fce8ff, #c4f7ff, #ffe8d2, #e6c6ff, #fce8ff);
+            animation: gradientShift 35s ease-in-out infinite;
+            filter: blur(50px);
+            opacity: 0.9;
+            pointer-events: none;
+            z-index: -2;
         }
 
         .floating-drops {
             position: fixed;
             inset: 0;
             pointer-events: none;
-            z-index: 1;
+            z-index: 0;
         }
 
         .floating-drops span {
             position: absolute;
-            width: clamp(24px, 3vw, 46px);
-            aspect-ratio: 1 / 1.6;
+            width: clamp(28px, 4vw, 60px);
+            aspect-ratio: 1 / 1.5;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 50% 50% 40% 40%;
-            filter: blur(0.3px);
-            animation: drift 12s ease-in-out infinite;
+            border-radius: 46% 54% 52% 48%;
+            filter: blur(0.6px);
+            animation: drift 14s ease-in-out infinite;
         }
 
-        .floating-drops .drop-1 { top: 12%; left: 15%; animation-delay: 0s; }
-        .floating-drops .drop-2 { top: 30%; right: 10%; animation-duration: 15s; }
-        .floating-drops .drop-3 { bottom: 18%; left: 25%; animation-duration: 10s; }
-        .floating-drops .drop-4 { bottom: 30%; right: 18%; animation-delay: 0.6s; }
+        .floating-drops .drop-1 { top: 18%; left: 12%; animation-delay: 0s; }
+        .floating-drops .drop-2 { top: 32%; right: 8%; animation-duration: 18s; }
+        .floating-drops .drop-3 { bottom: 24%; left: 24%; animation-duration: 12s; }
+        .floating-drops .drop-4 { bottom: 30%; right: 16%; animation-delay: 0.7s; }
 
         .container {
-            text-align: center;
-            width: 100%;
-            max-width: 720px;
+            width: min(640px, 100%);
             position: relative;
             z-index: 2;
         }
 
+        #content {
+            width: 100%;
+        }
+
         .card {
-            background: rgba(255, 255, 255, 0.16);
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            border-radius: var(--card-radius);
-            padding: clamp(2rem, 4vw, 3.5rem);
-            box-shadow: var(--shadow-soft);
-            backdrop-filter: blur(var(--blur));
-            color: var(--text-light);
+            position: relative;
+            background: rgba(255, 255, 255, 0.78);
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            border-radius: 32px;
+            padding: clamp(2rem, 5vw, 3.5rem);
+            box-shadow: 0 30px 80px rgba(15, 19, 43, 0.18);
+            backdrop-filter: blur(40px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 1.5rem;
+            min-height: 460px;
+            max-width: 640px;
+            width: 100%;
+        }
+
+        .hero-card {
+            text-align: left;
+            animation: heroBreathe 9s ease-in-out infinite;
+            gap: 1rem;
         }
 
         .eyebrow {
-            font-size: 0.95rem;
-            letter-spacing: 0.25em;
+            font-size: 0.85rem;
+            letter-spacing: 0.3em;
             text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.75);
-            margin-bottom: 1rem;
+            color: var(--ink-muted);
+            font-weight: 600;
         }
 
         .hero-title {
-            font-size: clamp(2.8rem, 6vw, 4.8rem);
-            letter-spacing: -0.02em;
+            font-family: 'Space Grotesk', 'Sora', sans-serif;
+            font-size: clamp(3rem, 6.5vw, 4.8rem);
             line-height: 1.05;
-            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.35rem;
         }
 
         .hero-copy {
-            font-size: clamp(1.05rem, 2.5vw, 1.3rem);
-            color: rgba(255, 255, 255, 0.85);
+            font-size: clamp(1.05rem, 2.7vw, 1.3rem);
+            color: var(--ink-soft);
             line-height: 1.5;
-            margin-bottom: 2.5rem;
         }
 
         .cta-button {
+            --magnet-x: 0px;
+            --magnet-y: 0px;
+            --cta-scale: 1;
+            --cta-translate-y: 0px;
+            position: relative;
             border: none;
             border-radius: 999px;
-            padding: 1.1rem 2.5rem;
-            font-size: 1.1rem;
+            padding: 1.15rem 2.6rem;
+            font-size: 1.05rem;
             font-weight: 700;
-            text-transform: uppercase;
             letter-spacing: 0.08em;
+            text-transform: uppercase;
             color: white;
             background-image: var(--cta-gradient);
-            box-shadow: 0 25px 45px rgba(172, 103, 255, 0.35);
+            background-size: 180% 180%;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+            justify-content: center;
+            gap: 0.6rem;
+            box-shadow: none;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background-position 0.3s ease;
             min-height: 56px;
+            width: fit-content;
+            transform: translate3d(var(--magnet-x), calc(var(--magnet-y) + var(--cta-translate-y)), 0) scale(var(--cta-scale));
+        }
+
+        .cta-button::after {
+            content: "";
+            position: absolute;
+            inset: 3px;
+            border-radius: inherit;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.45), transparent 60%);
+            opacity: 0.75;
+            pointer-events: none;
         }
 
         .cta-button:hover {
-            transform: translateY(-4px) scale(1.02);
-            box-shadow: 0 30px 60px rgba(172, 103, 255, 0.45);
+            --cta-scale: 1.02;
+            --cta-translate-y: -5px;
+            background-image: var(--cta-gradient-hover);
+            box-shadow: 0 40px 80px rgba(128, 81, 255, 0.4);
         }
 
         .cta-button:active {
-            transform: translateY(0px) scale(0.98);
+            --cta-scale: 0.99;
+            --cta-translate-y: -1px;
         }
 
         .cta-button:focus-visible {
-            outline: 3px solid rgba(255, 255, 255, 0.7);
+            outline: 3px solid rgba(255, 255, 255, 0.9);
             outline-offset: 4px;
         }
 
         .loading-card {
-            display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
+            text-align: center;
+            justify-content: center;
         }
 
         .loading-orb {
-            width: clamp(120px, 30vw, 200px);
+            width: clamp(120px, 32vw, 210px);
             aspect-ratio: 1 / 1;
             border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.2));
-            position: relative;
-            animation: orbPulse 2.5s ease-in-out infinite;
-            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.6), 0 20px 50px rgba(15, 23, 42, 0.2);
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.25));
+            animation: orbPulse 2.8s ease-in-out infinite;
+            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.6), 0 25px 50px rgba(17, 19, 34, 0.25);
         }
 
         .loading-orb::after {
             content: "";
             position: absolute;
-            inset: 25%;
+            inset: 24%;
             border-radius: 50%;
-            border: 2px dashed rgba(255, 255, 255, 0.5);
-            animation: spin 6s linear infinite;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            animation: spin 7s linear infinite;
         }
 
         .loading-text {
-            font-size: clamp(1.3rem, 3vw, 2rem);
-            font-weight: 700;
+            font-size: clamp(1.2rem, 3vw, 1.8rem);
+            font-weight: 600;
         }
 
         .loading-sub {
-            font-size: 1.05rem;
-            color: rgba(255, 255, 255, 0.8);
-            line-height: 1.5;
+            font-size: 1rem;
+            color: var(--ink-soft);
+        }
+
+        .answer-card {
+            text-align: left;
+        }
+
+        .answer-label {
+            font-size: 0.8rem;
+            letter-spacing: 0.35em;
+            color: var(--ink-muted);
         }
 
         .answer {
@@ -241,87 +275,72 @@
             font-weight: 900;
             letter-spacing: -0.04em;
             line-height: 1;
-            text-shadow: 0 15px 35px rgba(0, 0, 0, 0.35);
             opacity: 0;
-            transform: scale(0.9);
+            transform: translateY(20px) scale(0.95);
             animation: answerPop 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
         }
 
         .location {
-            font-size: clamp(1rem, 2.4vw, 1.5rem);
-            margin-top: 1.25rem;
+            font-size: 1.1rem;
             font-weight: 600;
+            color: var(--ink-soft);
         }
 
         .details {
-            margin-top: 1.5rem;
-            margin-bottom: 2.5rem;
+            margin-top: 0.6rem;
             line-height: 1.6;
+            color: var(--ink);
         }
 
         .detail-main {
-            font-size: 1.15rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            letter-spacing: 0.02em;
         }
 
         .detail-secondary {
-            margin-top: 0.5rem;
             font-size: 1rem;
-            color: rgba(255, 255, 255, 0.75);
+            color: var(--ink-muted);
         }
 
-        .refresh {
-            background: rgba(255, 255, 255, 0.9);
-            color: #0f172a;
-            border: none;
-            border-radius: 16px;
-            padding: 0.95rem 2rem;
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
-            min-height: 52px;
-        }
-
-        .refresh:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.25);
-        }
-
-        .refresh:focus-visible {
-            outline: 3px solid rgba(15, 23, 42, 0.6);
-            outline-offset: 4px;
-        }
-
-        .error-card .error {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .footer-chip {
-            margin-top: 2.5rem;
+        .brand-terminal {
+            position: fixed;
+            bottom: 1.5rem;
+            left: 1.5rem;
+            font-family: 'IBM Plex Mono', 'Space Grotesk', monospace;
             font-size: 0.95rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: rgba(255, 255, 255, 0.75);
-            text-align: center;
+            text-transform: lowercase;
+            letter-spacing: 0.05em;
+            color: #0b0b0f;
             z-index: 2;
         }
 
-        .footer-chip strong {
-            font-weight: 700;
+        .sparkle-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 20;
+        }
+
+        .sparkle-layer span {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle 1.1s ease-out forwards;
+            box-shadow: 0 0 12px currentColor;
         }
 
         @keyframes drift {
-            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.65; }
-            50% { transform: translate3d(0, -25px, 0) scale(1.1); opacity: 0.5; }
-            100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.65; }
+            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
+            50% { transform: translate3d(0, -28px, 0) scale(1.05); opacity: 0.4; }
+            100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
         }
 
         @keyframes orbPulse {
             0%, 100% { transform: scale(0.9); }
-            50% { transform: scale(1.05); }
+            50% { transform: scale(1.08); }
         }
 
         @keyframes spin {
@@ -329,23 +348,45 @@
         }
 
         @keyframes answerPop {
-            50% { opacity: 1; transform: scale(1.08); }
-            100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 1; transform: translateY(-6px) scale(1.04); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        @keyframes sparkle {
+            0% { transform: scale(0.5) translateY(0); opacity: 0.9; }
+            60% { transform: scale(1.1) translateY(-30px); opacity: 1; }
+            100% { transform: scale(0.4) translateY(-60px); opacity: 0; }
+        }
+
+        @keyframes heroBreathe {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-6px) scale(1.01); }
+        }
+
+        @keyframes auroraShift {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        @keyframes gradientShift {
+            0% { transform: rotate(0deg); background-position: 0% 50%; }
+            50% { transform: rotate(180deg); background-position: 100% 50%; }
+            100% { transform: rotate(360deg); background-position: 0% 50%; }
         }
 
         @media (max-width: 768px) {
             body {
-                padding: 2rem 1.25rem 3rem;
+                padding: 2rem 1.25rem 3.5rem;
             }
 
-            .brand-anchor {
+            .brand-terminal {
                 position: static;
-                margin-bottom: 1.5rem;
-                justify-content: center;
+                margin-top: 2rem;
             }
 
-            .footer-chip {
-                font-size: 0.8rem;
+            .card {
+                min-height: 0;
             }
         }
 
@@ -359,7 +400,6 @@
     </style>
 </head>
 <body class="idle">
-    <div class="brand-anchor">isitgoingtorain.app <span aria-hidden="true">☂️</span></div>
     <div class="floating-drops" aria-hidden="true">
         <span class="drop-1"></span>
         <span class="drop-2"></span>
@@ -369,9 +409,7 @@
     <div class="container">
         <div id="content"></div>
     </div>
-    <footer class="footer-chip">
-        Powered by <strong>wttr.in</strong> + <strong>ipinfo</strong> · Built for humans, not forecasts
-    </footer>
+    <div class="brand-terminal">isitgoingtorain.app</div>
 
     <script>
         const RAIN_THRESHOLD = {
@@ -379,28 +417,60 @@
             MAYBE_HIGH: 30
         };
 
+        const ANSWER_LABELS = {
+            YES: 'Yep!',
+            MAYBE: 'Hmm',
+            NO: 'Nope!'
+        };
+
+        const ANSWER_EMOJI = {
+            YES: '☔',
+            MAYBE: '🌥️',
+            NO: '🌞'
+        };
+
+        const ANSWER_COPY = {
+            YES: 'Grab the umbrella. Sky sounds serious.',
+            MAYBE: 'Keep it close. Clouds are undecided.',
+            NO: 'No rain on deck. Cruise.'
+        };
+
         const content = document.getElementById('content');
         let isChecking = false;
 
+        const HERO_LINES = [
+            'Stepping out? Let the sky answer first.',
+            'Going somewhere? Ask the clouds before they gossip.',
+            'Need umbrella odds in one syllable.',
+            'Weather oracle, one button, zero scroll.',
+            'Quick confidence check before you grab the keys.'
+        ];
+
+        function pickHeroLine() {
+            const index = Math.floor(Math.random() * HERO_LINES.length);
+            return HERO_LINES[index];
+        }
+
         function renderIntro() {
             document.body.className = 'idle';
+            const heroLine = pickHeroLine();
+
             content.innerHTML = `
                 <div class="card hero-card">
-                    <p class="eyebrow">One vibe check away</p>
+                    <p class="eyebrow">Local weather hotline</p>
                     <h1 class="hero-title">Is it going to rain?</h1>
                     <p class="hero-copy">
-                        We sniff your sky using wttr.in + ipinfo, then give you a single, definitive answer.
-                        One tap. One vibe check. Zero bullshit.
+                        ${heroLine}
                     </p>
                     <button class="cta-button" id="checkButton">
-                        <span>Check the sky</span>
-                        <span aria-hidden="true">✨</span>
+                        <span>Let's check</span>
                     </button>
                 </div>
             `;
 
             const button = document.getElementById('checkButton');
             button.addEventListener('click', startCheck, { once: true });
+            setupMagnet(button);
         }
 
         function showLoading() {
@@ -408,8 +478,8 @@
             content.innerHTML = `
                 <div class="card loading-card">
                     <div class="loading-orb" aria-hidden="true"></div>
-                    <p class="loading-text">Sniffing the clouds...</p>
-                    <p class="loading-sub">Hold tight babe—dialing up the sky gods.</p>
+                    <p class="loading-text">Listening for clouds...</p>
+                    <p class="loading-sub">Dialing wttr.in, hanging on the line.</p>
                 </div>
             `;
         }
@@ -453,27 +523,30 @@
         function renderAnswer(answer, location, weather) {
             document.body.className = answer.toLowerCase();
 
-            const emoji = answer === 'YES' ? '☔' : answer === 'MAYBE' ? '🌥️' : '🌞';
-            const vibeCopy = {
-                YES: 'Grab the cutest umbrella you own. Storm energy is on deck.',
-                MAYBE: 'Keep it close. Clouds are gossiping and could spill.',
-                NO: 'Sun is clocked in. Go live your life, no rain tax today.'
-            }[answer];
+            const label = ANSWER_LABELS[answer];
+            const emoji = ANSWER_EMOJI[answer];
+            const vibeCopy = ANSWER_COPY[answer];
+            const timestamp = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
             content.innerHTML = `
                 <div class="card answer-card">
                     <p class="eyebrow answer-label">Sky verdict</p>
-                    <div class="answer">${emoji} ${answer}</div>
+                    <div class="answer">${emoji} ${label}</div>
                     <p class="location">📍 ${location.city || 'Unknown'}${location.country ? ', ' + location.country : ''}</p>
                     <div class="details">
                         <p class="detail-main">${weather.precipChance}% chance · ${weather.condition} · ${weather.temp}°C</p>
-                        <p class="detail-secondary">${vibeCopy}</p>
+                        <p class="detail-secondary">${vibeCopy} · Updated ${timestamp}</p>
                     </div>
-                    <button class="refresh" id="againButton">Check again</button>
+                    <button class="cta-button" id="againButton">
+                        <span>Let's check</span>
+                    </button>
                 </div>
             `;
 
-            document.getElementById('againButton').addEventListener('click', renderIntro);
+            const againButton = document.getElementById('againButton');
+            againButton.addEventListener('click', startCheck);
+            setupMagnet(againButton);
+            triggerSparkles(answer.toLowerCase());
         }
 
         function showError(message) {
@@ -481,10 +554,14 @@
             content.innerHTML = `
                 <div class="card error-card">
                     <div class="error">${message}</div>
-                    <button class="refresh" id="retryButton">Try again</button>
+                    <button class="cta-button" id="retryButton">
+                        <span>Let's check</span>
+                    </button>
                 </div>
             `;
-            document.getElementById('retryButton').addEventListener('click', renderIntro);
+            const retry = document.getElementById('retryButton');
+            retry.addEventListener('click', startCheck);
+            setupMagnet(retry);
         }
 
         async function startCheck() {
@@ -495,7 +572,7 @@
             try {
                 const location = await getLocation();
                 if (!location.city) {
-                    showError('We could not detect your location. Pop VPN off and try again.');
+                    showError('Could not find your city. Toggle VPN off and retry.');
                     return;
                 }
 
@@ -504,10 +581,56 @@
                 renderAnswer(answer, location, weather);
             } catch (error) {
                 console.error('Error:', error);
-                showError('Something blew away in the wind. Try again?');
+                showError('Signal dropped. Try again?');
             } finally {
                 isChecking = false;
             }
+        }
+
+        function setupMagnet(button) {
+            const strength = 18;
+            button.addEventListener('pointermove', (event) => {
+                const rect = button.getBoundingClientRect();
+                const moveX = (event.clientX - (rect.left + rect.width / 2)) / strength;
+                const moveY = (event.clientY - (rect.top + rect.height / 2)) / strength;
+                button.style.setProperty('--magnet-x', `${moveX}px`);
+                button.style.setProperty('--magnet-y', `${moveY}px`);
+            });
+
+            ['pointerleave', 'pointerup', 'blur'].forEach((evt) => {
+                button.addEventListener(evt, () => {
+                    button.style.setProperty('--magnet-x', '0px');
+                    button.style.setProperty('--magnet-y', '0px');
+                });
+            });
+        }
+
+        function triggerSparkles(answer) {
+            const palettes = {
+                yes: ['#f472b6', '#d946ef', '#c084fc'],
+                maybe: ['#38bdf8', '#5f5ae0', '#a5b4fc'],
+                no: ['#fcd34d', '#fb7185', '#fdba74']
+            };
+
+            const colors = palettes[answer] || palettes.maybe;
+            const layer = document.createElement('div');
+            layer.className = 'sparkle-layer';
+
+            const sparkles = 16;
+            for (let i = 0; i < sparkles; i++) {
+                const dot = document.createElement('span');
+                const size = Math.random() * 8 + 6;
+                dot.style.width = `${size}px`;
+                dot.style.height = `${size}px`;
+                dot.style.left = `${45 + (Math.random() - 0.5) * 40}%`;
+                dot.style.top = `${42 + (Math.random() - 0.5) * 34}%`;
+                dot.style.color = colors[i % colors.length];
+                dot.style.animationDelay = `${Math.random() * 0.2}s`;
+                layer.appendChild(dot);
+            }
+
+            document.body.appendChild(layer);
+            setTimeout(() => layer.remove(), 1300);
         }
 
         renderIntro();
