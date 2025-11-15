@@ -17,7 +17,15 @@
     <meta name="twitter:title" content="Is it going to rain?">
     <meta name="twitter:description" content="Just tell me if it's going to rain. Yes, no, or maybe.">
 
+    <!-- Google Fonts - Chunky Display -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@700;900&display=swap" rel="stylesheet">
+
     <style>
+        /* ===================================================================
+           RESET & BASE
+           =================================================================== */
         * {
             margin: 0;
             padding: 0;
@@ -31,43 +39,61 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: background 0.8s ease;
+            transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
+            position: relative;
         }
 
-        /* Answer states */
+        /* ===================================================================
+           ANSWER STATE GRADIENTS (Pastel-Punk Edition)
+           =================================================================== */
         body.yes {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* Purple Rain - Bring umbrella vibes */
+            background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 50%, #5B21B6 100%);
         }
 
         body.no {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            /* Peach Sunshine - You're good vibes */
+            background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 50%, #F97316 100%);
         }
 
         body.maybe {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            /* Sky Blues - Could go either way */
+            background: linear-gradient(135deg, #7DD3FC 0%, #38BDF8 50%, #0EA5E9 100%);
         }
 
         body.loading {
-            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            /* Soft neutral loading state */
+            background: linear-gradient(135deg, #FDE68A 0%, #FCD34D 50%, #FBBF24 100%);
         }
 
+        /* ===================================================================
+           CONTAINER & LAYOUT
+           =================================================================== */
         .container {
             text-align: center;
             padding: 2rem;
-            max-width: 600px;
+            max-width: 700px;
+            width: 100%;
         }
 
+        /* ===================================================================
+           ANSWER DISPLAY (The Big Moment)
+           =================================================================== */
         .answer {
-            font-size: 15vw;
+            font-family: 'Space Grotesk', -apple-system, sans-serif;
+            font-size: clamp(5rem, 12vw, 10rem);
             font-weight: 900;
             color: white;
-            text-shadow: 4px 4px 0 rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
-            line-height: 1;
+            text-shadow:
+                6px 6px 0 rgba(0, 0, 0, 0.3),
+                0 0 40px rgba(255, 255, 255, 0.3);
+            margin-bottom: 3rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
             opacity: 0;
-            transform: scale(0.8);
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transform: scale(0.85);
+            transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
 
         .answer.show {
@@ -75,77 +101,147 @@
             transform: scale(1);
         }
 
+        /* ===================================================================
+           LOCATION & DETAILS
+           =================================================================== */
         .location {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.9);
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.95);
             margin-bottom: 1rem;
             opacity: 0;
-            transition: opacity 0.5s ease 0.3s;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.2s;
         }
 
         .location.show {
             opacity: 1;
+            transform: translateY(0);
         }
 
         .details {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 2rem;
+            font-size: clamp(0.95rem, 2vw, 1.1rem);
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
             opacity: 0;
-            transition: opacity 0.5s ease 0.5s;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.35s;
         }
 
         .details.show {
             opacity: 1;
+            transform: translateY(0);
         }
 
+        /* ===================================================================
+           BUTTON (Pastel-Punk Style)
+           =================================================================== */
         .refresh {
-            background: rgba(255, 255, 255, 0.2);
-            border: 3px solid white;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(10px);
+            border: 3px solid rgba(255, 255, 255, 0.9);
             color: white;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            font-size: clamp(1rem, 2vw, 1.15rem);
             font-weight: 700;
             border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.05em;
             opacity: 0;
-            transition: opacity 0.5s ease 0.7s;
+            transform: translateY(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) 0.5s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-height: 48px; /* Touch target accessibility */
         }
 
         .refresh.show {
             opacity: 1;
+            transform: translateY(0);
         }
 
         .refresh:hover {
-            background: white;
-            color: #667eea;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.95);
+            color: #1F2937;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
         }
 
         .refresh:active {
-            transform: translateY(0);
-            box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
+        .refresh:focus-visible {
+            outline: 3px solid rgba(255, 255, 255, 0.6);
+            outline-offset: 4px;
+        }
+
+        /* ===================================================================
+           LOADING STATE
+           =================================================================== */
         .loading-text {
-            font-size: 2rem;
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             color: white;
             font-weight: 700;
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
 
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.02);
+            }
+        }
+
+        /* ===================================================================
+           ERROR STATE
+           =================================================================== */
         .error {
             color: white;
-            font-size: 1.5rem;
+            font-size: clamp(1.2rem, 3vw, 1.75rem);
             font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 2rem;
         }
 
+        /* ===================================================================
+           RESPONSIVE ADJUSTMENTS
+           =================================================================== */
         @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
             .answer {
-                font-size: 20vw;
+                margin-bottom: 2rem;
+            }
+
+            .details {
+                margin-bottom: 2rem;
+            }
+
+            .refresh {
+                padding: 1.25rem 2rem;
+                width: 100%;
+                max-width: 280px;
+            }
+        }
+
+        /* ===================================================================
+           ACCESSIBILITY - REDUCED MOTION
+           =================================================================== */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
             }
         }
     </style>
@@ -233,14 +329,14 @@
             // Set body class for gradient
             body.className = answer.toLowerCase();
 
-            // Build details text
+            // Build details text with personality
             let details = `${weather.precipChance}% chance of rain`;
             if (answer === 'MAYBE') {
                 details += ' · Could go either way';
             } else if (answer === 'YES') {
-                details += ' · Bring an umbrella';
+                details += ' · Bring an umbrella!';
             } else {
-                details += ' · You\'re good';
+                details += ' · You\'re all good';
             }
 
             // Render
@@ -251,12 +347,14 @@
                 <button class="refresh" onclick="location.reload()">Check Again</button>
             `;
 
-            // Trigger animations
+            // Trigger animations with proper timing
             requestAnimationFrame(() => {
-                document.querySelector('.answer').classList.add('show');
-                document.querySelector('.location').classList.add('show');
-                document.querySelector('.details').classList.add('show');
-                document.querySelector('.refresh').classList.add('show');
+                requestAnimationFrame(() => {
+                    document.querySelector('.answer').classList.add('show');
+                    document.querySelector('.location').classList.add('show');
+                    document.querySelector('.details').classList.add('show');
+                    document.querySelector('.refresh').classList.add('show');
+                });
             });
         }
 
@@ -271,7 +369,9 @@
                 <button class="refresh" onclick="location.reload()">Try Again</button>
             `;
             requestAnimationFrame(() => {
-                document.querySelector('.refresh').classList.add('show');
+                requestAnimationFrame(() => {
+                    document.querySelector('.refresh').classList.add('show');
+                });
             });
         }
 
