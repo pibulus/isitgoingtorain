@@ -28,6 +28,7 @@
             --card-border: rgba(17, 19, 34, 0.08);
             --cta-gradient: linear-gradient(120deg, #6f5bff 0%, #a33bff 40%, #ff66c4 80%);
             --cta-gradient-hover: linear-gradient(120deg, #8a8eff 0%, #ff54b0 60%, #ffc877 100%);
+            --bg-gradient: linear-gradient(125deg, #fef6ff, #d8f1ff, #ffe5f4, #cbf9e5);
         }
 
         *, *::before, *::after {
@@ -41,9 +42,9 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: radial-gradient(circle at 15% 20%, #f5f0ff, #e2f5ff 45%, #c6f7ec 85%);
-            background-size: 220% 220%;
-            animation: auroraShift 30s ease-in-out infinite;
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: auroraShift 32s ease-in-out infinite;
             transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
             overflow: hidden;
             position: relative;
@@ -52,23 +53,23 @@
         }
 
         body.idle {
-            background: radial-gradient(circle at 20% 20%, #fff4f9, #e2f2ff 45%, #ccf8ed 90%);
+            --bg-gradient: linear-gradient(120deg, #fff3fa, #dff2ff, #c7f9ed, #ffe6f3);
         }
 
         body.loading {
-            background: radial-gradient(circle at 15% 20%, #dfe7ff, #f5d0ff 55%, #ffe1cf 100%);
+            --bg-gradient: linear-gradient(130deg, #dfe7ff, #f7d0ff, #ffe1cf, #d5f5ff);
         }
 
         body.yes {
-            background: radial-gradient(circle at 20% 15%, #120623, #4f32ff 40%, #ff6ad3 95%);
+            --bg-gradient: linear-gradient(130deg, #120623, #4f32ff, #ff6ad3, #ffb88c);
         }
 
         body.maybe {
-            background: radial-gradient(circle at 20% 25%, #dff8ff, #5ecae9 45%, #4f58e6 95%);
+            --bg-gradient: linear-gradient(130deg, #dff8ff, #5ecae9, #4f58e6, #a17cf5);
         }
 
         body.no {
-            background: radial-gradient(circle at 20% 20%, #fff3e7, #ffcdc8 45%, #f9bae9 95%);
+            --bg-gradient: linear-gradient(130deg, #fff3e7, #ffcdc8, #f9bae9, #ffe59f);
         }
 
         body::before {
@@ -88,8 +89,8 @@
             inset: -15%;
             background: conic-gradient(from 160deg, #fce8ff, #c4f7ff, #ffe8d2, #e6c6ff, #fce8ff);
             animation: gradientShift 35s ease-in-out infinite;
-            filter: blur(50px);
-            opacity: 0.9;
+            filter: blur(70px);
+            opacity: 0.7;
             pointer-events: none;
             z-index: -2;
         }
@@ -128,47 +129,60 @@
 
         .card {
             position: relative;
-            background: rgba(255, 255, 255, 0.78);
+            background: rgba(255, 255, 255, 0.82);
             border: 1px solid rgba(17, 19, 34, 0.08);
-            border-radius: 32px;
-            padding: clamp(2rem, 5vw, 3.5rem);
-            box-shadow: 0 30px 80px rgba(15, 19, 43, 0.18);
-            backdrop-filter: blur(40px);
+            border-radius: 34px;
+            padding: clamp(2.25rem, 5vw, 3.75rem);
+            box-shadow: 0 35px 90px rgba(15, 19, 43, 0.22);
+            backdrop-filter: blur(35px);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             gap: 1.5rem;
-            min-height: 460px;
-            max-width: 640px;
+            min-height: 480px;
+            max-width: 660px;
             width: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease;
+        }
+
+        .card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            background: radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.5), transparent 55%);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.01);
+        }
+
+        .card:hover::after {
+            opacity: 1;
         }
 
         .hero-card {
             text-align: left;
             animation: heroBreathe 9s ease-in-out infinite;
-            gap: 1rem;
-        }
-
-        .eyebrow {
-            font-size: 0.85rem;
-            letter-spacing: 0.3em;
-            text-transform: uppercase;
-            color: var(--ink-muted);
-            font-weight: 600;
+            gap: 1.2rem;
         }
 
         .hero-title {
             font-family: 'Space Grotesk', 'Sora', sans-serif;
-            font-size: clamp(3rem, 6.5vw, 4.8rem);
-            line-height: 1.05;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.35rem;
+            font-size: clamp(3.6rem, 7vw, 5.4rem);
+            line-height: 1;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.5rem;
         }
 
         .hero-copy {
-            font-size: clamp(1.05rem, 2.7vw, 1.3rem);
+            font-size: clamp(1.15rem, 2.7vw, 1.4rem);
             color: var(--ink-soft);
-            line-height: 1.5;
+            line-height: 1.55;
         }
 
         .cta-button {
@@ -233,21 +247,31 @@
         }
 
         .loading-orb {
-            width: clamp(120px, 32vw, 210px);
+            width: clamp(140px, 34vw, 220px);
             aspect-ratio: 1 / 1;
-            border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.25));
-            animation: orbPulse 2.8s ease-in-out infinite;
-            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.6), 0 25px 50px rgba(17, 19, 34, 0.25);
+            border-radius: 40% 60% 55% 45%;
+            background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.2));
+            position: relative;
+            animation: orbPulse 2.4s ease-in-out infinite;
+            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.55), 0 25px 50px rgba(17, 19, 34, 0.25);
+            overflow: hidden;
         }
 
+        .loading-orb::before,
         .loading-orb::after {
             content: "";
             position: absolute;
-            inset: 24%;
+            inset: 15%;
             border-radius: 50%;
-            border: 2px dashed rgba(255, 255, 255, 0.6);
-            animation: spin 7s linear infinite;
+            border: 3px dashed rgba(255, 255, 255, 0.6);
+            animation: spin 6s linear infinite;
+        }
+
+        .loading-orb::after {
+            inset: 30%;
+            animation-duration: 4s;
+            border-style: solid;
+            border-color: rgba(255, 255, 255, 0.4) transparent;
         }
 
         .loading-text {
@@ -262,12 +286,6 @@
 
         .answer-card {
             text-align: left;
-        }
-
-        .answer-label {
-            font-size: 0.8rem;
-            letter-spacing: 0.35em;
-            color: var(--ink-muted);
         }
 
         .answer {
@@ -312,6 +330,12 @@
             letter-spacing: 0.05em;
             color: #0b0b0f;
             z-index: 2;
+            text-decoration: none;
+            padding-bottom: 0.15rem;
+        }
+
+        .brand-terminal:hover {
+            color: #5b21b6;
         }
 
         .sparkle-layer {
@@ -409,7 +433,7 @@
     <div class="container">
         <div id="content"></div>
     </div>
-    <div class="brand-terminal">isitgoingtorain.app</div>
+    <a class="brand-terminal" href="/" aria-label="isitgoingtorain home">isitgoingtorain.app</a>
 
     <script>
         const RAIN_THRESHOLD = {
@@ -457,7 +481,6 @@
 
             content.innerHTML = `
                 <div class="card hero-card">
-                    <p class="eyebrow">Local weather hotline</p>
                     <h1 class="hero-title">Is it going to rain?</h1>
                     <p class="hero-copy">
                         ${heroLine}
@@ -530,22 +553,15 @@
 
             content.innerHTML = `
                 <div class="card answer-card">
-                    <p class="eyebrow answer-label">Sky verdict</p>
                     <div class="answer">${emoji} ${label}</div>
                     <p class="location">📍 ${location.city || 'Unknown'}${location.country ? ', ' + location.country : ''}</p>
                     <div class="details">
                         <p class="detail-main">${weather.precipChance}% chance · ${weather.condition} · ${weather.temp}°C</p>
                         <p class="detail-secondary">${vibeCopy} · Updated ${timestamp}</p>
                     </div>
-                    <button class="cta-button" id="againButton">
-                        <span>Let's check</span>
-                    </button>
                 </div>
             `;
 
-            const againButton = document.getElementById('againButton');
-            againButton.addEventListener('click', startCheck);
-            setupMagnet(againButton);
             triggerSparkles(answer.toLowerCase());
         }
 
@@ -554,14 +570,9 @@
             content.innerHTML = `
                 <div class="card error-card">
                     <div class="error">${message}</div>
-                    <button class="cta-button" id="retryButton">
-                        <span>Let's check</span>
-                    </button>
                 </div>
             `;
-            const retry = document.getElementById('retryButton');
-            retry.addEventListener('click', startCheck);
-            setupMagnet(retry);
+            setTimeout(renderIntro, 2500);
         }
 
         async function startCheck() {
