@@ -3,21 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Is it going to rain?</title>
-    <meta name="description" content="Just tell me if it's going to rain. One tap, one answer.">
 
-    <meta property="og:title" content="Is it going to rain?">
-    <meta property="og:description" content="Just tell me if it's going to rain. One tap, one answer.">
+    <!-- Primary Meta Tags -->
+    <title>Is it going to rain? | Simple Weather Answer in One Tap</title>
+    <meta name="title" content="Is it going to rain? | Simple Weather Answer in One Tap">
+    <meta name="description" content="Skip the graphs and scrolling. Get a straight answer: Yes, No, or Maybe. One question, one tap, zero BS. Real-time weather oracle powered by wttr.in.">
+    <meta name="keywords" content="weather, rain forecast, will it rain, umbrella forecast, simple weather, rain today, weather app, minimalist weather">
+    <meta name="author" content="isitgoingtorain.app">
+    <meta name="theme-color" content="#FFD93D">
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://isitgoingtorain.app">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://isitgoingtorain.app">
+    <meta property="og:title" content="Is it going to rain? | Simple Weather Answer in One Tap">
+    <meta property="og:description" content="Skip the graphs and scrolling. Get a straight answer: Yes, No, or Maybe. One question, one tap, zero BS.">
+    <meta property="og:image" content="https://isitgoingtorain.app/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Is it going to rain?">
+    <meta property="og:locale" content="en_US">
 
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Is it going to rain?">
-    <meta name="twitter:description" content="Just tell me if it's going to rain. One tap, one answer.">
+    <meta name="twitter:url" content="https://isitgoingtorain.app">
+    <meta name="twitter:title" content="Is it going to rain? | Simple Weather Answer">
+    <meta name="twitter:description" content="Skip the graphs. Get a straight answer: Yes, No, or Maybe. One tap, zero BS.">
+    <meta name="twitter:image" content="https://isitgoingtorain.app/og-image.png">
 
+    <!-- Additional Meta -->
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+
+    <!-- Mobile Web App -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Rain?">
+
+    <!-- Performance & Resource Hints -->
+    <link rel="preconnect" href="https://wttr.in">
+    <link rel="preconnect" href="https://ipinfo.io">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Is it going to rain?",
+        "url": "https://isitgoingtorain.app",
+        "description": "Simple weather app that answers one question: Is it going to rain? Get instant Yes, No, or Maybe answers based on your location.",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Any",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+        },
+        "author": {
+            "@type": "Organization",
+            "name": "isitgoingtorain.app"
+        },
+        "browserRequirements": "Requires JavaScript. Requires HTML5.",
+        "softwareVersion": "1.0",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5",
+            "ratingCount": "1"
+        }
+    }
+    </script>
 
     <style>
         :root {
@@ -137,13 +204,13 @@
             backdrop-filter: blur(35px);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center;
             gap: 1.5rem;
-            min-height: 480px;
+            min-height: 520px;
             max-width: 660px;
             width: 100%;
             overflow: hidden;
-            transition: transform 0.6s ease;
+            transition: transform 0.6s ease, min-height 0.3s ease;
         }
 
         .card::after {
@@ -168,7 +235,8 @@
         .hero-card {
             text-align: left;
             animation: heroBreathe 9s ease-in-out infinite;
-            gap: 1.2rem;
+            gap: 1.8rem;
+            justify-content: center;
         }
 
         .hero-title {
@@ -300,6 +368,20 @@
 
         .answer-card {
             text-align: left;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .error-card {
+            text-align: center;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .error {
+            font-size: clamp(1.2rem, 3vw, 1.6rem);
+            font-weight: 600;
+            color: var(--ink-soft);
         }
 
         .answer {
@@ -435,7 +517,12 @@
             }
 
             .card {
-                min-height: 0;
+                min-height: 420px;
+                padding: clamp(2rem, 5vw, 2.5rem);
+            }
+
+            .loading-cloud {
+                margin-bottom: 1rem;
             }
         }
 
