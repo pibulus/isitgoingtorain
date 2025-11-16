@@ -461,6 +461,8 @@
 
         const content = document.getElementById('content');
         let isChecking = false;
+        let errorTimeout = null;
+        let magnetCleanup = null;
 
         const HERO_LINES = [
             'Stepping out? Let the sky answer first.',
@@ -471,11 +473,22 @@
         ];
 
         function pickHeroLine() {
-            const index = Math.floor(Math.random() * HERO_LINES.length);
-            return HERO_LINES[index];
+            return HERO_LINES[Math.floor(Math.random() * HERO_LINES.length)];
         }
 
         function renderIntro() {
+            // Clear any pending error timeout
+            if (errorTimeout) {
+                clearTimeout(errorTimeout);
+                errorTimeout = null;
+            }
+
+            // Clean up previous magnet listeners
+            if (magnetCleanup) {
+                magnetCleanup();
+                magnetCleanup = null;
+            }
+
             document.body.className = 'idle';
             const heroLine = pickHeroLine();
 
@@ -493,10 +506,22 @@
 
             const button = document.getElementById('checkButton');
             button.addEventListener('click', startCheck, { once: true });
-            setupMagnet(button);
+            magnetCleanup = setupMagnet(button);
         }
 
         function showLoading() {
+            // Clear any pending error timeout
+            if (errorTimeout) {
+                clearTimeout(errorTimeout);
+                errorTimeout = null;
+            }
+
+            // Clean up magnet listeners
+            if (magnetCleanup) {
+                magnetCleanup();
+                magnetCleanup = null;
+            }
+
             document.body.className = 'loading';
             content.innerHTML = `
                 <div class="card loading-card">
@@ -523,9 +548,11 @@
             const data = await response.json();
             const current = data.current_condition[0];
             const today = data.weather[0];
-            const precipChance = parseInt(current.precipMM || 0, 10) > 0
-                ? parseInt(current.humidity || 0, 10)
-                : parseInt(today.hourly[0].chanceofrain || 0, 10);
+
+            // Get the maximum chance of rain from today's hourly forecast
+            const precipChance = Math.max(
+                ...today.hourly.map(hour => parseInt(hour.chanceofrain || 0, 10))
+            );
 
             return {
                 precipChance,
@@ -566,13 +593,22 @@
         }
 
         function showError(message) {
+            // Clear any pending error timeout
+            if (errorTimeout) {
+                clearTimeout(errorTimeout);
+                errorTimeout = null;
+            }
+
             document.body.className = 'idle';
             content.innerHTML = `
                 <div class="card error-card">
                     <div class="error">${message}</div>
                 </div>
             `;
-            setTimeout(renderIntro, 2500);
+            errorTimeout = setTimeout(() => {
+                errorTimeout = null;
+                renderIntro();
+            }, 2500);
         }
 
         async function startCheck() {
@@ -600,20 +636,31 @@
 
         function setupMagnet(button) {
             const strength = 18;
-            button.addEventListener('pointermove', (event) => {
+            const onMove = (event) => {
                 const rect = button.getBoundingClientRect();
                 const moveX = (event.clientX - (rect.left + rect.width / 2)) / strength;
                 const moveY = (event.clientY - (rect.top + rect.height / 2)) / strength;
                 button.style.setProperty('--magnet-x', `${moveX}px`);
                 button.style.setProperty('--magnet-y', `${moveY}px`);
+            };
+
+            const onReset = () => {
+                button.style.setProperty('--magnet-x', '0px');
+                button.style.setProperty('--magnet-y', '0px');
+            };
+
+            button.addEventListener('pointermove', onMove);
+            ['pointerleave', 'pointerup', 'blur'].forEach((evt) => {
+                button.addEventListener(evt, onReset);
             });
 
-            ['pointerleave', 'pointerup', 'blur'].forEach((evt) => {
-                button.addEventListener(evt, () => {
-                    button.style.setProperty('--magnet-x', '0px');
-                    button.style.setProperty('--magnet-y', '0px');
+            // Return cleanup function
+            return () => {
+                button.removeEventListener('pointermove', onMove);
+                ['pointerleave', 'pointerup', 'blur'].forEach((evt) => {
+                    button.removeEventListener(evt, onReset);
                 });
-            });
+            };
         }
 
         function triggerSparkles(answer) {
