@@ -26,9 +26,9 @@
             --ink-muted: rgba(17, 19, 34, 0.55);
             --card-bg: rgba(255, 255, 255, 0.9);
             --card-border: rgba(17, 19, 34, 0.08);
-            --cta-gradient: linear-gradient(120deg, #6f5bff 0%, #a33bff 40%, #ff66c4 80%);
-            --cta-gradient-hover: linear-gradient(120deg, #8a8eff 0%, #ff54b0 60%, #ffc877 100%);
-            --bg-gradient: linear-gradient(125deg, #fef6ff, #d8f1ff, #ffe5f4, #cbf9e5);
+            --cta-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF5C8A 50%, #FFD93D 100%);
+            --cta-gradient-hover: linear-gradient(135deg, #FF4757 0%, #FF3D7F 50%, #FFC93C 100%);
+            --bg-gradient: linear-gradient(135deg, #FFE9D6, #FFF8E7, #E3F9FF, #FFE5E5);
         }
 
         *, *::before, *::after {
@@ -53,23 +53,23 @@
         }
 
         body.idle {
-            --bg-gradient: linear-gradient(120deg, #fff3fa, #dff2ff, #c7f9ed, #ffe6f3);
+            --bg-gradient: linear-gradient(135deg, #FFE9D6, #FFF8E7, #E3F9FF, #FFE5E5);
         }
 
         body.loading {
-            --bg-gradient: linear-gradient(130deg, #dfe7ff, #f7d0ff, #ffe1cf, #d5f5ff);
+            --bg-gradient: linear-gradient(135deg, #FFD93D, #FFE9D6, #00D9FF, #FFF8E7);
         }
 
         body.yes {
-            --bg-gradient: linear-gradient(130deg, #120623, #4f32ff, #ff6ad3, #ffb88c);
+            --bg-gradient: linear-gradient(135deg, #00C2FF, #4ECDC4, #FF6B6B, #FF5C8A);
         }
 
         body.maybe {
-            --bg-gradient: linear-gradient(130deg, #dff8ff, #5ecae9, #4f58e6, #a17cf5);
+            --bg-gradient: linear-gradient(135deg, #FFF8E7, #FFD93D, #00D9FF, #95E1D3);
         }
 
         body.no {
-            --bg-gradient: linear-gradient(130deg, #fff3e7, #ffcdc8, #f9bae9, #ffe59f);
+            --bg-gradient: linear-gradient(135deg, #FFD93D, #FFC93C, #FF6B6B, #FFAA00);
         }
 
         body::before {
@@ -87,10 +87,10 @@
             content: "";
             position: fixed;
             inset: -15%;
-            background: conic-gradient(from 160deg, #fce8ff, #c4f7ff, #ffe8d2, #e6c6ff, #fce8ff);
+            background: conic-gradient(from 160deg, #FFD93D, #00D9FF, #FF6B6B, #95E1D3, #FFD93D);
             animation: gradientShift 35s ease-in-out infinite;
             filter: blur(70px);
-            opacity: 0.7;
+            opacity: 0.6;
             pointer-events: none;
             z-index: -2;
         }
@@ -106,16 +106,16 @@
             position: absolute;
             width: clamp(28px, 4vw, 60px);
             aspect-ratio: 1 / 1.5;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 211, 61, 0.25);
             border-radius: 46% 54% 52% 48%;
             filter: blur(0.6px);
             animation: drift 14s ease-in-out infinite;
         }
 
-        .floating-drops .drop-1 { top: 18%; left: 12%; animation-delay: 0s; }
-        .floating-drops .drop-2 { top: 32%; right: 8%; animation-duration: 18s; }
-        .floating-drops .drop-3 { bottom: 24%; left: 24%; animation-duration: 12s; }
-        .floating-drops .drop-4 { bottom: 30%; right: 16%; animation-delay: 0.7s; }
+        .floating-drops .drop-1 { top: 18%; left: 12%; animation-delay: 0s; background: rgba(255, 211, 61, 0.25); }
+        .floating-drops .drop-2 { top: 32%; right: 8%; animation-duration: 18s; background: rgba(0, 217, 255, 0.2); }
+        .floating-drops .drop-3 { bottom: 24%; left: 24%; animation-duration: 12s; background: rgba(255, 107, 107, 0.2); }
+        .floating-drops .drop-4 { bottom: 30%; right: 16%; animation-delay: 0.7s; background: rgba(78, 205, 196, 0.22); }
 
         .container {
             width: min(640px, 100%);
@@ -129,11 +129,11 @@
 
         .card {
             position: relative;
-            background: rgba(255, 255, 255, 0.82);
-            border: 1px solid rgba(17, 19, 34, 0.08);
+            background: rgba(255, 255, 255, 0.85);
+            border: 2px solid rgba(17, 19, 34, 0.1);
             border-radius: 34px;
             padding: clamp(2.25rem, 5vw, 3.75rem);
-            box-shadow: 0 35px 90px rgba(15, 19, 43, 0.22);
+            box-shadow: 0 25px 60px rgba(255, 107, 107, 0.12), 0 15px 40px rgba(0, 217, 255, 0.08);
             backdrop-filter: blur(35px);
             display: flex;
             flex-direction: column;
@@ -227,7 +227,7 @@
             --cta-scale: 1.02;
             --cta-translate-y: -5px;
             background-image: var(--cta-gradient-hover);
-            box-shadow: 0 40px 80px rgba(128, 81, 255, 0.4);
+            box-shadow: 0 40px 80px rgba(255, 107, 107, 0.35);
         }
 
         .cta-button:active {
@@ -246,33 +246,47 @@
             justify-content: center;
         }
 
-        .loading-orb {
-            width: clamp(140px, 34vw, 220px);
-            aspect-ratio: 1 / 1;
-            border-radius: 40% 60% 55% 45%;
-            background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.2));
+        .loading-cloud {
+            width: clamp(140px, 34vw, 200px);
+            height: clamp(70px, 17vw, 100px);
             position: relative;
-            animation: orbPulse 2.4s ease-in-out infinite;
-            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.55), 0 25px 50px rgba(17, 19, 34, 0.25);
-            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .loading-orb::before,
-        .loading-orb::after {
-            content: "";
+        .loading-cloud::before {
+            content: "☁️";
+            font-size: clamp(80px, 18vw, 120px);
+            animation: cloudFloat 2.5s ease-in-out infinite;
+            filter: drop-shadow(0 10px 20px rgba(17, 19, 34, 0.15));
+        }
+
+        .loading-drops {
             position: absolute;
-            inset: 15%;
-            border-radius: 50%;
-            border: 3px dashed rgba(255, 255, 255, 0.6);
-            animation: spin 6s linear infinite;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
         }
 
-        .loading-orb::after {
-            inset: 30%;
-            animation-duration: 4s;
-            border-style: solid;
-            border-color: rgba(255, 255, 255, 0.4) transparent;
+        .loading-drops span {
+            width: 8px;
+            height: 8px;
+            background: #00D9FF;
+            border-radius: 50%;
+            animation: dropFall 1.2s ease-in infinite;
+            box-shadow: 0 2px 8px rgba(0, 217, 255, 0.4);
         }
+
+        .loading-drops span:nth-child(1) { animation-delay: 0s; background: #00D9FF; }
+        .loading-drops span:nth-child(2) { animation-delay: 0.15s; background: #4ECDC4; }
+        .loading-drops span:nth-child(3) { animation-delay: 0.3s; background: #00C2FF; }
+        .loading-drops span:nth-child(4) { animation-delay: 0.45s; background: #95E1D3; }
 
         .loading-text {
             font-size: clamp(1.2rem, 3vw, 1.8rem);
@@ -362,13 +376,24 @@
             100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
         }
 
-        @keyframes orbPulse {
-            0%, 100% { transform: scale(0.9); }
-            50% { transform: scale(1.08); }
+        @keyframes cloudFloat {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-12px) scale(1.05); }
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
+        @keyframes dropFall {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            70% {
+                transform: translateY(50px) scale(0.8);
+                opacity: 0.7;
+            }
+            100% {
+                transform: translateY(60px) scale(0.5);
+                opacity: 0;
+            }
         }
 
         @keyframes answerPop {
@@ -525,7 +550,14 @@
             document.body.className = 'loading';
             content.innerHTML = `
                 <div class="card loading-card">
-                    <div class="loading-orb" aria-hidden="true"></div>
+                    <div class="loading-cloud" aria-hidden="true">
+                        <div class="loading-drops">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
                     <p class="loading-text">Listening for clouds...</p>
                     <p class="loading-sub">Dialing wttr.in, hanging on the line.</p>
                 </div>
@@ -665,9 +697,9 @@
 
         function triggerSparkles(answer) {
             const palettes = {
-                yes: ['#f472b6', '#d946ef', '#c084fc'],
-                maybe: ['#38bdf8', '#5f5ae0', '#a5b4fc'],
-                no: ['#fcd34d', '#fb7185', '#fdba74']
+                yes: ['#00D9FF', '#4ECDC4', '#FF6B6B', '#00C2FF'],
+                maybe: ['#FFD93D', '#95E1D3', '#00D9FF', '#FFC93C'],
+                no: ['#FFD93D', '#FF6B6B', '#FFC93C', '#FF5C8A']
             };
 
             const colors = palettes[answer] || palettes.maybe;
