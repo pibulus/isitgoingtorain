@@ -89,12 +89,6 @@
     </script>
 
     <style>
-        @property --gradient-angle {
-            syntax: '<angle>';
-            initial-value: 0deg;
-            inherits: false;
-        }
-
         :root {
             --ink: #1a1625;
             --ink-soft: rgba(26, 22, 37, 0.75);
@@ -128,22 +122,19 @@
             overflow: hidden;
         }
 
-        /* Animated mesh gradient background */
+        /* Simple gradient background - no animation */
         body::before {
             content: "";
             position: fixed;
-            inset: -50%;
-            background: conic-gradient(
-                from var(--gradient-angle),
+            inset: 0;
+            background: radial-gradient(
+                circle at 30% 40%,
                 var(--accent-peach),
                 var(--accent-sky),
                 var(--accent-mint),
-                var(--cream-soft),
-                var(--accent-peach)
+                var(--cream-soft)
             );
-            animation: rotateGradient 20s linear infinite;
-            filter: blur(100px);
-            opacity: 0.4;
+            opacity: 0.3;
             pointer-events: none;
             z-index: 0;
         }
@@ -181,7 +172,6 @@
                 0 2px 8px rgba(26, 22, 37, 0.04),
                 inset 0 1px 0 rgba(255, 255, 255, 0.8),
                 inset 0 -1px 0 rgba(26, 22, 37, 0.05);
-            backdrop-filter: blur(20px) saturate(180%);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -190,7 +180,7 @@
             max-width: 660px;
             width: 100%;
             overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.3s ease;
         }
 
         /* Glossy shine effect */
@@ -265,21 +255,6 @@
             line-height: 1.1;
             letter-spacing: -0.03em;
             margin-bottom: 0;
-            position: relative;
-            display: inline-block;
-        }
-
-        /* Animated underline */
-        .hero-title::after {
-            content: "";
-            position: absolute;
-            bottom: -8px;
-            left: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-peach), var(--accent-sky), var(--accent-mint));
-            border-radius: 2px;
-            width: 0;
-            animation: growUnderline 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
         }
 
         .hero-copy {
@@ -329,16 +304,6 @@
 
         .cloud-body {
             transform-origin: center;
-            animation: cloudFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes cloudFloat {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-10px);
-            }
         }
 
         .cloud-eye {
@@ -651,11 +616,6 @@
         }
 
         /* Keyframe Animations */
-        @keyframes rotateGradient {
-            0% { --gradient-angle: 0deg; transform: rotate(0deg); }
-            100% { --gradient-angle: 360deg; transform: rotate(360deg); }
-        }
-
         @keyframes fadeInUp {
             0% {
                 opacity: 0;
@@ -664,17 +624,6 @@
             100% {
                 opacity: 1;
                 transform: translateY(0);
-            }
-        }
-
-        @keyframes growUnderline {
-            0% {
-                width: 0;
-                opacity: 0;
-            }
-            100% {
-                width: 100%;
-                opacity: 1;
             }
         }
 
@@ -886,26 +835,29 @@
                                 </linearGradient>
                             </defs>
 
-                            <!-- Cloud shape -->
+                            <!-- Cloud shape - cuter and rounder -->
                             <g class="cloud-body">
-                                <path class="cloud-shape" fill="url(#cloudGradient)" stroke="#1a1625" stroke-width="3"
-                                    d="M 100 150
-                                       C 100 120, 120 100, 150 100
-                                       C 160 70, 190 60, 220 70
-                                       C 250 60, 280 80, 280 110
-                                       C 310 110, 330 130, 330 160
-                                       C 330 190, 310 210, 280 210
-                                       L 120 210
-                                       C 90 210, 70 190, 70 160
-                                       C 70 145, 80 135, 100 150 Z" />
+                                <path class="cloud-shape" fill="url(#cloudGradient)" stroke="#1a1625" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"
+                                    d="M 95 165
+                                       C 75 165, 60 150, 60 130
+                                       C 60 115, 68 102, 80 96
+                                       C 82 75, 100 60, 122 60
+                                       C 135 50, 152 48, 168 54
+                                       C 180 42, 198 38, 215 44
+                                       C 232 38, 252 42, 265 54
+                                       C 285 54, 302 68, 308 88
+                                       C 328 92, 342 108, 342 128
+                                       C 342 150, 326 168, 304 170
+                                       L 115 170
+                                       C 103 170, 95 165, 95 165 Z" />
 
-                                <!-- Left eye -->
+                                <!-- Left eye - closer to center -->
                                 <ellipse class="cloud-eye cloud-eye-left"
-                                    cx="160" cy="140" rx="12" ry="20" fill="#1a1625" />
+                                    cx="175" cy="120" rx="14" ry="22" fill="#1a1625" />
 
-                                <!-- Right eye -->
+                                <!-- Right eye - closer to center -->
                                 <ellipse class="cloud-eye cloud-eye-right"
-                                    cx="240" cy="140" rx="12" ry="20" fill="#1a1625" />
+                                    cx="225" cy="120" rx="14" ry="22" fill="#1a1625" />
                             </g>
                         </svg>
                         <span class="cloud-label">Tap the cloud</span>
