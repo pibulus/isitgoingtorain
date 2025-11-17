@@ -288,6 +288,74 @@
             line-height: 1.55;
         }
 
+        /* Cloud Button */
+        .cloud-button {
+            position: relative;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .cloud-button:hover {
+            transform: translateY(-8px) scale(1.05);
+        }
+
+        .cloud-button:active {
+            transform: translateY(-2px) scale(0.98);
+        }
+
+        .cloud-button:focus-visible {
+            outline: 3px solid var(--accent-sky);
+            outline-offset: 8px;
+            border-radius: 12px;
+        }
+
+        .cloud-svg {
+            width: clamp(180px, 40vw, 280px);
+            height: auto;
+            filter: drop-shadow(0 8px 24px rgba(135, 206, 235, 0.3));
+            transition: filter 0.3s ease;
+        }
+
+        .cloud-button:hover .cloud-svg {
+            filter: drop-shadow(0 12px 32px rgba(135, 206, 235, 0.5));
+        }
+
+        .cloud-body {
+            transform-origin: center;
+            animation: cloudFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes cloudFloat {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .cloud-eye {
+            transition: ry 0.15s ease-out;
+        }
+
+        .cloud-eye.blinking {
+            ry: 2;
+        }
+
+        .cloud-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink-soft);
+            letter-spacing: 0.02em;
+        }
+
         .cta-button {
             --magnet-x: 0px;
             --magnet-y: 0px;
@@ -728,6 +796,7 @@
         let isChecking = false;
         let errorTimeout = null;
         let magnetCleanup = null;
+        let blinkInterval = null;
 
         const HERO_LINES = [
             'Stepping out? Let the sky answer first.',
@@ -739,6 +808,48 @@
 
         function pickHeroLine() {
             return HERO_LINES[Math.floor(Math.random() * HERO_LINES.length)];
+        }
+
+        function blink() {
+            const leftEye = document.querySelector('.cloud-eye-left');
+            const rightEye = document.querySelector('.cloud-eye-right');
+
+            if (!leftEye || !rightEye) return;
+
+            // Add blinking class
+            leftEye.classList.add('blinking');
+            rightEye.classList.add('blinking');
+
+            // Remove after blink duration
+            setTimeout(() => {
+                leftEye.classList.remove('blinking');
+                rightEye.classList.remove('blinking');
+            }, 150);
+        }
+
+        function startBlinking() {
+            // Clear any existing interval
+            if (blinkInterval) {
+                clearInterval(blinkInterval);
+            }
+
+            // Blink randomly between 2-6 seconds
+            const scheduleBlink = () => {
+                const delay = 2000 + Math.random() * 4000;
+                blinkInterval = setTimeout(() => {
+                    blink();
+                    scheduleBlink();
+                }, delay);
+            };
+
+            scheduleBlink();
+        }
+
+        function stopBlinking() {
+            if (blinkInterval) {
+                clearTimeout(blinkInterval);
+                blinkInterval = null;
+            }
         }
 
         function renderIntro() {
@@ -764,15 +875,49 @@
                     <p class="hero-copy">
                         ${heroLine}
                     </p>
-                    <button class="cta-button" id="checkButton">
-                        <span>Let's check</span>
+
+                    <button class="cloud-button" id="cloudButton" aria-label="Check the weather">
+                        <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="cloud-svg">
+                            <defs>
+                                <linearGradient id="cloudGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                    <stop offset="0%" stop-color="#87CEEB" />
+                                    <stop offset="50%" stop-color="#B8E6F5" />
+                                    <stop offset="100%" stop-color="#FFFAED" />
+                                </linearGradient>
+                            </defs>
+
+                            <!-- Cloud shape -->
+                            <g class="cloud-body">
+                                <path class="cloud-shape" fill="url(#cloudGradient)" stroke="#1a1625" stroke-width="3"
+                                    d="M 100 150
+                                       C 100 120, 120 100, 150 100
+                                       C 160 70, 190 60, 220 70
+                                       C 250 60, 280 80, 280 110
+                                       C 310 110, 330 130, 330 160
+                                       C 330 190, 310 210, 280 210
+                                       L 120 210
+                                       C 90 210, 70 190, 70 160
+                                       C 70 145, 80 135, 100 150 Z" />
+
+                                <!-- Left eye -->
+                                <ellipse class="cloud-eye cloud-eye-left"
+                                    cx="160" cy="140" rx="12" ry="20" fill="#1a1625" />
+
+                                <!-- Right eye -->
+                                <ellipse class="cloud-eye cloud-eye-right"
+                                    cx="240" cy="140" rx="12" ry="20" fill="#1a1625" />
+                            </g>
+                        </svg>
+                        <span class="cloud-label">Tap the cloud</span>
                     </button>
                 </div>
             `;
 
-            const button = document.getElementById('checkButton');
-            button.addEventListener('click', startCheck, { once: true });
-            magnetCleanup = setupMagnet(button);
+            const cloudBtn = document.getElementById('cloudButton');
+            cloudBtn.addEventListener('click', startCheck, { once: true });
+
+            // Start blinking animation
+            startBlinking();
         }
 
         function showLoading() {
@@ -787,6 +932,9 @@
                 magnetCleanup();
                 magnetCleanup = null;
             }
+
+            // Stop cloud blinking
+            stopBlinking();
 
             document.body.className = 'loading';
             content.innerHTML = `
