@@ -89,15 +89,25 @@
     </script>
 
     <style>
+        @property --gradient-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
         :root {
-            --ink: #111322;
-            --ink-soft: rgba(17, 19, 34, 0.7);
-            --ink-muted: rgba(17, 19, 34, 0.55);
-            --card-bg: rgba(255, 255, 255, 0.9);
-            --card-border: rgba(17, 19, 34, 0.08);
-            --cta-gradient: linear-gradient(135deg, #FF6B6B 0%, #FF5C8A 50%, #FFD93D 100%);
-            --cta-gradient-hover: linear-gradient(135deg, #FF4757 0%, #FF3D7F 50%, #FFC93C 100%);
-            --bg-gradient: linear-gradient(135deg, #FFE9D6, #FFF8E7, #E3F9FF, #FFE5E5);
+            --ink: #1a1625;
+            --ink-soft: rgba(26, 22, 37, 0.75);
+            --ink-muted: rgba(26, 22, 37, 0.5);
+            --cream: #FFFAED;
+            --cream-soft: #FFF8E7;
+            --glass-bg: rgba(255, 250, 237, 0.75);
+            --glass-border: rgba(26, 22, 37, 0.1);
+            --cta-gradient: linear-gradient(135deg, #FF6B9D 0%, #C44569 50%, #FFC93C 100%);
+            --cta-gradient-hover: linear-gradient(135deg, #FF5583 0%, #B33559 50%, #FFB700 100%);
+            --accent-sky: #87CEEB;
+            --accent-mint: #B8E6D5;
+            --accent-peach: #FFCBA4;
         }
 
         *, *::before, *::after {
@@ -111,80 +121,44 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            background: var(--bg-gradient);
-            background-size: 400% 400%;
-            animation: auroraShift 32s ease-in-out infinite;
-            transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
+            background: var(--cream);
             position: relative;
             padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 3rem);
             color: var(--ink);
+            overflow: hidden;
         }
 
-        body.idle {
-            --bg-gradient: linear-gradient(135deg, #FFE9D6, #FFF8E7, #E3F9FF, #FFE5E5);
-        }
-
-        body.loading {
-            --bg-gradient: linear-gradient(135deg, #FFD93D, #FFE9D6, #00D9FF, #FFF8E7);
-        }
-
-        body.yes {
-            --bg-gradient: linear-gradient(135deg, #00C2FF, #4ECDC4, #FF6B6B, #FF5C8A);
-        }
-
-        body.maybe {
-            --bg-gradient: linear-gradient(135deg, #FFF8E7, #FFD93D, #00D9FF, #95E1D3);
-        }
-
-        body.no {
-            --bg-gradient: linear-gradient(135deg, #FFD93D, #FFC93C, #FF6B6B, #FFAA00);
-        }
-
+        /* Animated mesh gradient background */
         body::before {
             content: "";
             position: fixed;
-            inset: 0;
-            background-image: radial-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px);
-            background-size: 140px 140px;
-            opacity: 0.5;
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        body::after {
-            content: "";
-            position: fixed;
-            inset: -15%;
-            background: conic-gradient(from 160deg, #FFD93D, #00D9FF, #FF6B6B, #95E1D3, #FFD93D);
-            animation: gradientShift 35s ease-in-out infinite;
-            filter: blur(70px);
-            opacity: 0.6;
-            pointer-events: none;
-            z-index: -2;
-        }
-
-        .floating-drops {
-            position: fixed;
-            inset: 0;
+            inset: -50%;
+            background: conic-gradient(
+                from var(--gradient-angle),
+                var(--accent-peach),
+                var(--accent-sky),
+                var(--accent-mint),
+                var(--cream-soft),
+                var(--accent-peach)
+            );
+            animation: rotateGradient 20s linear infinite;
+            filter: blur(100px);
+            opacity: 0.4;
             pointer-events: none;
             z-index: 0;
         }
 
-        .floating-drops span {
-            position: absolute;
-            width: clamp(28px, 4vw, 60px);
-            aspect-ratio: 1 / 1.5;
-            background: rgba(255, 211, 61, 0.25);
-            border-radius: 46% 54% 52% 48%;
-            filter: blur(0.6px);
-            animation: drift 14s ease-in-out infinite;
+        /* Combined noise + vignette overlay */
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background-image:
+                radial-gradient(circle at center, transparent 20%, rgba(26, 22, 37, 0.15) 100%),
+                url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 10;
         }
-
-        .floating-drops .drop-1 { top: 18%; left: 12%; animation-delay: 0s; background: rgba(255, 211, 61, 0.25); }
-        .floating-drops .drop-2 { top: 32%; right: 8%; animation-duration: 18s; background: rgba(0, 217, 255, 0.2); }
-        .floating-drops .drop-3 { bottom: 24%; left: 24%; animation-duration: 12s; background: rgba(255, 107, 107, 0.2); }
-        .floating-drops .drop-4 { bottom: 30%; right: 16%; animation-delay: 0.7s; background: rgba(78, 205, 196, 0.22); }
 
         .container {
             width: min(640px, 100%);
@@ -198,55 +172,114 @@
 
         .card {
             position: relative;
-            background: rgba(255, 255, 255, 0.85);
-            border: 2px solid rgba(17, 19, 34, 0.1);
-            border-radius: 34px;
-            padding: clamp(2.25rem, 5vw, 3.75rem);
-            box-shadow: 0 25px 60px rgba(255, 107, 107, 0.12), 0 15px 40px rgba(0, 217, 255, 0.08);
-            backdrop-filter: blur(35px);
+            background: var(--glass-bg);
+            border: 3px solid rgba(26, 22, 37, 0.12);
+            border-radius: 36px;
+            padding: clamp(2.5rem, 5vw, 4rem);
+            box-shadow:
+                0 8px 32px rgba(26, 22, 37, 0.08),
+                0 2px 8px rgba(26, 22, 37, 0.04),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(26, 22, 37, 0.05);
+            backdrop-filter: blur(20px) saturate(180%);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 1.8rem;
             min-height: 520px;
             max-width: 660px;
             width: 100%;
             overflow: hidden;
-            transition: transform 0.6s ease, min-height 0.3s ease;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
+        /* Glossy shine effect */
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 100px;
+            background: radial-gradient(ellipse at center top, rgba(255, 255, 255, 0.6), transparent 70%);
+            border-radius: inherit;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        /* Hover glow */
         .card::after {
             content: "";
             position: absolute;
-            inset: 0;
+            inset: -3px;
             border-radius: inherit;
-            background: radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.5), transparent 55%);
+            background: linear-gradient(135deg, var(--accent-peach), var(--accent-sky), var(--accent-mint));
             opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+            z-index: -1;
+            filter: blur(20px);
+            transition: opacity 0.6s ease;
         }
 
         .card:hover {
-            transform: translateY(-6px) scale(1.01);
+            transform: translateY(-8px) scale(1.01);
+            border-color: rgba(26, 22, 37, 0.15);
         }
 
         .card:hover::after {
-            opacity: 1;
+            opacity: 0.3;
         }
 
         .hero-card {
             text-align: left;
-            animation: heroBreathe 9s ease-in-out infinite;
-            gap: 1.8rem;
+            gap: 1.5rem;
             justify-content: center;
+        }
+
+        /* Eyebrow text */
+        .hero-eyebrow {
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            opacity: 0;
+            animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
+        }
+
+        .hero-eyebrow::before,
+        .hero-eyebrow::after {
+            content: "";
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--ink-muted), transparent);
+            flex: 1;
+            max-width: 40px;
         }
 
         .hero-title {
             font-family: 'Space Grotesk', 'Sora', sans-serif;
             font-size: clamp(3.6rem, 7vw, 5.4rem);
-            line-height: 1;
+            line-height: 1.1;
             letter-spacing: -0.03em;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0;
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Animated underline */
+        .hero-title::after {
+            content: "";
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-peach), var(--accent-sky), var(--accent-mint));
+            border-radius: 2px;
+            width: 0;
+            animation: growUnderline 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.8s forwards;
         }
 
         .hero-copy {
@@ -258,8 +291,6 @@
         .cta-button {
             --magnet-x: 0px;
             --magnet-y: 0px;
-            --cta-scale: 1;
-            --cta-translate-y: 0px;
             position: relative;
             border: none;
             border-radius: 999px;
@@ -270,17 +301,19 @@
             text-transform: uppercase;
             color: white;
             background-image: var(--cta-gradient);
-            background-size: 180% 180%;
+            background-size: 200% 200%;
+            background-position: 0% 50%;
             cursor: pointer;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.6rem;
-            box-shadow: none;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background-position 0.3s ease;
+            box-shadow: 0 4px 16px rgba(255, 107, 157, 0.2);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
             min-height: 56px;
             width: fit-content;
-            transform: translate3d(var(--magnet-x), calc(var(--magnet-y) + var(--cta-translate-y)), 0) scale(var(--cta-scale));
+            transform: translate(var(--magnet-x), var(--magnet-y));
+            will-change: transform;
         }
 
         .cta-button::after {
@@ -294,15 +327,13 @@
         }
 
         .cta-button:hover {
-            --cta-scale: 1.02;
-            --cta-translate-y: -5px;
-            background-image: var(--cta-gradient-hover);
-            box-shadow: 0 40px 80px rgba(255, 107, 107, 0.35);
+            transform: translate(var(--magnet-x), var(--magnet-y)) translateY(-5px) scale(1.02);
+            background-position: 100% 50%;
+            box-shadow: 0 12px 32px rgba(255, 107, 157, 0.35);
         }
 
         .cta-button:active {
-            --cta-scale: 0.99;
-            --cta-translate-y: -1px;
+            transform: translate(var(--magnet-x), var(--magnet-y)) translateY(-1px) scale(0.99);
         }
 
         .cta-button:focus-visible {
@@ -370,7 +401,7 @@
 
         .answer-card {
             text-align: left;
-            justify-content: center;
+            justify-content: flex-start;
             gap: 1.5rem;
         }
 
@@ -386,14 +417,23 @@
             color: var(--ink-soft);
         }
 
+        /* Answer with emoji inline */
         .answer {
-            font-size: clamp(4rem, 12vw, 8rem);
+            font-size: clamp(3.5rem, 10vw, 6.5rem);
             font-weight: 900;
             letter-spacing: -0.04em;
-            line-height: 1;
+            line-height: 1.1;
+            display: flex;
+            align-items: center;
+            gap: 0.4em;
             opacity: 0;
             transform: translateY(20px) scale(0.95);
             animation: answerPop 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        .answer .emoji {
+            font-size: 1.2em;
+            animation: emojiFloat 2s ease-in-out infinite;
         }
 
         .location {
@@ -416,6 +456,94 @@
         .detail-secondary {
             font-size: 1rem;
             color: var(--ink-muted);
+        }
+
+        /* Tomorrow forecast glass pill */
+        .tomorrow-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(255, 255, 255, 0.5);
+            border: 2px solid rgba(26, 22, 37, 0.08);
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--ink);
+            backdrop-filter: blur(10px);
+            box-shadow:
+                0 2px 8px rgba(26, 22, 37, 0.06),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            margin-top: 0.5rem;
+        }
+
+        /* Action buttons container */
+        .cta-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 0.5rem;
+        }
+
+        /* Secondary button (Check Again) */
+        .btn-secondary {
+            padding: 0.9rem 1.8rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.6);
+            border: 2px solid rgba(26, 22, 37, 0.15);
+            border-radius: 999px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow:
+                0 2px 8px rgba(26, 22, 37, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px) scale(1.02);
+            border-color: rgba(26, 22, 37, 0.25);
+            box-shadow: 0 6px 20px rgba(26, 22, 37, 0.15);
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .btn-secondary:active {
+            transform: translateY(-1px) scale(0.99);
+        }
+
+        /* Share link */
+        .share-link {
+            padding: 0.9rem 1.8rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--ink-soft);
+            background: transparent;
+            border: 2px solid rgba(26, 22, 37, 0.12);
+            border-radius: 999px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .share-link:hover {
+            transform: translateY(-3px) scale(1.02);
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.4);
+            border-color: rgba(26, 22, 37, 0.2);
+        }
+
+        .share-link:active {
+            transform: translateY(-1px) scale(0.99);
         }
 
         .brand-terminal {
@@ -454,10 +582,41 @@
             box-shadow: 0 0 12px currentColor;
         }
 
-        @keyframes drift {
-            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
-            50% { transform: translate3d(0, -28px, 0) scale(1.05); opacity: 0.4; }
-            100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
+        /* Keyframe Animations */
+        @keyframes rotateGradient {
+            0% { --gradient-angle: 0deg; transform: rotate(0deg); }
+            100% { --gradient-angle: 360deg; transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes growUnderline {
+            0% {
+                width: 0;
+                opacity: 0;
+            }
+            100% {
+                width: 100%;
+                opacity: 1;
+            }
+        }
+
+        @keyframes emojiFloat {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+            50% {
+                transform: translateY(-8px) rotate(5deg);
+            }
         }
 
         @keyframes cloudFloat {
@@ -481,8 +640,18 @@
         }
 
         @keyframes answerPop {
-            50% { opacity: 1; transform: translateY(-6px) scale(1.04); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.9) rotate(-2deg);
+            }
+            60% {
+                opacity: 1;
+                transform: translateY(-8px) scale(1.05) rotate(1deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1) rotate(0deg);
+            }
         }
 
         @keyframes sparkle {
@@ -493,19 +662,7 @@
 
         @keyframes heroBreathe {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-6px) scale(1.01); }
-        }
-
-        @keyframes auroraShift {
-            0% { background-position: 0% 0%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 0%; }
-        }
-
-        @keyframes gradientShift {
-            0% { transform: rotate(0deg); background-position: 0% 50%; }
-            50% { transform: rotate(180deg); background-position: 100% 50%; }
-            100% { transform: rotate(360deg); background-position: 0% 50%; }
+            50% { transform: translateY(-6px) scale(1.005); }
         }
 
         @media (max-width: 768px) {
@@ -538,12 +695,6 @@
     </style>
 </head>
 <body class="idle">
-    <div class="floating-drops" aria-hidden="true">
-        <span class="drop-1"></span>
-        <span class="drop-2"></span>
-        <span class="drop-3"></span>
-        <span class="drop-4"></span>
-    </div>
     <div class="container">
         <div id="content"></div>
     </div>
@@ -608,6 +759,7 @@
 
             content.innerHTML = `
                 <div class="card hero-card">
+                    <div class="hero-eyebrow">Weather Oracle</div>
                     <h1 class="hero-title">Is it going to rain?</h1>
                     <p class="hero-copy">
                         ${heroLine}
@@ -704,7 +856,7 @@
         }
 
         function renderAnswer(answer, location, weather) {
-            document.body.className = answer.toLowerCase();
+            document.body.className = 'idle'; // Keep cream background
 
             const label = ANSWER_LABELS[answer];
             const emoji = ANSWER_EMOJI[answer];
@@ -716,19 +868,72 @@
 
             content.innerHTML = `
                 <div class="card answer-card">
-                    <div class="answer">${emoji} ${label}</div>
+                    <div class="answer">
+                        <span class="emoji">${emoji}</span>
+                        <span>${label}</span>
+                    </div>
                     <p class="location">📍 ${location.city || 'Unknown'}${location.country ? ', ' + location.country : ''}</p>
                     <div class="details">
                         <p class="detail-main">${weather.precipChance}% chance · ${weather.condition} · ${weather.temp}°C</p>
                         <p class="detail-secondary">${vibeCopy} · Updated ${timestamp}</p>
-                        <p class="detail-secondary" style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid rgba(17, 19, 34, 0.08);">
-                            Tomorrow ${tomorrowEmoji}: ${weather.tomorrow.precipChance}% · ${weather.tomorrow.condition} · ${weather.tomorrow.minTemp}-${weather.tomorrow.maxTemp}°C
-                        </p>
+
+                        <div class="tomorrow-pill">
+                            <span>${tomorrowEmoji}</span>
+                            <span>Tomorrow: ${weather.tomorrow.precipChance}% · ${weather.tomorrow.minTemp}-${weather.tomorrow.maxTemp}°C</span>
+                        </div>
+                    </div>
+
+                    <div class="cta-group">
+                        <button class="btn-secondary" id="checkAgainBtn">
+                            <span>🔄</span>
+                            <span>Check Again</span>
+                        </button>
+                        <button class="share-link" id="shareBtn">
+                            <span>↗</span>
+                            <span>Share Result</span>
+                        </button>
                     </div>
                 </div>
             `;
 
+            // Add check again functionality
+            document.getElementById('checkAgainBtn').addEventListener('click', () => {
+                renderIntro();
+            });
+
+            // Add share functionality
+            document.getElementById('shareBtn').addEventListener('click', async () => {
+                const shareText = `${emoji} ${label} – ${weather.precipChance}% chance of rain in ${location.city}!\n\nCheck yours at isitgoingtorain.app`;
+
+                if (navigator.share) {
+                    try {
+                        await navigator.share({
+                            title: 'Is it going to rain?',
+                            text: shareText,
+                            url: 'https://isitgoingtorain.app'
+                        });
+                    } catch (err) {
+                        if (err.name !== 'AbortError') {
+                            copyToClipboard(shareText);
+                        }
+                    }
+                } else {
+                    copyToClipboard(shareText);
+                }
+            });
+
             triggerSparkles(answer.toLowerCase());
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.getElementById('shareBtn');
+                const originalHTML = btn.innerHTML;
+                btn.innerHTML = '<span>✓</span><span>Copied!</span>';
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                }, 2000);
+            });
         }
 
         function showError(message) {
@@ -774,13 +979,22 @@
         }
 
         function setupMagnet(button) {
-            const strength = 18;
+            const strength = 12; // Reduced from 18 for more subtle effect
+            let rafId = null;
+
             const onMove = (event) => {
-                const rect = button.getBoundingClientRect();
-                const moveX = (event.clientX - (rect.left + rect.width / 2)) / strength;
-                const moveY = (event.clientY - (rect.top + rect.height / 2)) / strength;
-                button.style.setProperty('--magnet-x', `${moveX}px`);
-                button.style.setProperty('--magnet-y', `${moveY}px`);
+                if (rafId) return; // Throttle with RAF
+
+                rafId = requestAnimationFrame(() => {
+                    const rect = button.getBoundingClientRect();
+                    const centerX = rect.left + rect.width / 2;
+                    const centerY = rect.top + rect.height / 2;
+                    const moveX = (event.clientX - centerX) / strength;
+                    const moveY = (event.clientY - centerY) / strength;
+                    button.style.setProperty('--magnet-x', `${moveX}px`);
+                    button.style.setProperty('--magnet-y', `${moveY}px`);
+                    rafId = null;
+                });
             };
 
             const onReset = () => {
@@ -795,6 +1009,7 @@
 
             // Return cleanup function
             return () => {
+                if (rafId) cancelAnimationFrame(rafId);
                 button.removeEventListener('pointermove', onMove);
                 ['pointerleave', 'pointerup', 'blur'].forEach((evt) => {
                     button.removeEventListener(evt, onReset);
