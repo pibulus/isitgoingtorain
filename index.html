@@ -122,21 +122,30 @@
             overflow: hidden;
         }
 
-        /* Simple gradient background - no animation */
+        /* Animated gradient background - lighter approach */
         body::before {
             content: "";
             position: fixed;
             inset: 0;
-            background: radial-gradient(
-                circle at 30% 40%,
+            background: linear-gradient(
+                45deg,
                 var(--accent-peach),
                 var(--accent-sky),
                 var(--accent-mint),
-                var(--cream-soft)
+                var(--cream-soft),
+                var(--accent-peach)
             );
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             opacity: 0.3;
             pointer-events: none;
             z-index: 0;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* Combined noise + vignette overlay */
@@ -221,32 +230,10 @@
         }
 
         .hero-card {
-            text-align: left;
-            gap: 1.5rem;
+            text-align: center;
+            gap: 1.2rem;
             justify-content: center;
-        }
-
-        /* Eyebrow text */
-        .hero-eyebrow {
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.15em;
-            text-transform: uppercase;
-            color: var(--ink-muted);
-            display: flex;
             align-items: center;
-            gap: 0.5rem;
-            opacity: 0;
-            animation: fadeInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.2s forwards;
-        }
-
-        .hero-eyebrow::before,
-        .hero-eyebrow::after {
-            content: "";
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--ink-muted), transparent);
-            flex: 1;
-            max-width: 40px;
         }
 
         .hero-title {
@@ -270,10 +257,7 @@
             background: transparent;
             cursor: pointer;
             padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
+            margin-bottom: 1rem;
             transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
@@ -292,7 +276,7 @@
         }
 
         .cloud-svg {
-            width: clamp(180px, 40vw, 280px);
+            width: clamp(160px, 35vw, 220px);
             height: auto;
             filter: drop-shadow(0 8px 24px rgba(135, 206, 235, 0.3));
             transition: filter 0.3s ease;
@@ -312,13 +296,6 @@
 
         .cloud-eye.blinking {
             ry: 2;
-        }
-
-        .cloud-label {
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: var(--ink-soft);
-            letter-spacing: 0.02em;
         }
 
         .cta-button {
@@ -819,12 +796,6 @@
 
             content.innerHTML = `
                 <div class="card hero-card">
-                    <div class="hero-eyebrow">Weather Oracle</div>
-                    <h1 class="hero-title">Is it going to rain?</h1>
-                    <p class="hero-copy">
-                        ${heroLine}
-                    </p>
-
                     <button class="cloud-button" id="cloudButton" aria-label="Check the weather">
                         <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" class="cloud-svg">
                             <defs>
@@ -860,13 +831,31 @@
                                     cx="225" cy="120" rx="14" ry="22" fill="#1a1625" />
                             </g>
                         </svg>
-                        <span class="cloud-label">Tap the cloud</span>
+                    </button>
+
+                    <h1 class="hero-title">Is it going to rain?</h1>
+                    <p class="hero-copy">
+                        ${heroLine}
+                    </p>
+
+                    <button class="cta-button" id="checkButton">
+                        <span>Let's check</span>
                     </button>
                 </div>
             `;
 
             const cloudBtn = document.getElementById('cloudButton');
-            cloudBtn.addEventListener('click', startCheck, { once: true });
+            const checkBtn = document.getElementById('checkButton');
+
+            cloudBtn.addEventListener('click', () => {
+                stopBlinking();
+                startCheck();
+            }, { once: true });
+
+            checkBtn.addEventListener('click', () => {
+                stopBlinking();
+                startCheck();
+            }, { once: true });
 
             // Start blinking animation
             startBlinking();
