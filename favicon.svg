@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
+  <title id="title">Is it going to rain? icon</title>
+  <desc id="desc">A soft rounded square with an umbrella emoji.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
+      <stop offset="0%" stop-color="#fff0e2"/>
+      <stop offset="50%" stop-color="#ffe2f1"/>
+      <stop offset="100%" stop-color="#e6efff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="132" fill="url(#bg)"/>
+  <rect x="18" y="18" width="476" height="476" rx="114" fill="none" stroke="#111322" stroke-opacity="0.08"/>
+  <text x="50%" y="56%" text-anchor="middle" dominant-baseline="middle" font-size="248">☔</text>
+</svg>

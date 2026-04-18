@@ -1,0 +1,27 @@
+{
+  "name": "Is it going to rain?",
+  "short_name": "Rain?",
+  "description": "One tap for the umbrella check. Cute, quick, and useful for your patch of sky.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff5ee",
+  "theme_color": "#ffe6ef",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
