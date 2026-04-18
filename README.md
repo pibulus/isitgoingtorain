@@ -7,18 +7,20 @@ One question. One answer. Zero bullshit.
 ## Features
 
 - 🎯 **Single purpose** - Answers one question perfectly
-- 📍 **Auto-location** - Uses your IP to detect city
-- 🌈 **Gradient answers** - YES (purple), NO (pink), MAYBE (blue)
-- 📱 **Mobile-first** - Works everywhere
+- 📍 **Actual location first** - Uses browser geolocation when you allow it
+- 🏙️ **Manual city fallback** - Type a city if you do not want to share location
+- 🌈 **Expressive answers** - YES / MAYBE / NO with color-shifting result states
+- ⏱️ **Near-term forecast strip** - Shows the next few forecast windows so the answer has receipts
+- 📱 **Mobile-first** - Clean one-thumb flow at phone sizes
 - ⚡ **Zero dependencies** - Pure HTML/CSS/JS
-- 🔒 **Privacy-first** - No tracking, no cookies, no BS
-- 🆓 **Free APIs** - wttr.in (weather) + ipinfo.io (location)
+- 🔒 **Privacy-first** - No tracking, no cookies, no backend
+- 🆓 **Free weather data** - Powered by wttr.in
 
 ## Tech Stack
 
 - **Zero frameworks** - Just one HTML file
 - **wttr.in API** - Free weather data, no API key needed
-- **ipinfo.io** - Free IP geolocation
+- **Browser Geolocation API** - Native location lookup with a manual fallback
 
 ## Deploy
 
@@ -48,6 +50,12 @@ deno run --allow-net --allow-read https://deno.land/std/http/file_server.ts
 ```
 
 Open http://localhost:8080
+
+## Behavior
+
+- Tap `Check my sky` to ask the browser for your location.
+- If location is blocked or you just do not feel like it, tap `Type a city instead`.
+- The app uses wttr.in's structured forecast data to answer based on the next few forecast windows, not a fake humidity guess.
 
 ## Philosophy
 

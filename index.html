@@ -4,72 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Is it going to rain?</title>
-    <meta name="description" content="Just tell me if it's going to rain. One tap, one answer.">
+    <meta name="description" content="Just tell me if it is going to rain. One tap, one answer, zero weather-app nonsense.">
+    <meta name="theme-color" content="#ffe6ef">
+    <meta name="color-scheme" content="light">
+    <link rel="canonical" href="https://isitgoingtorain.app">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='18' fill='%23111322'/%3E%3Ctext x='50%25' y='56%25' text-anchor='middle' dominant-baseline='middle' font-size='34'%3E%E2%98%94%EF%B8%8F%3C/text%3E%3C/svg%3E">
 
     <meta property="og:title" content="Is it going to rain?">
-    <meta property="og:description" content="Just tell me if it's going to rain. One tap, one answer.">
+    <meta property="og:description" content="One tap. Umbrella or not.">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://isitgoingtorain.app">
+    <meta property="og:site_name" content="Is it going to rain?">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Is it going to rain?">
-    <meta name="twitter:description" content="Just tell me if it's going to rain. One tap, one answer.">
+    <meta name="twitter:description" content="One tap. Umbrella or not.">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --ink: #111322;
-            --ink-soft: rgba(17, 19, 34, 0.7);
-            --ink-muted: rgba(17, 19, 34, 0.55);
-            --card-bg: #fff8f1;
+            --ink-soft: rgba(17, 19, 34, 0.74);
+            --ink-muted: rgba(17, 19, 34, 0.56);
+            --card-bg: rgba(255, 250, 245, 0.95);
             --card-border: rgba(17, 19, 34, 0.08);
-            --cta-gradient: linear-gradient(120deg, #8455ff 0%, #c643ff 40%, #ff7ac4 80%);
-            --cta-gradient-hover: linear-gradient(120deg, #9f6bff 0%, #ff579f 60%, #ffc178 100%);
-            --bg-gradient: linear-gradient(120deg, #fef2ef, #eddcf7, #fde3da, #e9f2dc);
+            --panel-bg: rgba(255, 255, 255, 0.58);
+            --cta-gradient: linear-gradient(120deg, #f7b172 0%, #ff82bf 52%, #9579ff 100%);
+            --cta-gradient-hover: linear-gradient(120deg, #ffbe86 0%, #ff91c8 50%, #a58cff 100%);
+            --bg-gradient: linear-gradient(120deg, #fff5ee, #f3e7ff, #fff3e1, #e6f5ff);
+            --chip-bg: rgba(255, 255, 255, 0.55);
+            --chip-border: rgba(17, 19, 34, 0.08);
+            --button-shadow: 0 18px 32px rgba(149, 121, 255, 0.22);
+            --answer-accent: #7d6cff;
+            --answer-glow: rgba(149, 121, 255, 0.2);
         }
 
-        *, *::before, *::after {
+        * {
             box-sizing: border-box;
         }
 
+        *::before,
+        *::after {
+            box-sizing: border-box;
+        }
+
+        html {
+            min-height: 100%;
+        }
+
         body {
-            font-family: 'Sora', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            margin: 0;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: clamp(1.5rem, 4vw, 3rem) clamp(1.1rem, 4vw, 3rem);
+            font-family: 'Sora', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            color: var(--ink);
             background: var(--bg-gradient);
             background-size: 400% 400%;
             animation: auroraShift 42s ease-in-out infinite;
-            transition: background 1s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: hidden;
+            transition: background 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow-x: hidden;
+            overflow-y: auto;
             position: relative;
-            padding: clamp(2rem, 5vw, 3rem) clamp(1.5rem, 4vw, 3rem);
-            color: var(--ink);
         }
 
         body.idle {
-            --bg-gradient: linear-gradient(120deg, #ffe6ef, #e8ddff, #fbe1cf, #e2f7da);
+            --bg-gradient: linear-gradient(135deg, #fff1e8, #ffe4f4 34%, #efe3ff 68%, #dff4ff);
+            --answer-accent: #ff8fb6;
+            --answer-glow: rgba(255, 143, 182, 0.18);
         }
 
         body.loading {
-            --bg-gradient: linear-gradient(120deg, #dedcff, #f8cfff, #ffd8c7, #d5f5f0);
+            --bg-gradient: linear-gradient(120deg, #efe7ff, #ffdff1, #ffe6d4, #dcf3f5);
+            --answer-accent: #8b7cff;
+            --answer-glow: rgba(139, 124, 255, 0.22);
         }
 
         body.yes {
-            --bg-gradient: linear-gradient(120deg, #130320, #4c30d8, #ff5faf, #ffbd82);
+            --bg-gradient: linear-gradient(135deg, #dde4ff, #d4ecff 30%, #efdfff 66%, #fff0ca);
+            --answer-accent: #625dce;
+            --answer-glow: rgba(98, 93, 206, 0.22);
         }
 
         body.maybe {
-            --bg-gradient: linear-gradient(120deg, #cdf4ff, #59c6ec, #4f58e6, #a17cf5);
+            --bg-gradient: linear-gradient(135deg, #dff6ff, #dce8ff 34%, #f0e4ff 70%, #fff4d6);
+            --answer-accent: #4f7bd6;
+            --answer-glow: rgba(79, 123, 214, 0.2);
         }
 
         body.no {
-            --bg-gradient: linear-gradient(120deg, #fff0e2, #ffc9c6, #f6aee4, #fee081);
+            --bg-gradient: linear-gradient(135deg, #fff2cf, #ffe1d3 34%, #ffdff0 68%, #f7e9ff);
+            --answer-accent: #dd8a49;
+            --answer-glow: rgba(221, 138, 73, 0.2);
         }
 
         body::before {
@@ -78,7 +110,7 @@
             inset: 0;
             background-image: radial-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px);
             background-size: 140px 140px;
-            opacity: 0.5;
+            opacity: 0.28;
             pointer-events: none;
             z-index: -1;
         }
@@ -86,45 +118,32 @@
         body::after {
             content: "";
             position: fixed;
-            inset: -15%;
-            background: conic-gradient(from 160deg, #fce8ff, #c4f7ff, #ffe8d2, #e6c6ff, #fce8ff);
-            animation: gradientShift 35s ease-in-out infinite;
-            filter: blur(70px);
-            opacity: 0.7;
+            inset: -16%;
+            background: conic-gradient(from 150deg, #ffe9f7, #dff6ff, #fff0d8, #ead7ff, #ffe9f7);
+            animation: gradientShift 34s ease-in-out infinite;
+            filter: blur(72px);
+            opacity: 0.5;
             pointer-events: none;
             z-index: -2;
         }
 
-        .floating-drops {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
+        ::selection {
+            background: rgba(255, 122, 196, 0.26);
         }
 
-        .floating-drops span {
-            position: absolute;
-            width: clamp(28px, 4vw, 60px);
-            aspect-ratio: 1 / 1.5;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 46% 54% 52% 48%;
-            filter: blur(0.6px);
-            animation: drift 14s ease-in-out infinite;
-            transition: transform 0.5s ease, opacity 0.5s ease;
+        button,
+        input {
+            font: inherit;
         }
 
-        .floating-drops span:hover {
-            transform: translateY(-12px) scale(1.08);
-            opacity: 0.9;
+        p,
+        h1,
+        h2 {
+            margin: 0;
         }
-
-        .floating-drops .drop-1 { top: 18%; left: 12%; animation-delay: 0s; }
-        .floating-drops .drop-2 { top: 32%; right: 8%; animation-duration: 18s; }
-        .floating-drops .drop-3 { bottom: 24%; left: 24%; animation-duration: 12s; }
-        .floating-drops .drop-4 { bottom: 30%; right: 16%; animation-delay: 0.7s; }
 
         .container {
-            width: min(640px, 100%);
+            width: min(680px, 100%);
             position: relative;
             z-index: 2;
         }
@@ -135,21 +154,19 @@
 
         .card {
             position: relative;
-            background: rgba(255, 248, 241, 0.92);
-            border: 1px solid rgba(17, 19, 34, 0.08);
-            border-radius: 34px;
-            padding: clamp(2.2rem, 5vw, 3.8rem);
-            box-shadow: 0 35px 95px rgba(15, 19, 43, 0.22);
-            backdrop-filter: blur(28px);
+            width: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            gap: 1.5rem;
-            min-height: 480px;
-            max-width: 660px;
-            width: 100%;
+            gap: 1.4rem;
+            min-height: 0;
+            padding: clamp(1.7rem, 4vw, 3.2rem);
+            border-radius: 34px;
+            border: 1px solid var(--card-border);
+            background: var(--card-bg);
+            box-shadow: 0 28px 62px rgba(15, 19, 43, 0.14);
+            backdrop-filter: blur(28px);
             overflow: hidden;
-            transition: transform 0.6s ease;
+            transition: transform 0.45s ease, box-shadow 0.45s ease;
         }
 
         .card::before {
@@ -158,10 +175,10 @@
             inset: 0;
             border-radius: inherit;
             background-image:
-                radial-gradient(circle at 12% 0%, rgba(255, 194, 236, 0.25), transparent 55%),
+                radial-gradient(circle at 10% 0%, rgba(255, 194, 236, 0.25), transparent 55%),
                 repeating-linear-gradient(45deg, rgba(255, 163, 181, 0.07), rgba(255, 163, 181, 0.07) 2px, transparent 2px, transparent 4px);
             mix-blend-mode: multiply;
-            opacity: 0.4;
+            opacity: 0.44;
             pointer-events: none;
         }
 
@@ -170,14 +187,15 @@
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.45), transparent 55%);
+            background: radial-gradient(circle at 12% 0%, rgba(255, 255, 255, 0.48), transparent 55%);
             opacity: 0;
+            transition: opacity 0.35s ease;
             pointer-events: none;
-            transition: opacity 0.4s ease;
         }
 
         .card:hover {
             transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 34px 74px rgba(15, 19, 43, 0.16);
         }
 
         .card:hover::after {
@@ -185,59 +203,414 @@
         }
 
         .hero-card {
-            text-align: left;
-            animation: heroBreathe 9s ease-in-out infinite;
-            gap: 1.2rem;
+            gap: 1.35rem;
+        }
+
+        .hero-card .weather-scene-wrap {
+            animation: ambientFloat 7s ease-in-out infinite;
+        }
+
+        .hero-layout,
+        .result-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1.08fr) minmax(220px, 0.78fr);
+            gap: 1.25rem;
+            align-items: center;
+        }
+
+        .hero-stack,
+        .answer-wrap,
+        .details {
+            display: grid;
+            gap: 0.8rem;
+        }
+
+        .hero-tag,
+        .meta-chip,
+        .forecast-time,
+        .brand-terminal {
+            font-family: 'IBM Plex Mono', 'Space Grotesk', monospace;
         }
 
         .hero-tag {
-            font-size: 0.85rem;
-            letter-spacing: 0.35em;
+            font-size: 0.84rem;
+            font-weight: 500;
+            letter-spacing: 0.32em;
             text-transform: uppercase;
             color: var(--ink-muted);
-            font-weight: 600;
         }
 
         .hero-title {
             font-family: 'Space Grotesk', 'Sora', sans-serif;
-            font-size: clamp(3.6rem, 7vw, 5.4rem);
-            line-height: 1;
-            letter-spacing: -0.03em;
-            margin-bottom: 0.5rem;
+            font-size: clamp(3rem, 8vw, 4.9rem);
+            line-height: 0.97;
+            letter-spacing: -0.045em;
+            max-width: 9ch;
         }
 
         .hero-copy {
-            font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+            max-width: 28ch;
+            font-size: clamp(0.98rem, 2.3vw, 1.12rem);
+            line-height: 1.48;
             color: var(--ink-soft);
-            line-height: 1.5;
+        }
+
+        .weather-scene-wrap {
+            display: flex;
+            justify-content: center;
+        }
+
+        .weather-scene {
+            position: relative;
+            width: min(100%, 260px);
+            min-height: 224px;
+            border-radius: 30px;
+            overflow: hidden;
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            background:
+                radial-gradient(circle at 74% 20%, rgba(255, 239, 198, 0.54), transparent 26%),
+                linear-gradient(180deg, #fff8f1 0%, #fff1ec 54%, #eaf4ff 100%);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.9),
+                inset 0 -16px 28px rgba(149, 121, 255, 0.08),
+                inset 0 -28px 44px rgba(255, 255, 255, 0.18),
+                0 18px 28px rgba(17, 19, 34, 0.08);
+        }
+
+        .weather-scene::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(circle at 20% 14%, rgba(255, 255, 255, 0.76), transparent 22%),
+                radial-gradient(circle at 84% 80%, rgba(255, 255, 255, 0.42), transparent 18%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.14), transparent 48%);
+            pointer-events: none;
+        }
+
+        .weather-scene::after {
+            content: "";
+            position: absolute;
+            left: 14px;
+            right: 14px;
+            bottom: 12px;
+            height: 24px;
+            border-radius: 999px;
+            background:
+                linear-gradient(90deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 0.18));
+            filter: blur(8px);
+            opacity: 0.7;
+        }
+
+        .weather-scene--idle {
+            background:
+                radial-gradient(circle at 74% 18%, rgba(255, 208, 163, 0.6), transparent 24%),
+                linear-gradient(180deg, #fff5ee 0%, #ffe8f4 56%, #e7f5ff 100%);
+        }
+
+        .weather-scene--idle .scene-sun {
+            width: 98px;
+            height: 98px;
+            background: radial-gradient(circle at 35% 35%, #fff8e6 0%, #ffd8a2 48%, #ff9db0 100%);
+            box-shadow:
+                inset 0 3px 8px rgba(255, 255, 255, 0.7),
+                0 0 0 12px rgba(255, 221, 167, 0.24),
+                0 18px 36px rgba(255, 157, 176, 0.28);
+        }
+
+        .weather-scene--idle .scene-cloud--one {
+            top: 108px;
+            left: 26px;
+        }
+
+        .weather-scene--idle .scene-cloud--two {
+            top: 78px;
+            right: 24px;
+            opacity: 0.76;
+        }
+
+        .weather-scene--idle .scene-cloud--three {
+            opacity: 0.7;
+        }
+
+        .weather-scene--idle .scene-rain {
+            opacity: 0;
+        }
+
+        .weather-scene--idle .scene-spark {
+            opacity: 0.58;
+        }
+
+        .scene-sun {
+            position: absolute;
+            top: 28px;
+            right: 26px;
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background:
+                radial-gradient(circle at 35% 35%, #fff8e0 0%, #ffe9a8 48%, #ffc27a 100%);
+            box-shadow:
+                inset 0 3px 8px rgba(255, 255, 255, 0.65),
+                0 0 0 10px rgba(255, 231, 164, 0.25),
+                0 18px 34px rgba(255, 194, 122, 0.35);
+            animation: sunBob 7s ease-in-out infinite;
+        }
+
+        .scene-cloud {
+            position: absolute;
+            height: 44px;
+            border-radius: 999px;
+            background: #fffaf6;
+            box-shadow:
+                inset 0 2px 0 rgba(255, 255, 255, 0.95),
+                0 16px 24px rgba(17, 19, 34, 0.08);
+            animation: cloudLope 9s ease-in-out infinite;
+        }
+
+        .scene-cloud::before,
+        .scene-cloud::after {
+            content: "";
+            position: absolute;
+            bottom: 10px;
+            background: inherit;
+            border-radius: 50%;
+        }
+
+        .scene-cloud::before {
+            left: 14px;
+            width: 36px;
+            height: 36px;
+        }
+
+        .scene-cloud::after {
+            left: 40px;
+            width: 48px;
+            height: 48px;
+        }
+
+        .scene-cloud--one {
+            top: 100px;
+            left: 28px;
+            width: 124px;
+        }
+
+        .scene-cloud--two {
+            top: 72px;
+            right: 20px;
+            width: 94px;
+            animation-delay: -2s;
+        }
+
+        .scene-cloud--three {
+            top: 54px;
+            left: 58px;
+            width: 76px;
+            opacity: 0.56;
+            animation-duration: 12s;
+        }
+
+        .scene-rain {
+            position: absolute;
+            top: 148px;
+            width: 10px;
+            height: 22px;
+            border-radius: 10px 10px 16px 16px;
+            background: linear-gradient(180deg, #96d4ff, #7692ff);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+            opacity: 0;
+        }
+
+        .scene-rain--one {
+            left: 84px;
+        }
+
+        .scene-rain--two {
+            left: 110px;
+            top: 154px;
+        }
+
+        .scene-rain--three {
+            left: 136px;
+        }
+
+        .scene-spark {
+            position: absolute;
+            width: 11px;
+            height: 11px;
+            border-radius: 3px;
+            background: #fff6ce;
+            box-shadow: 0 0 0 6px rgba(255, 246, 206, 0.18);
+            transform: rotate(45deg);
+            opacity: 0.4;
+            animation: microTwinkle 3.8s ease-in-out infinite;
+        }
+
+        .scene-spark--one {
+            top: 34px;
+            left: 34px;
+            animation-delay: -0.3s;
+        }
+
+        .scene-spark--two {
+            top: 124px;
+            right: 36px;
+            animation-delay: -1.2s;
+        }
+
+        .scene-spark--three {
+            bottom: 38px;
+            right: 72px;
+            animation-delay: -2.2s;
+        }
+
+        .weather-scene--yes {
+            background:
+                radial-gradient(circle at 72% 18%, rgba(182, 174, 255, 0.48), transparent 28%),
+                linear-gradient(180deg, #e8e5ff 0%, #efe3ff 48%, #dff1ff 100%);
+        }
+
+        .weather-scene--yes .scene-sun {
+            opacity: 0.4;
+            transform: scale(1.16) translateY(-6px);
+            box-shadow:
+                inset 0 3px 8px rgba(255, 255, 255, 0.62),
+                0 0 0 14px rgba(187, 176, 255, 0.18),
+                0 20px 38px rgba(129, 118, 255, 0.22);
+        }
+
+        .weather-scene--yes .scene-cloud {
+            background: #faf7ff;
+        }
+
+        .weather-scene--yes .scene-rain {
+            opacity: 1;
+            animation: rainDrift 1.6s ease-in-out infinite;
+        }
+
+        .weather-scene--yes .scene-spark {
+            opacity: 0.16;
+        }
+
+        .weather-scene--maybe {
+            background:
+                radial-gradient(circle at 78% 22%, rgba(255, 221, 181, 0.5), transparent 24%),
+                linear-gradient(180deg, #fff8ef 0%, #f4eaff 52%, #e5f5ff 100%);
+        }
+
+        .weather-scene--maybe .scene-sun {
+            opacity: 0.78;
+            box-shadow:
+                inset 0 3px 8px rgba(255, 255, 255, 0.68),
+                0 0 0 11px rgba(255, 229, 172, 0.22),
+                0 18px 34px rgba(255, 187, 131, 0.24);
+        }
+
+        .weather-scene--maybe .scene-rain--one {
+            opacity: 0.5;
+        }
+
+        .weather-scene--maybe .scene-rain--two {
+            opacity: 0.22;
+        }
+
+        .weather-scene--maybe .scene-spark {
+            opacity: 0.46;
+        }
+
+        .weather-scene--no {
+            background:
+                radial-gradient(circle at 76% 18%, rgba(255, 202, 143, 0.62), transparent 22%),
+                linear-gradient(180deg, #fff8e8 0%, #ffedd7 52%, #fff7ef 100%);
+        }
+
+        .weather-scene--no .scene-sun {
+            width: 104px;
+            height: 104px;
+            top: 20px;
+            right: 20px;
+            box-shadow:
+                inset 0 3px 8px rgba(255, 255, 255, 0.65),
+                0 0 0 12px rgba(255, 231, 164, 0.22),
+                0 18px 34px rgba(255, 194, 122, 0.28);
+        }
+
+        .weather-scene--no .scene-cloud--one {
+            top: 112px;
+            left: 36px;
+        }
+
+        .weather-scene--no .scene-cloud--two {
+            top: 84px;
+            right: 26px;
+            opacity: 0.42;
+            transform: scale(0.82);
+        }
+
+        .weather-scene--no .scene-cloud--three,
+        .weather-scene--no .scene-rain {
+            opacity: 0;
+        }
+
+        .weather-scene--no .scene-spark {
+            opacity: 1;
+        }
+
+        .hero-actions,
+        .actions-row,
+        .error-actions,
+        .manual-form,
+        .result-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.85rem;
+            align-items: center;
+        }
+
+        .cta-button,
+        .ghost-button,
+        .utility-button {
+            min-height: 52px;
+            border-radius: 999px;
+            border: 0;
+            cursor: pointer;
+            touch-action: manipulation;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
         }
 
         .cta-button {
-            --magnet-x: 0px;
-            --magnet-y: 0px;
-            --cta-scale: 1;
-            --cta-translate-y: 0px;
             position: relative;
-            border: none;
-            border-radius: 999px;
-            padding: 1.15rem 2.6rem;
-            font-size: 1.05rem;
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: white;
-            background-image: var(--cta-gradient);
-            background-size: 180% 180%;
-            cursor: pointer;
+            isolation: isolate;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.6rem;
-            box-shadow: none;
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease, background-position 0.3s ease;
-            min-height: 56px;
-            width: fit-content;
-            transform: translate3d(var(--magnet-x), calc(var(--magnet-y) + var(--cta-translate-y)), 0) scale(var(--cta-scale));
+            padding: 1rem 2rem;
+            color: #ffffff;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 0;
+            text-transform: none;
+            background-image: var(--cta-gradient);
+            background-size: 180% 180%;
+            box-shadow: var(--button-shadow);
+        }
+
+        body.idle .cta-button {
+            animation: microBreathe 4.2s ease-in-out infinite;
+        }
+
+        .cta-button::before {
+            content: "";
+            position: absolute;
+            inset: 1px;
+            border-radius: inherit;
+            background:
+                radial-gradient(circle at 50% 10%, rgba(255, 255, 255, 0.42), transparent 56%),
+                linear-gradient(180deg, rgba(255, 255, 255, 0.18), transparent 70%);
+            opacity: 0.86;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
         }
 
         .cta-button::after {
@@ -245,43 +618,135 @@
             position: absolute;
             inset: 3px;
             border-radius: inherit;
-            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.45), transparent 60%);
-            opacity: 0.75;
+            background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.46), transparent 60%);
+            opacity: 0.72;
+            transition: opacity 0.25s ease;
             pointer-events: none;
         }
 
         .cta-button:hover {
-            --cta-scale: 1.02;
-            --cta-translate-y: -5px;
+            animation: none;
+            transform: translateY(-2px);
             background-image: var(--cta-gradient-hover);
-            box-shadow: 0 40px 80px rgba(128, 81, 255, 0.4);
+            box-shadow: 0 24px 42px rgba(128, 81, 255, 0.24);
+        }
+
+        .cta-button:hover::before {
+            opacity: 1;
+            transform: scale(1.015);
+        }
+
+        .cta-button:hover::after {
+            opacity: 0.9;
         }
 
         .cta-button:active {
-            --cta-scale: 0.99;
-            --cta-translate-y: -1px;
+            animation: none;
+            transform: translateY(1px) scale(0.995);
+            box-shadow:
+                0 14px 24px rgba(128, 81, 255, 0.18),
+                inset 0 2px 4px rgba(255, 255, 255, 0.14);
         }
 
-        .cta-button:focus-visible {
-            outline: 3px solid rgba(255, 255, 255, 0.9);
+        .cta-button:active::before {
+            transform: scale(0.99);
+        }
+
+        .ghost-button,
+        .utility-button {
+            padding: 0.95rem 1.35rem;
+            font-size: 0.98rem;
+            font-weight: 600;
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.62);
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.85),
+                0 10px 20px rgba(17, 19, 34, 0.06);
+        }
+
+        .ghost-button:hover,
+        .utility-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .utility-button {
+            background: rgba(255, 255, 255, 0.42);
+        }
+
+        .cta-button:focus-visible,
+        .ghost-button:focus-visible,
+        .utility-button:focus-visible,
+        .manual-input:focus-visible {
+            outline: 3px solid rgba(255, 255, 255, 0.92);
             outline-offset: 4px;
         }
 
-        .loading-card {
+        .manual-panel {
+            position: relative;
+            display: grid;
+            gap: 0.75rem;
+            padding: 1rem;
+            border-radius: 24px;
+            background: var(--panel-bg);
+            border: 1px solid rgba(17, 19, 34, 0.06);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+            animation: panelBloom 0.34s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .manual-panel[hidden] {
+            display: none;
+        }
+
+        .manual-input {
+            flex: 1 1 220px;
+            width: 100%;
+            min-height: 52px;
+            padding: 0.9rem 1rem;
+            border-radius: 18px;
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            background: rgba(255, 255, 255, 0.78);
+            color: var(--ink);
+            box-shadow: inset 0 1px 4px rgba(17, 19, 34, 0.04);
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+        }
+
+        .manual-input::placeholder {
+            color: rgba(17, 19, 34, 0.44);
+        }
+
+        .manual-input:focus {
+            transform: translateY(-1px);
+            border-color: rgba(255, 143, 182, 0.3);
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow:
+                inset 0 1px 4px rgba(17, 19, 34, 0.03),
+                0 12px 28px rgba(255, 143, 182, 0.12);
+        }
+
+        .manual-hint {
+            font-size: 0.95rem;
+            line-height: 1.45;
+            color: var(--ink-muted);
+        }
+
+        .loading-card,
+        .error-card {
             align-items: center;
-            text-align: center;
             justify-content: center;
+            text-align: center;
         }
 
         .loading-orb {
-            width: clamp(140px, 34vw, 220px);
+            width: clamp(130px, 32vw, 210px);
             aspect-ratio: 1 / 1;
-            border-radius: 40% 60% 55% 45%;
-            background: radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.2)),
-                        linear-gradient(135deg, rgba(255, 186, 186, 0.45), rgba(200, 229, 207, 0.45));
             position: relative;
+            border-radius: 42% 58% 53% 47%;
+            background:
+                radial-gradient(circle at 35% 30%, rgba(255, 255, 255, 0.96), rgba(255, 255, 255, 0.18)),
+                linear-gradient(135deg, rgba(255, 186, 186, 0.44), rgba(200, 229, 207, 0.42));
+            box-shadow: inset 0 0 82px rgba(255, 255, 255, 0.54), 0 25px 52px rgba(17, 19, 34, 0.22);
             animation: orbPulse 2.4s ease-in-out infinite;
-            box-shadow: inset 0 0 80px rgba(255, 255, 255, 0.55), 0 25px 50px rgba(17, 19, 34, 0.25);
             overflow: hidden;
         }
 
@@ -289,85 +754,264 @@
         .loading-orb::after {
             content: "";
             position: absolute;
-            inset: 15%;
             border-radius: 50%;
-            border: 3px dashed rgba(255, 255, 255, 0.6);
+            inset: 15%;
+            border: 3px dashed rgba(255, 255, 255, 0.62);
             animation: spin 6s linear infinite;
         }
 
         .loading-orb::after {
             inset: 30%;
-            animation-duration: 4s;
             border-style: solid;
-            border-color: rgba(255, 255, 255, 0.4) transparent;
+            border-color: rgba(255, 255, 255, 0.42) transparent;
+            animation-duration: 4s;
         }
 
-        .loading-text {
-            font-size: clamp(1.2rem, 3vw, 1.8rem);
-            font-weight: 600;
+        .loading-text,
+        .error-title {
+            font-size: clamp(1.35rem, 3vw, 1.95rem);
+            font-weight: 700;
+            line-height: 1.1;
         }
 
-        .loading-sub {
-            font-size: 1rem;
+        .loading-sub,
+        .error-copy {
+            max-width: 30ch;
+            line-height: 1.55;
             color: var(--ink-soft);
         }
 
         .answer-card {
-            text-align: left;
+            gap: 1.4rem;
+        }
+
+        .answer-wrap {
+            gap: 0.95rem;
+            align-content: start;
+        }
+
+        .answer-kicker {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            min-height: 34px;
+            padding: 0.35rem 0.72rem;
+            border-radius: 999px;
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            background: rgba(255, 255, 255, 0.54);
+            font-family: 'IBM Plex Mono', 'Space Grotesk', monospace;
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82);
+        }
+
+        .result-meta {
+            gap: 0.65rem;
+        }
+
+        .meta-chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 38px;
+            padding: 0.45rem 0.85rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            border-radius: 999px;
+            border: 1px solid var(--chip-border);
+            background: var(--chip-bg);
+            color: var(--ink-soft);
+        }
+
+        .meta-chip--muted {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .location {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--ink-soft);
         }
 
         .answer {
             display: inline-flex;
             align-items: center;
-            gap: 1.25rem;
-            font-size: clamp(4rem, 12vw, 8rem);
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 1;
+            gap: 0.85rem;
+            font-family: 'Space Grotesk', 'Sora', sans-serif;
+            font-size: clamp(3.1rem, 10vw, 6rem);
+            font-weight: 700;
+            line-height: 0.95;
+            letter-spacing: -0.05em;
             opacity: 0;
-            transform: translateY(20px) scale(0.95);
+            transform: translateY(18px) scale(0.96);
             animation: answerPop 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-            transition: transform 0.4s ease;
+        }
+
+        .answer-icon-wrap {
+            display: inline-grid;
+            place-items: center;
+            flex: 0 0 auto;
+            width: clamp(62px, 12vw, 82px);
+            height: clamp(62px, 12vw, 82px);
+            border-radius: 24px;
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 255, 255, 0.52));
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.92),
+                0 16px 28px var(--answer-glow);
+        }
+
+        .answer-icon {
+            font-size: clamp(1.9rem, 4vw, 2.6rem);
+            line-height: 1;
+            transform: translateY(0.05em);
+        }
+
+        .answer-word {
+            color: var(--answer-accent);
+            text-shadow: 0 10px 24px var(--answer-glow);
         }
 
         .answer-card:hover .answer {
-            transform: translateY(0) scale(1.03);
+            transform: translateY(0) scale(1.02);
         }
 
-        .location {
-            font-size: 1.1rem;
-            font-weight: 600;
+        .result-copy {
+            max-width: 27ch;
+            font-size: 1.06rem;
+            line-height: 1.5;
             color: var(--ink-soft);
         }
 
-        .details {
-            margin-top: 0.6rem;
-            line-height: 1.6;
-            color: var(--ink);
+        .answer-note {
+            font-size: 0.98rem;
+            line-height: 1.45;
+            color: var(--ink-muted);
         }
 
         .detail-main {
-            font-size: 1.1rem;
+            font-size: 1.08rem;
             font-weight: 600;
+            line-height: 1.45;
         }
 
         .detail-secondary {
-            font-size: 1rem;
+            font-size: 0.98rem;
+            line-height: 1.55;
             color: var(--ink-muted);
+        }
+
+        .forecast-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.75rem;
+        }
+
+        .forecast-pill {
+            display: grid;
+            gap: 0.3rem;
+            padding: 0.9rem 0.95rem;
+            border-radius: 20px;
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            background: rgba(255, 255, 255, 0.56);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+            opacity: 0;
+            transform: translateY(12px) scale(0.98);
+            animation: pillRise 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+
+        .forecast-pill:hover {
+            transform: translateY(-3px) scale(1.01);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.84),
+                0 14px 24px rgba(17, 19, 34, 0.08);
+        }
+
+        .forecast-pill:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+
+        .forecast-pill:nth-child(2) {
+            animation-delay: 0.12s;
+        }
+
+        .forecast-pill:nth-child(3) {
+            animation-delay: 0.19s;
+        }
+
+        .forecast-pill:nth-child(4) {
+            animation-delay: 0.26s;
+        }
+
+        body.yes .answer-card {
+            box-shadow: 0 30px 70px rgba(86, 94, 196, 0.16);
+        }
+
+        body.yes .answer-kicker,
+        body.yes .meta-chip:first-child,
+        body.yes .forecast-pill {
+            background: rgba(236, 237, 255, 0.74);
+        }
+
+        body.maybe .answer-card {
+            box-shadow: 0 30px 70px rgba(79, 123, 214, 0.14);
+        }
+
+        body.maybe .answer-kicker,
+        body.maybe .meta-chip:first-child,
+        body.maybe .forecast-pill {
+            background: rgba(232, 244, 255, 0.74);
+        }
+
+        body.no .answer-card {
+            box-shadow: 0 30px 70px rgba(221, 138, 73, 0.16);
+        }
+
+        body.no .answer-kicker,
+        body.no .meta-chip:first-child,
+        body.no .forecast-pill {
+            background: rgba(255, 243, 219, 0.74);
+        }
+
+        .forecast-time {
+            font-size: 0.76rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
+        }
+
+        .forecast-percent {
+            font-size: 1.45rem;
+            line-height: 1;
+            letter-spacing: -0.04em;
+        }
+
+        .forecast-condition {
+            font-size: 0.92rem;
+            color: var(--ink-soft);
+            line-height: 1.35;
+        }
+
+        .error-actions {
+            justify-content: center;
         }
 
         .brand-terminal {
             position: fixed;
-            bottom: 1.5rem;
-            left: 1.5rem;
-            font-family: 'IBM Plex Mono', 'Space Grotesk', monospace;
-            font-size: 0.95rem;
-            text-transform: lowercase;
-            letter-spacing: 0.05em;
-            color: #0b0b0f;
+            left: 1.4rem;
+            bottom: 1.3rem;
             z-index: 2;
+            font-size: 0.92rem;
+            text-transform: lowercase;
+            letter-spacing: 0.06em;
+            color: #0b0b0f;
             text-decoration: none;
-            padding-bottom: 0.15rem;
         }
 
         .brand-terminal:hover {
@@ -377,8 +1021,8 @@
         .sparkle-layer {
             position: fixed;
             inset: 0;
-            pointer-events: none;
             overflow: hidden;
+            pointer-events: none;
             z-index: 20;
         }
 
@@ -392,15 +1036,52 @@
             box-shadow: 0 0 12px currentColor;
         }
 
-        @keyframes drift {
-            0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
-            50% { transform: translate3d(0, -28px, 0) scale(1.05); opacity: 0.4; }
-            100% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.7; }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
         }
 
         @keyframes orbPulse {
-            0%, 100% { transform: scale(0.9); }
+            0%, 100% { transform: scale(0.92); }
             50% { transform: scale(1.08); }
+        }
+
+        @keyframes microBreathe {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.01); }
+        }
+
+        @keyframes sunBob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        @keyframes cloudLope {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(5px); }
+        }
+
+        @keyframes rainDrift {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(4px); }
+        }
+
+        @keyframes microTwinkle {
+            0%, 100% {
+                opacity: 0.32;
+                transform: rotate(45deg) scale(0.88);
+            }
+            50% {
+                opacity: 1;
+                transform: rotate(45deg) scale(1.08);
+            }
         }
 
         @keyframes spin {
@@ -408,7 +1089,7 @@
         }
 
         @keyframes answerPop {
-            50% { opacity: 1; transform: translateY(-6px) scale(1.04); }
+            50% { opacity: 1; transform: translateY(-6px) scale(1.03); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
@@ -416,11 +1097,6 @@
             0% { transform: scale(0.5) translateY(0); opacity: 0.9; }
             60% { transform: scale(1.1) translateY(-30px); opacity: 1; }
             100% { transform: scale(0.4) translateY(-60px); opacity: 0; }
-        }
-
-        @keyframes heroBreathe {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-6px) scale(1.01); }
         }
 
         @keyframes auroraShift {
@@ -435,223 +1111,647 @@
             100% { transform: rotate(360deg); background-position: 0% 50%; }
         }
 
+        @keyframes ambientFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes panelBloom {
+            0% {
+                opacity: 0;
+                transform: translateY(-8px) scale(0.985);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        @keyframes pillRise {
+            0% {
+                opacity: 0;
+                transform: translateY(12px) scale(0.98);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
         @media (max-width: 768px) {
             body {
-                padding: 2rem 1.25rem 3.5rem;
+                justify-content: center;
+                padding: 1rem 1rem 1.5rem;
+            }
+
+            .card {
+                border-radius: 28px;
+            }
+
+            .hero-layout,
+            .result-header {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-layout .weather-scene-wrap,
+            .result-header .weather-scene-wrap {
+                order: -1;
+            }
+
+            .weather-scene {
+                width: 100%;
+                min-height: 162px;
+            }
+
+            .hero-tag {
+                font-size: 0.74rem;
+                letter-spacing: 0.22em;
+                line-height: 1.35;
+            }
+
+            .answer {
+                gap: 0.7rem;
+            }
+
+            .answer-icon-wrap {
+                width: 58px;
+                height: 58px;
+                border-radius: 20px;
+            }
+
+            .hero-actions,
+            .manual-form,
+            .actions-row,
+            .error-actions {
+                align-items: stretch;
+            }
+
+            .cta-button,
+            .ghost-button,
+            .utility-button {
+                width: 100%;
+                justify-content: center;
             }
 
             .brand-terminal {
                 position: static;
-                margin-top: 2rem;
-            }
-
-            .card {
-                min-height: 0;
+                margin-top: 0.9rem;
+                font-size: 0.84rem;
+                opacity: 0.7;
             }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
+                scroll-behavior: auto !important;
             }
         }
     </style>
 </head>
 <body class="idle">
-    <div class="floating-drops" aria-hidden="true">
-        <span class="drop-1"></span>
-        <span class="drop-2"></span>
-        <span class="drop-3"></span>
-        <span class="drop-4"></span>
-    </div>
-    <div class="container">
-        <div id="content"></div>
-    </div>
+    <main class="container">
+        <div id="content" aria-live="polite"></div>
+        <noscript>
+            <section class="card error-card" aria-labelledby="noscript-title">
+                <p class="hero-tag">signal missing</p>
+                <h1 class="error-title" id="noscript-title">JavaScript needs to be on.</h1>
+                <p class="error-copy">This tiny weather hotline runs in the browser. Flip JavaScript back on and it will tell you if the umbrella is coming out.</p>
+            </section>
+        </noscript>
+    </main>
+
     <a class="brand-terminal" href="/" aria-label="isitgoingtorain home">isitgoingtorain.app</a>
 
     <script>
         const RAIN_THRESHOLD = {
-            YES: 60,
-            MAYBE_HIGH: 30
+            YES: 65,
+            MAYBE: 30
         };
 
+        const FORECAST_SLOT_COUNT = 4;
+        const FORECAST_LOOKBACK_MINUTES = 90;
+
         const ANSWER_LABELS = {
-            YES: 'Yep!',
-            MAYBE: 'Hmm',
-            NO: 'Nope!'
+            YES: 'Yes',
+            MAYBE: 'Maybe',
+            NO: 'No'
         };
 
         const ANSWER_EMOJI = {
             YES: '☔',
-            MAYBE: '🌥️',
-            NO: '🌞'
+            MAYBE: '⛅',
+            NO: '☀️'
         };
 
         const ANSWER_COPY = {
-            YES: 'Grab the umbrella. Sky sounds serious.',
-            MAYBE: 'Keep it close. Clouds are undecided.',
-            NO: 'No rain on deck. Cruise.'
+            YES: 'Umbrella up. Keep the outfit dry.',
+            MAYBE: 'Could swing either way. Keep one nearby.',
+            NO: 'Looks clear. Hands free, shoulders light.'
+        };
+
+        const HERO_LINES = [
+            'umbrella check / one tap',
+            'your patch of sky',
+            'quick weather / low fuss',
+            'tap in / head out',
+            'small forecast / soft landing'
+        ];
+
+        const THEME_COLORS = {
+            idle: '#fff1e8',
+            loading: '#efe7ff',
+            yes: '#e5e6ff',
+            maybe: '#e4f5ff',
+            no: '#fff7db'
         };
 
         const content = document.getElementById('content');
+        const themeColorMeta = document.querySelector('meta[name="theme-color"]');
         let isChecking = false;
+        let lastLookup = {};
+        let lastManualCity = '';
 
-        const HERO_LINES = [
-            'weather oracle · analog energy',
-            'drizzle gossip · hotline mode',
-            'one word dispatch · zero scroll',
-            'risograph sky report · local tape',
-            'umbrella odds · warm signal'
-        ];
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, (char) => {
+                const entities = {
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    '"': '&quot;',
+                    "'": '&#39;'
+                };
+                return entities[char] || char;
+            });
+        }
+
+        function cleanText(value) {
+            return String(value ?? '').replace(/\s+/g, ' ').trim();
+        }
+
+        function setBodyState(state) {
+            document.body.className = state;
+            if (themeColorMeta) {
+                themeColorMeta.setAttribute('content', THEME_COLORS[state] || THEME_COLORS.idle);
+            }
+        }
 
         function pickHeroLine() {
             const index = Math.floor(Math.random() * HERO_LINES.length);
             return HERO_LINES[index];
         }
 
-        function renderIntro() {
-            document.body.className = 'idle';
-            const heroLine = pickHeroLine();
-
-            content.innerHTML = `
-                <div class="card hero-card">
-                    <p class="hero-tag">${heroLine}</p>
-                    <h1 class="hero-title">Is it going to rain?</h1>
-                    <p class="hero-copy">Warm analog signal. Get the answer, move on.</p>
-                    <button class="cta-button" id="checkButton">
-                        <span>Let's check</span>
-                    </button>
+        function getSceneMarkup(variant = 'idle') {
+            return `
+                <div class="weather-scene weather-scene--${variant}" aria-hidden="true">
+                    <div class="scene-sun"></div>
+                    <div class="scene-cloud scene-cloud--one"></div>
+                    <div class="scene-cloud scene-cloud--two"></div>
+                    <div class="scene-cloud scene-cloud--three"></div>
+                    <span class="scene-rain scene-rain--one"></span>
+                    <span class="scene-rain scene-rain--two"></span>
+                    <span class="scene-rain scene-rain--three"></span>
+                    <span class="scene-spark scene-spark--one"></span>
+                    <span class="scene-spark scene-spark--two"></span>
+                    <span class="scene-spark scene-spark--three"></span>
                 </div>
             `;
-
-            const button = document.getElementById('checkButton');
-            button.addEventListener('click', startCheck, { once: true });
-            setupMagnet(button);
         }
 
-        function showLoading() {
-            document.body.className = 'loading';
+        function renderIntro(options = {}) {
+            const { manualOpen = false, city = lastManualCity } = options;
+            setBodyState('idle');
+
             content.innerHTML = `
-                <div class="card loading-card">
+                <section class="card hero-card">
+                    <div class="hero-layout">
+                        <div class="hero-stack">
+                            <p class="hero-tag">${escapeHtml(pickHeroLine())}</p>
+                            <h1 class="hero-title">Is it going to rain?</h1>
+                            <p class="hero-copy">One tap for the umbrella check. Let it find your patch of sky, or name the city.</p>
+                        </div>
+                        <div class="weather-scene-wrap">
+                            ${getSceneMarkup('idle')}
+                        </div>
+                    </div>
+                    <div class="hero-actions">
+                        <button class="cta-button" id="checkButton" type="button">
+                            <span>Check my sky</span>
+                        </button>
+                        <button class="utility-button" id="toggleManualButton" type="button" aria-expanded="${manualOpen ? 'true' : 'false'}">
+                            Type a city
+                        </button>
+                    </div>
+                    <div class="manual-panel" id="manualPanel" ${manualOpen ? '' : 'hidden'}>
+                        <form class="manual-form" id="manualForm">
+                            <label class="sr-only" for="cityInput">City name</label>
+                            <input
+                                class="manual-input"
+                                id="cityInput"
+                                name="city"
+                                type="text"
+                                inputmode="text"
+                                autocomplete="address-level2"
+                                placeholder="Melbourne, Tokyo, Mexico City"
+                                value="${escapeHtml(city)}"
+                                minlength="2"
+                                required
+                            >
+                            <button class="ghost-button" type="submit">Use this city</button>
+                        </form>
+                        <p class="manual-hint">Type it in. Get the verdict.</p>
+                    </div>
+                </section>
+            `;
+
+            const checkButton = document.getElementById('checkButton');
+            const toggleButton = document.getElementById('toggleManualButton');
+            const manualPanel = document.getElementById('manualPanel');
+            const manualForm = document.getElementById('manualForm');
+            const cityInput = document.getElementById('cityInput');
+
+            checkButton.addEventListener('click', () => startCheck());
+
+            toggleButton.addEventListener('click', () => {
+                const willOpen = manualPanel.hidden;
+                manualPanel.hidden = !willOpen;
+                toggleButton.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+                if (willOpen) {
+                    cityInput.focus();
+                    cityInput.select();
+                }
+            });
+
+            manualForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                const manualCity = cleanText(cityInput.value);
+                if (!manualCity) {
+                    cityInput.focus();
+                    return;
+                }
+                lastManualCity = manualCity;
+                startCheck({ manualCity });
+            });
+        }
+
+        function showLoading(headline, subline) {
+            setBodyState('loading');
+            content.innerHTML = `
+                <section class="card loading-card" role="status" aria-label="Loading weather">
                     <div class="loading-orb" aria-hidden="true"></div>
-                    <p class="loading-text">Listening for clouds...</p>
-                    <p class="loading-sub">Dialing wttr.in, hanging on the line.</p>
-                </div>
+                    <p class="loading-text">${escapeHtml(headline)}</p>
+                    <p class="loading-sub">${escapeHtml(subline)}</p>
+                </section>
             `;
         }
 
-        async function getLocation() {
-            const response = await fetch('https://ipinfo.io/json?token=demo');
-            const data = await response.json();
+        async function fetchJson(url, timeout = 9000) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), timeout);
+
+            try {
+                const response = await fetch(url, {
+                    signal: controller.signal,
+                    headers: {
+                        Accept: 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Request failed: ${response.status}`);
+                }
+
+                return await response.json();
+            } finally {
+                clearTimeout(timeoutId);
+            }
+        }
+
+        function getBrowserLocation() {
+            return new Promise((resolve, reject) => {
+                if (!navigator.geolocation) {
+                    reject(new Error('LOCATION_UNAVAILABLE'));
+                    return;
+                }
+
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        resolve({
+                            lat: Number(position.coords.latitude.toFixed(4)),
+                            lon: Number(position.coords.longitude.toFixed(4)),
+                            source: 'gps'
+                        });
+                    },
+                    reject,
+                    {
+                        enableHighAccuracy: false,
+                        timeout: 6500,
+                        maximumAge: 15 * 60 * 1000
+                    }
+                );
+            });
+        }
+
+        async function getAutoLocation() {
+            try {
+                return await getBrowserLocation();
+            } catch (geoError) {
+                console.info('Geolocation unavailable.', geoError);
+                throw new Error('LOCATION_UNAVAILABLE');
+            }
+        }
+
+        function buildLocationQuery(location) {
+            if (Number.isFinite(Number(location.lat)) && Number.isFinite(Number(location.lon))) {
+                return `${location.lat},${location.lon}`;
+            }
+            return cleanText(location.city);
+        }
+
+        function buildTimeline(days) {
+            return (days || []).flatMap((day) =>
+                (day.hourly || []).map((slot) => {
+                    const hour = Math.floor(Number.parseInt(slot.time || '0', 10) / 100);
+                    const when = new Date(`${day.date}T${String(hour).padStart(2, '0')}:00:00`);
+                    return {
+                        when,
+                        chance: Number.parseInt(slot.chanceofrain || '0', 10),
+                        precipMm: Number.parseFloat(slot.precipMM || '0'),
+                        condition: cleanText(slot.weatherDesc?.[0]?.value || '')
+                    };
+                })
+            );
+        }
+
+        function pickUpcomingSlots(timeline) {
+            const cutoff = Date.now() - (FORECAST_LOOKBACK_MINUTES * 60 * 1000);
+            const upcoming = timeline.filter((slot) => slot.when.getTime() >= cutoff).slice(0, FORECAST_SLOT_COUNT);
+            const base = upcoming.length ? upcoming : timeline.slice(0, FORECAST_SLOT_COUNT);
+            const now = Date.now();
+
+            return base.map((slot) => {
+                const diffHours = Math.max(0, Math.round((slot.when.getTime() - now) / (60 * 60 * 1000)));
+                const label = diffHours <= 1 ? 'Now' : `+${Math.ceil(diffHours / 3) * 3}h`;
+
+                return {
+                    ...slot,
+                    label
+                };
+            });
+        }
+
+        function summarizeWindow(upcoming) {
+            if (!upcoming.length) {
+                return {
+                    precipChance: 0,
+                    windowHours: 6,
+                    headline: 'Forecast signal is thin, but it looks dry enough.'
+                };
+            }
+
+            const peakSlot = upcoming.reduce((best, slot) => (slot.chance > best.chance ? slot : best), upcoming[0]);
+            const windowHours = Math.max(3, upcoming.length * 3);
+
+            if (peakSlot.chance >= RAIN_THRESHOLD.YES) {
+                return {
+                    precipChance: peakSlot.chance,
+                    windowHours,
+                    headline: peakSlot.label === 'Now'
+                        ? 'Rain is already in the room.'
+                        : `Rain looks most likely around ${peakSlot.label}.`
+                };
+            }
+
+            if (peakSlot.chance >= RAIN_THRESHOLD.MAYBE) {
+                return {
+                    precipChance: peakSlot.chance,
+                    windowHours,
+                    headline: `Could swing wet in the next ${windowHours} hours.`
+                };
+            }
+
             return {
-                city: data.city || 'Unknown',
-                country: data.country || '',
-                lat: data.loc ? data.loc.split(',')[0] : null,
-                lon: data.loc ? data.loc.split(',')[1] : null
+                precipChance: peakSlot.chance,
+                windowHours,
+                headline: `Nothing rude in the next ${windowHours} hours.`
             };
         }
 
-        async function getWeather(city) {
-            const response = await fetch(`https://wttr.in/${encodeURIComponent(city)}?format=j1`);
-            const data = await response.json();
-            const current = data.current_condition[0];
-            const today = data.weather[0];
-            const precipChance = parseInt(current.precipMM || 0, 10) > 0
-                ? parseInt(current.humidity || 0, 10)
-                : parseInt(today.hourly[0].chanceofrain || 0, 10);
+        function getSourceNote(source) {
+            if (source === 'gps') {
+                return 'Found your patch of sky.';
+            }
+            return 'City set by hand.';
+        }
+
+        async function getWeather(location) {
+            const query = buildLocationQuery(location);
+            if (!query) {
+                throw new Error('No location query available');
+            }
+
+            const data = await fetchJson(`https://wttr.in/${encodeURIComponent(query)}?format=j1`);
+            const current = data.current_condition?.[0];
+            const nearestArea = data.nearest_area?.[0];
+            const timeline = buildTimeline((data.weather || []).slice(0, 2));
+
+            if (!current || !timeline.length) {
+                throw new Error('Weather data missing');
+            }
+
+            const upcoming = pickUpcomingSlots(timeline);
+            const summary = summarizeWindow(upcoming);
+            const isCurrentlyWet = Number.parseFloat(current.precipMM || '0') > 0;
+            const precipChance = isCurrentlyWet ? Math.max(summary.precipChance, 80) : summary.precipChance;
+            const city = cleanText(nearestArea?.areaName?.[0]?.value || location.city || 'Your area');
+            const country = cleanText(nearestArea?.country?.[0]?.value || location.country || '');
+            const locationLabel = [city, country].filter(Boolean).join(', ');
 
             return {
                 precipChance,
-                condition: current.weatherDesc[0].value,
-                temp: current.temp_C
+                isCurrentlyWet,
+                condition: cleanText(current.weatherDesc?.[0]?.value || 'Unknown'),
+                tempC: cleanText(current.temp_C || '--'),
+                location: {
+                    city,
+                    country,
+                    label: locationLabel || 'Unknown',
+                    source: location.source || 'manual'
+                },
+                upcoming,
+                windowHours: summary.windowHours,
+                headline: summary.headline,
+                sourceNote: getSourceNote(location.source || 'manual')
             };
         }
 
-        function determineAnswer(precipChance) {
-            if (precipChance >= RAIN_THRESHOLD.YES) {
+        function determineAnswer(precipChance, isCurrentlyWet) {
+            if (isCurrentlyWet || precipChance >= RAIN_THRESHOLD.YES) {
                 return 'YES';
-            } else if (precipChance >= RAIN_THRESHOLD.MAYBE_HIGH) {
+            }
+            if (precipChance >= RAIN_THRESHOLD.MAYBE) {
                 return 'MAYBE';
             }
             return 'NO';
         }
 
-        function renderAnswer(answer, location, weather) {
-            document.body.className = answer.toLowerCase();
+        function renderAnswer(answer, weather) {
+            setBodyState(answer.toLowerCase());
 
             const label = ANSWER_LABELS[answer];
             const emoji = ANSWER_EMOJI[answer];
             const vibeCopy = ANSWER_COPY[answer];
-            const timestamp = new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+            const timestamp = new Date().toLocaleTimeString([], {
+                hour: 'numeric',
+                minute: '2-digit'
+            });
+
+            const upcomingMarkup = weather.upcoming.map((slot) => `
+                <div class="forecast-pill">
+                    <span class="forecast-time">${escapeHtml(slot.label)}</span>
+                    <strong class="forecast-percent">${slot.chance}%</strong>
+                    <span class="forecast-condition">${escapeHtml(slot.condition || 'Clear')}</span>
+                </div>
+            `).join('');
 
             content.innerHTML = `
-                <div class="card answer-card">
-                    <div class="answer">${emoji} ${label}</div>
-                    <p class="location">📍 ${location.city || 'Unknown'}${location.country ? ', ' + location.country : ''}</p>
-                    <div class="details">
-                        <p class="detail-main">${weather.precipChance}% chance · ${weather.condition} · ${weather.temp}°C</p>
-                        <p class="detail-secondary">${vibeCopy} · Updated ${timestamp}</p>
+                <section class="card answer-card">
+                    <div class="result-header">
+                        <div class="answer-wrap">
+                            <p class="location">📍 ${escapeHtml(weather.location.label)}</p>
+                            <span class="answer-kicker">Umbrella verdict</span>
+                            <div class="answer">
+                                <span class="answer-icon-wrap"><span class="answer-icon">${emoji}</span></span>
+                                <span class="answer-word">${label}</span>
+                            </div>
+                            <p class="result-copy">${escapeHtml(vibeCopy)}</p>
+                        </div>
+                        <div class="weather-scene-wrap">
+                            ${getSceneMarkup(answer.toLowerCase())}
+                        </div>
                     </div>
-                </div>
+                    <div class="result-meta">
+                        <span class="meta-chip">Next ${weather.windowHours} hours</span>
+                        <span class="meta-chip meta-chip--muted">${escapeHtml(weather.sourceNote)}</span>
+                    </div>
+                    <div class="details">
+                        <p class="detail-main">${weather.precipChance}% umbrella odds · ${escapeHtml(weather.condition)} · ${escapeHtml(weather.tempC)}°C</p>
+                        <p class="detail-secondary">${escapeHtml(weather.headline)} · Updated ${escapeHtml(timestamp)}</p>
+                    </div>
+                    <div class="forecast-strip" aria-label="Upcoming forecast windows">
+                        ${upcomingMarkup}
+                    </div>
+                    <div class="actions-row">
+                        <button class="ghost-button" id="checkAgainButton" type="button">Check again</button>
+                        <button class="utility-button" id="manualAgainButton" type="button">Try another city</button>
+                    </div>
+                </section>
             `;
+
+            document.getElementById('checkAgainButton').addEventListener('click', () => startCheck(lastLookup));
+            document.getElementById('manualAgainButton').addEventListener('click', () => {
+                renderIntro({
+                    manualOpen: true,
+                    city: lastManualCity || weather.location.city
+                });
+            });
 
             triggerSparkles(answer.toLowerCase());
         }
 
-        function showError(message) {
-            document.body.className = 'idle';
+        function renderError(message) {
+            setBodyState('idle');
             content.innerHTML = `
-                <div class="card error-card">
-                    <div class="error">${message}</div>
-                </div>
+                <section class="card error-card">
+                    <p class="hero-tag">little recalibration</p>
+                    <h2 class="error-title">That sky check drifted.</h2>
+                    <p class="error-copy">${escapeHtml(message)}</p>
+                    <div class="error-actions">
+                        <button class="ghost-button" id="retryButton" type="button">Try again</button>
+                        <button class="utility-button" id="manualButton" type="button">Type a city</button>
+                    </div>
+                </section>
             `;
-            setTimeout(renderIntro, 2500);
+
+            document.getElementById('retryButton').addEventListener('click', () => startCheck(lastLookup));
+            document.getElementById('manualButton').addEventListener('click', () => {
+                renderIntro({
+                    manualOpen: true,
+                    city: lastManualCity
+                });
+            });
         }
 
-        async function startCheck() {
-            if (isChecking) return;
+        function getLoadingMessage(manualCity) {
+            if (manualCity) {
+                return {
+                    headline: `Checking ${manualCity}...`,
+                    subline: 'Pulling the forecast. Keeping it simple.'
+                };
+            }
+
+            return {
+                headline: 'Finding your patch of sky...',
+                subline: 'Give me your location, or type a city.'
+            };
+        }
+
+        function getErrorMessage(error, manualCity) {
+            if (manualCity) {
+                return `Could not place "${manualCity}". Check the spelling and try again.`;
+            }
+
+            if (error.message === 'LOCATION_UNAVAILABLE') {
+                return 'Location did not land. Allow it, or type a city instead.';
+            }
+
+            if (error.name === 'AbortError') {
+                return 'That check took too long. Give it another shot.';
+            }
+
+            return 'The weather line drifted. Try again in a sec.';
+        }
+
+        async function startCheck(options = {}) {
+            if (isChecking) {
+                return;
+            }
+
+            const manualCity = cleanText(options.manualCity || '');
+            lastLookup = manualCity ? { manualCity } : {};
+            if (manualCity) {
+                lastManualCity = manualCity;
+            }
+
+            const loadingCopy = getLoadingMessage(manualCity);
             isChecking = true;
-            showLoading();
+            showLoading(loadingCopy.headline, loadingCopy.subline);
 
             try {
-                const location = await getLocation();
-                if (!location.city) {
-                    showError('Could not find your city. Toggle VPN off and retry.');
-                    return;
-                }
+                const location = manualCity
+                    ? { city: manualCity, source: 'manual' }
+                    : await getAutoLocation();
 
-                const weather = await getWeather(location.city);
-                const answer = determineAnswer(weather.precipChance);
-                renderAnswer(answer, location, weather);
+                const weather = await getWeather(location);
+                const answer = determineAnswer(weather.precipChance, weather.isCurrentlyWet);
+                renderAnswer(answer, weather);
             } catch (error) {
-                console.error('Error:', error);
-                showError('Signal dropped. Try again?');
+                console.error('Weather check failed.', error);
+                renderError(getErrorMessage(error, manualCity));
             } finally {
                 isChecking = false;
             }
         }
 
-        function setupMagnet(button) {
-            const strength = 18;
-            button.addEventListener('pointermove', (event) => {
-                const rect = button.getBoundingClientRect();
-                const moveX = (event.clientX - (rect.left + rect.width / 2)) / strength;
-                const moveY = (event.clientY - (rect.top + rect.height / 2)) / strength;
-                button.style.setProperty('--magnet-x', `${moveX}px`);
-                button.style.setProperty('--magnet-y', `${moveY}px`);
-            });
-
-            ['pointerleave', 'pointerup', 'blur'].forEach((evt) => {
-                button.addEventListener(evt, () => {
-                    button.style.setProperty('--magnet-x', '0px');
-                    button.style.setProperty('--magnet-y', '0px');
-                });
-            });
-        }
-
         function triggerSparkles(answer) {
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                return;
+            }
+
             const palettes = {
                 yes: ['#f472b6', '#d946ef', '#c084fc'],
                 maybe: ['#38bdf8', '#5f5ae0', '#a5b4fc'],
@@ -662,15 +1762,14 @@
             const layer = document.createElement('div');
             layer.className = 'sparkle-layer';
 
-            const sparkles = 16;
-            for (let i = 0; i < sparkles; i++) {
+            for (let index = 0; index < 16; index += 1) {
                 const dot = document.createElement('span');
                 const size = Math.random() * 8 + 6;
                 dot.style.width = `${size}px`;
                 dot.style.height = `${size}px`;
                 dot.style.left = `${45 + (Math.random() - 0.5) * 40}%`;
                 dot.style.top = `${42 + (Math.random() - 0.5) * 34}%`;
-                dot.style.color = colors[i % colors.length];
+                dot.style.color = colors[index % colors.length];
                 dot.style.animationDelay = `${Math.random() * 0.2}s`;
                 layer.appendChild(dot);
             }
