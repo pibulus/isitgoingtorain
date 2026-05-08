@@ -1,0 +1,32 @@
+# Launch hints for Launch Arsenal.
+# Edit aggressively. These fields should pin the app's real audience, problem, and promise.
+name: Is it going to rain?
+slug: isitgoingtorain
+app_type: web-app
+audience: people who already feel the problem
+problem: >-
+  the default tools ask for too much tracking, too much polish theater, or too
+  much trust
+promise: 'Just tell me if it''s going to rain. Yes, no, or maybe.'
+cta: Reply if you want the link.
+differentiators:
+  - "\U0001F4CD Actual location first - Uses browser geolocation when you allow it"
+  - "\U0001F512 Privacy-first - No tracking, no cookies, no backend"
+proof_points:
+  - "\U0001F3AF Single purpose - Answers one question perfectly"
+  - "\U0001F4CD Actual location first - Uses browser geolocation when you allow it"
+  - "\U0001F3D9️ Manual city fallback - Type a city if you do not want to share location"
+  - "\U0001F308 Expressive answers - YES / MAYBE / NO with color-shifting result states"
+objections:
+  - 'Still wants a human pass on audience, proof, and the sharpest angle.'
+keywords:
+  seed:
+    - Is it going to rain?
+    - isitgoingtorain
+    - web app
+  audience: people who already feel the problem
+  intent:
+    - launch faster
+    - clearer first draft
+manual_notes:
+  - Edit this aggressively. Keep only the lines that feel native to the app.
