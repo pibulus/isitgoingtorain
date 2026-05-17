@@ -1,0 +1,128 @@
+name: Static Health
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: App surface checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Validate static app files
+        shell: bash
+        run: |
+          python3 <<'PY'
+          import json
+          import pathlib
+          import re
+          import struct
+          import xml.etree.ElementTree as ET
+
+          root = pathlib.Path(".")
+          required_files = [
+              ".nojekyll",
+              "CNAME",
+              "LICENSE",
+              "README.md",
+              "index.html",
+              "robots.txt",
+              "site.webmanifest",
+              "sitemap.xml",
+              "sw.js",
+              "favicon.svg",
+              "favicon-32.png",
+              "apple-touch-icon.png",
+              "icon-192.png",
+              "icon-512.png",
+              "icon-maskable-512.png",
+              "og-image.png",
+              "screenshot-mobile.png",
+              "screenshot-wide.png",
+          ]
+          missing = [path for path in required_files if not (root / path).is_file()]
+          if missing:
+              raise SystemExit(f"Missing required files: {', '.join(missing)}")
+
+          def png_size(path):
+              data = (root / path).read_bytes()
+              if data[:8] != b"\x89PNG\r\n\x1a\n":
+                  raise SystemExit(f"{path} is not a PNG")
+              return struct.unpack(">II", data[16:24])
+
+          expected_sizes = {
+              "favicon-32.png": (32, 32),
+              "apple-touch-icon.png": (180, 180),
+              "icon-192.png": (192, 192),
+              "icon-512.png": (512, 512),
+              "icon-maskable-512.png": (512, 512),
+              "og-image.png": (1200, 630),
+              "screenshot-mobile.png": (390, 844),
+              "screenshot-wide.png": (1280, 720),
+          }
+          for path, expected in expected_sizes.items():
+              actual = png_size(path)
+              if actual != expected:
+                  raise SystemExit(f"{path} is {actual}, expected {expected}")
+
+          manifest = json.loads((root / "site.webmanifest").read_text())
+          if manifest.get("id") != "/" or manifest.get("scope") != "/":
+              raise SystemExit("Manifest id/scope should stay rooted at /")
+          if manifest.get("display") != "standalone":
+              raise SystemExit("Manifest should be installable as standalone")
+          icon_sources = {icon.get("src"): icon.get("purpose", "") for icon in manifest.get("icons", [])}
+          if icon_sources.get("/icon-maskable-512.png") != "maskable":
+              raise SystemExit("Manifest must use the dedicated maskable icon")
+          screenshot_sources = {item.get("src") for item in manifest.get("screenshots", [])}
+          if {"/screenshot-mobile.png", "/screenshot-wide.png"} - screenshot_sources:
+              raise SystemExit("Manifest screenshots are incomplete")
+
+          html = (root / "index.html").read_text()
+          required_html = [
+              '<link rel="canonical" href="https://isitgoingtorain.app/">',
+              'property="og:image"',
+              'name="twitter:card"',
+              'application/ld+json',
+              'id="statusAnnouncer"',
+              "LAST_CITY_STORAGE_KEY",
+              "parseObservationUtcMs",
+              "isWetCondition",
+              "navigator.serviceWorker.register('/sw.js'",
+          ]
+          for needle in required_html:
+              if needle not in html:
+                  raise SystemExit(f"index.html missing {needle}")
+
+          sw = (root / "sw.js").read_text()
+          for asset in ["/icon-maskable-512.png", "/site.webmanifest", "/screenshot-mobile.png"]:
+              if asset not in sw:
+                  raise SystemExit(f"Service worker is not caching {asset}")
+
+          robots = (root / "robots.txt").read_text()
+          if "Sitemap: https://isitgoingtorain.app/sitemap.xml" not in robots:
+              raise SystemExit("robots.txt must point at the canonical sitemap")
+
+          sitemap = ET.parse(root / "sitemap.xml")
+          locs = [node.text for node in sitemap.findall(".//{http://www.sitemaps.org/schemas/sitemap/0.9}loc")]
+          if locs != ["https://isitgoingtorain.app/"]:
+              raise SystemExit(f"Unexpected sitemap URLs: {locs}")
+
+          if (root / "CNAME").read_text().strip() != "isitgoingtorain.app":
+              raise SystemExit("CNAME should be isitgoingtorain.app")
+
+          indexnow_files = [
+              path for path in root.glob("*.txt")
+              if re.fullmatch(r"[A-Za-z0-9-]{8,128}\.txt", path.name)
+          ]
+          if not any(path.read_text().strip() == path.stem for path in indexnow_files):
+              raise SystemExit("Missing deployable IndexNow key file")
+
+          print("static health ok")
+          PY

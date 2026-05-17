@@ -5,10 +5,9 @@ slug: isitgoingtorain
 app_type: web-app
 audience: people who already feel the problem
 problem: >-
-  the default tools ask for too much tracking, too much polish theater, or too
-  much trust
+  most weather apps make a simple umbrella decision feel like reading a dashboard
 promise: 'Just tell me if it''s going to rain. Yes, no, or maybe.'
-cta: Reply if you want the link.
+cta: Check your sky.
 differentiators:
   - "\U0001F4CD Actual location first - Uses browser geolocation when you allow it"
   - "\U0001F512 Privacy-first - No tracking, no cookies, no backend"
@@ -18,15 +17,18 @@ proof_points:
   - "\U0001F3D9️ Manual city fallback - Type a city if you do not want to share location"
   - "\U0001F308 Expressive answers - YES / MAYBE / NO with color-shifting result states"
 objections:
-  - 'Still wants a human pass on audience, proof, and the sharpest angle.'
+  - 'Weather data comes from wttr.in, so the app should stay clear that it is a simple umbrella check, not a full forecast suite.'
 keywords:
   seed:
     - Is it going to rain?
     - isitgoingtorain
-    - web app
+    - rain forecast
+    - umbrella check
+    - will it rain today
   audience: people who already feel the problem
   intent:
-    - launch faster
-    - clearer first draft
+    - check if it will rain
+    - know whether to bring an umbrella
+    - quick local rain forecast
 manual_notes:
   - Edit this aggressively. Keep only the lines that feel native to the app.

@@ -1,0 +1,22 @@
+.DS_Store
+*.log
+
+# Local/editor state
+.env
+.env.*
+!.env.example
+.vscode/
+.idea/
+
+# Dependency/build caches if this static app ever gets wrapped in tooling.
+node_modules/
+dist/
+build/
+.cache/
+.parcel-cache/
+
+# Local test artifacts
+coverage/
+playwright-report/
+test-results/
+*.tmp

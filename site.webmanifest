@@ -1,27 +1,66 @@
 {
+  "id": "/",
   "name": "Is it going to rain?",
   "short_name": "Rain?",
-  "description": "One tap for the umbrella check. Cute, quick, and useful for your patch of sky.",
-  "start_url": "/",
+  "description": "Should you bring an umbrella? Get a quick yes, no, or maybe rain answer for your location or any city.",
+  "lang": "en",
+  "dir": "ltr",
+  "start_url": "/?source=pwa",
+  "scope": "/",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
   "background_color": "#fff5ee",
   "theme_color": "#ffe6ef",
+  "categories": ["weather", "utilities", "lifestyle"],
   "icons": [
     {
       "src": "/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     },
     {
       "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-mobile.png",
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "One-tap umbrella check on an iPhone-sized screen"
+    },
+    {
+      "src": "/screenshot-wide.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "Is it going to rain? desktop app view"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Type a city",
+      "short_name": "City",
+      "description": "Open the manual city rain check.",
+      "url": "/?manual=1",
+      "icons": [
+        {
+          "src": "/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
     }
   ]
 }

@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Is it going to rain?</title>
-    <meta name="description" content="One tap for the umbrella check. Cute, quick, and useful for your patch of sky.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+    <title>Is it going to rain? | One-tap umbrella check</title>
+    <meta name="description" content="Should you bring an umbrella? Get a quick yes, no, or maybe rain answer for your location or any city.">
     <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
     <meta name="author" content="Pablo Alvarado">
     <meta name="application-name" content="Is it going to rain?">
@@ -15,17 +15,18 @@
     <meta name="format-detection" content="telephone=no">
     <meta name="referrer" content="strict-origin-when-cross-origin">
     <meta name="theme-color" content="#ffe6ef">
+    <meta name="msapplication-TileColor" content="#ffe6ef">
     <meta name="color-scheme" content="light">
-    <link rel="canonical" href="https://isitgoingtorain.app">
+    <link rel="canonical" href="https://isitgoingtorain.app/">
     <link rel="manifest" href="/site.webmanifest">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <link rel="alternate icon" href="/favicon-32.png" type="image/png" sizes="32x32">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
     <meta property="og:title" content="Is it going to rain?">
-    <meta property="og:description" content="One tap. Umbrella or not.">
+    <meta property="og:description" content="Should you bring an umbrella? Get a quick yes, no, or maybe rain answer.">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://isitgoingtorain.app">
+    <meta property="og:url" content="https://isitgoingtorain.app/">
     <meta property="og:site_name" content="Is it going to rain?">
     <meta property="og:locale" content="en_US">
     <meta property="og:image" content="https://isitgoingtorain.app/og-image.png">
@@ -37,7 +38,9 @@
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Is it going to rain?">
-    <meta name="twitter:description" content="One tap. Umbrella or not.">
+    <meta name="twitter:description" content="Should you bring an umbrella? Get a quick yes, no, or maybe rain answer.">
+    <meta name="twitter:domain" content="isitgoingtorain.app">
+    <meta name="twitter:url" content="https://isitgoingtorain.app/">
     <meta name="twitter:image" content="https://isitgoingtorain.app/og-image.png">
     <meta name="twitter:image:alt" content="A soft pastel social card for Is it going to rain? with a tiny sky scene and the line One tap. Umbrella or not.">
 
@@ -48,23 +51,49 @@
     <script type="application/ld+json">
         {
             "@context": "https://schema.org",
-            "@type": "WebApplication",
-            "name": "Is it going to rain?",
-            "url": "https://isitgoingtorain.app",
-            "description": "One tap for the umbrella check. Cute, quick, and useful for your patch of sky.",
-            "applicationCategory": "WeatherApplication",
-            "operatingSystem": "Any",
-            "browserRequirements": "Requires JavaScript and browser geolocation for automatic lookup.",
-            "image": "https://isitgoingtorain.app/og-image.png",
-            "offers": {
-                "@type": "Offer",
-                "price": "0",
-                "priceCurrency": "USD"
-            },
-            "creator": {
-                "@type": "Person",
-                "name": "Pablo Alvarado"
-            }
+            "@graph": [
+                {
+                    "@type": "WebSite",
+                    "@id": "https://isitgoingtorain.app/#website",
+                    "name": "Is it going to rain?",
+                    "url": "https://isitgoingtorain.app/",
+                    "inLanguage": "en"
+                },
+                {
+                    "@type": "WebApplication",
+                    "@id": "https://isitgoingtorain.app/#app",
+                    "name": "Is it going to rain?",
+                    "alternateName": "isitgoingtorain.app",
+                    "url": "https://isitgoingtorain.app/",
+                    "description": "Should you bring an umbrella? Get a quick yes, no, or maybe rain answer for your location or any city.",
+                    "applicationCategory": "WeatherApplication",
+                    "operatingSystem": "Any",
+                    "browserRequirements": "Requires JavaScript and browser geolocation for automatic lookup.",
+                    "isAccessibleForFree": true,
+                    "inLanguage": "en",
+                    "keywords": "rain forecast, umbrella check, will it rain today, weather app",
+                    "image": "https://isitgoingtorain.app/og-image.png",
+                    "screenshot": "https://isitgoingtorain.app/screenshot-mobile.png",
+                    "featureList": [
+                        "Location-based rain check",
+                        "Manual city rain forecast",
+                        "Yes, no, or maybe umbrella verdict",
+                        "Installable progressive web app"
+                    ],
+                    "offers": {
+                        "@type": "Offer",
+                        "price": "0",
+                        "priceCurrency": "USD"
+                    },
+                    "creator": {
+                        "@type": "Person",
+                        "name": "Pablo Alvarado"
+                    },
+                    "isPartOf": {
+                        "@id": "https://isitgoingtorain.app/#website"
+                    }
+                }
+            ]
         }
     </script>
 
@@ -79,11 +108,31 @@
             --cta-gradient: linear-gradient(120deg, #f7b172 0%, #ff82bf 52%, #9579ff 100%);
             --cta-gradient-hover: linear-gradient(120deg, #ffbe86 0%, #ff91c8 50%, #a58cff 100%);
             --bg-gradient: linear-gradient(120deg, #fff5ee, #f3e7ff, #fff3e1, #e6f5ff);
+            --haze-gradient: conic-gradient(from 150deg, #ffe9f7, #dff6ff, #fff0d8, #ead7ff, #ffe9f7);
+            --haze-opacity: 0.5;
+            --haze-blur: 72px;
+            --dot-opacity: 0.28;
+            --dot-size: 140px;
             --chip-bg: rgba(255, 255, 255, 0.55);
             --chip-border: rgba(17, 19, 34, 0.08);
             --button-shadow: 0 18px 32px rgba(149, 121, 255, 0.22);
             --answer-accent: #7d6cff;
             --answer-glow: rgba(149, 121, 255, 0.2);
+            --scene-sky-glow: rgba(255, 239, 198, 0.54);
+            --scene-top: #fff8f1;
+            --scene-mid: #fff1ec;
+            --scene-bottom: #eaf4ff;
+            --scene-sun-core: #fff8e6;
+            --scene-sun-mid: #ffd8a2;
+            --scene-sun-rim: #ff9db0;
+            --scene-cloud: #fffaf6;
+            --scene-rain-a: #96d4ff;
+            --scene-rain-b: #7692ff;
+            --scene-rainbow-a: rgba(255, 143, 182, 0.34);
+            --scene-rainbow-b: rgba(255, 209, 133, 0.34);
+            --scene-rainbow-c: rgba(149, 121, 255, 0.22);
+            --scene-tilt: 0deg;
+            --card-radius: 34px;
         }
 
         * {
@@ -102,11 +151,16 @@
         body {
             margin: 0;
             min-height: 100vh;
+            min-height: 100svh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: clamp(1.5rem, 4vw, 3rem) clamp(1.1rem, 4vw, 3rem);
+            padding:
+                max(clamp(1.5rem, 4vw, 3rem), env(safe-area-inset-top))
+                max(clamp(1.1rem, 4vw, 3rem), env(safe-area-inset-right))
+                max(clamp(1.5rem, 4vw, 3rem), env(safe-area-inset-bottom))
+                max(clamp(1.1rem, 4vw, 3rem), env(safe-area-inset-left));
             font-family: 'Sora', 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             color: var(--ink);
             background: var(--bg-gradient);
@@ -148,13 +202,21 @@
             --answer-glow: rgba(221, 138, 73, 0.2);
         }
 
+        body.delight .card {
+            box-shadow: 0 30px 74px rgba(255, 130, 191, 0.18);
+        }
+
+        body.delight .weather-scene {
+            filter: saturate(1.08) brightness(1.03);
+        }
+
         body::before {
             content: "";
             position: fixed;
             inset: 0;
             background-image: radial-gradient(rgba(255, 255, 255, 0.35) 1px, transparent 1px);
-            background-size: 140px 140px;
-            opacity: 0.28;
+            background-size: var(--dot-size) var(--dot-size);
+            opacity: var(--dot-opacity);
             pointer-events: none;
             z-index: -1;
         }
@@ -163,10 +225,10 @@
             content: "";
             position: fixed;
             inset: -16%;
-            background: conic-gradient(from 150deg, #ffe9f7, #dff6ff, #fff0d8, #ead7ff, #ffe9f7);
+            background: var(--haze-gradient);
             animation: gradientShift 34s ease-in-out infinite;
-            filter: blur(72px);
-            opacity: 0.5;
+            filter: blur(var(--haze-blur));
+            opacity: var(--haze-opacity);
             pointer-events: none;
             z-index: -2;
         }
@@ -197,6 +259,10 @@
         }
 
         .card {
+            --sky-drift-x: 0px;
+            --sky-drift-y: 0px;
+            --sky-tilt-x: 0deg;
+            --sky-tilt-y: 0deg;
             position: relative;
             width: 100%;
             display: flex;
@@ -204,7 +270,7 @@
             gap: 1.4rem;
             min-height: 0;
             padding: clamp(1.7rem, 4vw, 3.2rem);
-            border-radius: 34px;
+            border-radius: var(--card-radius);
             border: 1px solid var(--card-border);
             background: var(--card-bg);
             box-shadow: 0 28px 62px rgba(15, 19, 43, 0.14);
@@ -237,21 +303,8 @@
             pointer-events: none;
         }
 
-        .card:hover {
-            transform: translateY(-6px) scale(1.01);
-            box-shadow: 0 34px 74px rgba(15, 19, 43, 0.16);
-        }
-
-        .card:hover::after {
-            opacity: 1;
-        }
-
         .hero-card {
             gap: 1.35rem;
-        }
-
-        .hero-card .weather-scene-wrap {
-            animation: ambientFloat 7s ease-in-out infinite;
         }
 
         .hero-layout,
@@ -288,8 +341,9 @@
             font-family: 'Space Grotesk', 'Sora', sans-serif;
             font-size: clamp(3rem, 8vw, 4.9rem);
             line-height: 0.97;
-            letter-spacing: -0.045em;
+            letter-spacing: 0;
             max-width: 9ch;
+            text-wrap: balance;
         }
 
         .hero-copy {
@@ -299,12 +353,58 @@
             color: var(--ink-soft);
         }
 
+        .word-wobble,
+        .word-lilt,
+        .word-rise {
+            will-change: transform, opacity;
+        }
+
+        .word-wobble {
+            display: inline-block;
+            transform-origin: 28% 78%;
+            animation: wordWobble 820ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .word-lilt {
+            display: inline-block;
+            transform-origin: 70% 80%;
+            animation: wordLilt 760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        .word-rise {
+            animation: wordRise 680ms cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
         .weather-scene-wrap {
             display: flex;
             justify-content: center;
         }
 
+        .sky-button {
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            cursor: pointer;
+            touch-action: manipulation;
+        }
+
+        .sky-button:focus-visible {
+            outline: 3px solid rgba(125, 108, 255, 0.72);
+            outline-offset: 6px;
+            border-radius: 32px;
+            box-shadow: 0 0 0 5px rgba(255, 255, 255, 0.78);
+        }
+
+        .sky-button.sky-wink .weather-scene {
+            animation: skyWink 720ms cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
         .weather-scene {
+            display: block;
             position: relative;
             width: min(100%, 260px);
             min-height: 224px;
@@ -312,13 +412,16 @@
             overflow: hidden;
             border: 1px solid rgba(17, 19, 34, 0.08);
             background:
-                radial-gradient(circle at 74% 20%, rgba(255, 239, 198, 0.54), transparent 26%),
-                linear-gradient(180deg, #fff8f1 0%, #fff1ec 54%, #eaf4ff 100%);
+                radial-gradient(circle at 74% 20%, var(--scene-sky-glow), transparent 26%),
+                linear-gradient(180deg, var(--scene-top) 0%, var(--scene-mid) 54%, var(--scene-bottom) 100%);
             box-shadow:
                 inset 0 1px 0 rgba(255, 255, 255, 0.9),
                 inset 0 -16px 28px rgba(149, 121, 255, 0.08),
                 inset 0 -28px 44px rgba(255, 255, 255, 0.18),
                 0 18px 28px rgba(17, 19, 34, 0.08);
+            transform: perspective(900px) rotateX(var(--sky-tilt-y)) rotateY(var(--sky-tilt-x)) rotate(var(--scene-tilt)) translate3d(var(--sky-drift-x), var(--sky-drift-y), 0);
+            transform-style: preserve-3d;
+            transition: transform 0.36s ease;
         }
 
         .weather-scene::before {
@@ -348,14 +451,14 @@
 
         .weather-scene--idle {
             background:
-                radial-gradient(circle at 74% 18%, rgba(255, 208, 163, 0.6), transparent 24%),
-                linear-gradient(180deg, #fff5ee 0%, #ffe8f4 56%, #e7f5ff 100%);
+                radial-gradient(circle at 74% 18%, var(--scene-sky-glow), transparent 24%),
+                linear-gradient(180deg, var(--scene-top) 0%, var(--scene-mid) 56%, var(--scene-bottom) 100%);
         }
 
         .weather-scene--idle .scene-sun {
             width: 98px;
             height: 98px;
-            background: radial-gradient(circle at 35% 35%, #fff8e6 0%, #ffd8a2 48%, #ff9db0 100%);
+            background: radial-gradient(circle at 35% 35%, var(--scene-sun-core) 0%, var(--scene-sun-mid) 48%, var(--scene-sun-rim) 100%);
             box-shadow:
                 inset 0 3px 8px rgba(255, 255, 255, 0.7),
                 0 0 0 12px rgba(255, 221, 167, 0.24),
@@ -393,7 +496,7 @@
             height: 90px;
             border-radius: 50%;
             background:
-                radial-gradient(circle at 35% 35%, #fff8e0 0%, #ffe9a8 48%, #ffc27a 100%);
+                radial-gradient(circle at 35% 35%, var(--scene-sun-core) 0%, var(--scene-sun-mid) 48%, var(--scene-sun-rim) 100%);
             box-shadow:
                 inset 0 3px 8px rgba(255, 255, 255, 0.65),
                 0 0 0 10px rgba(255, 231, 164, 0.25),
@@ -405,7 +508,7 @@
             position: absolute;
             height: 44px;
             border-radius: 999px;
-            background: #fffaf6;
+            background: var(--scene-cloud);
             box-shadow:
                 inset 0 2px 0 rgba(255, 255, 255, 0.95),
                 0 16px 24px rgba(17, 19, 34, 0.08);
@@ -460,7 +563,7 @@
             width: 10px;
             height: 22px;
             border-radius: 10px 10px 16px 16px;
-            background: linear-gradient(180deg, #96d4ff, #7692ff);
+            background: linear-gradient(180deg, var(--scene-rain-a), var(--scene-rain-b));
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
             opacity: 0;
         }
@@ -506,6 +609,33 @@
             bottom: 38px;
             right: 72px;
             animation-delay: -2.2s;
+        }
+
+        .scene-rainbow {
+            position: absolute;
+            left: 34px;
+            bottom: 30px;
+            width: 96px;
+            height: 48px;
+            border-radius: 96px 96px 0 0;
+            border-top: 8px solid var(--scene-rainbow-a);
+            box-shadow:
+                0 -8px 0 -2px var(--scene-rainbow-b),
+                0 -16px 0 -6px var(--scene-rainbow-c);
+            opacity: 0.42;
+            transform: rotate(-4deg);
+        }
+
+        .weather-scene--yes .scene-rainbow {
+            opacity: 0.18;
+        }
+
+        .weather-scene--maybe .scene-rainbow {
+            opacity: 0.36;
+        }
+
+        .weather-scene--no .scene-rainbow {
+            opacity: 0.52;
         }
 
         .weather-scene--yes {
@@ -668,22 +798,6 @@
             pointer-events: none;
         }
 
-        .cta-button:hover {
-            animation: none;
-            transform: translateY(-2px);
-            background-image: var(--cta-gradient-hover);
-            box-shadow: 0 24px 42px rgba(128, 81, 255, 0.24);
-        }
-
-        .cta-button:hover::before {
-            opacity: 1;
-            transform: scale(1.015);
-        }
-
-        .cta-button:hover::after {
-            opacity: 0.9;
-        }
-
         .cta-button:active {
             animation: none;
             transform: translateY(1px) scale(0.995);
@@ -709,11 +823,6 @@
                 0 10px 20px rgba(17, 19, 34, 0.06);
         }
 
-        .ghost-button:hover,
-        .utility-button:hover {
-            transform: translateY(-2px);
-        }
-
         .utility-button {
             background: rgba(255, 255, 255, 0.42);
         }
@@ -722,8 +831,11 @@
         .ghost-button:focus-visible,
         .utility-button:focus-visible,
         .manual-input:focus-visible {
-            outline: 3px solid rgba(255, 255, 255, 0.92);
+            outline: 3px solid rgba(125, 108, 255, 0.72);
             outline-offset: 4px;
+            box-shadow:
+                0 0 0 5px rgba(255, 255, 255, 0.78),
+                0 12px 28px rgba(125, 108, 255, 0.16);
         }
 
         .manual-panel {
@@ -889,7 +1001,7 @@
             font-size: clamp(3.1rem, 10vw, 6rem);
             font-weight: 700;
             line-height: 0.95;
-            letter-spacing: -0.05em;
+            letter-spacing: 0;
             opacity: 0;
             transform: translateY(18px) scale(0.96);
             animation: answerPop 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
@@ -921,10 +1033,6 @@
             text-shadow: 0 10px 24px var(--answer-glow);
         }
 
-        .answer-card:hover .answer {
-            transform: translateY(0) scale(1.02);
-        }
-
         .result-copy {
             max-width: 27ch;
             font-size: 1.06rem;
@@ -938,6 +1046,38 @@
             color: var(--ink-muted);
         }
 
+        .sky-stamp {
+            width: fit-content;
+            max-width: 100%;
+            min-height: 34px;
+            display: inline-flex;
+            align-items: center;
+            padding: 0.38rem 0.7rem;
+            border-radius: 999px;
+            border: 1px dashed rgba(17, 19, 34, 0.14);
+            background: rgba(255, 255, 255, 0.48);
+            color: var(--ink-muted);
+            font-family: 'IBM Plex Mono', 'Space Grotesk', monospace;
+            font-size: 0.72rem;
+            line-height: 1.2;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            transform: rotate(-1.2deg);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+        }
+
+        .sky-stamp--right {
+            transform: rotate(1.1deg);
+        }
+
+        .sky-stamp--flat {
+            transform: rotate(-0.15deg);
+        }
+
+        .sky-stamp--float {
+            animation: stampFloat 5.8s ease-in-out infinite;
+        }
+
         .detail-main {
             font-size: 1.08rem;
             font-weight: 600;
@@ -947,6 +1087,19 @@
         .detail-secondary {
             font-size: 0.98rem;
             line-height: 1.55;
+            color: var(--ink-muted);
+        }
+
+        .sky-aside {
+            width: fit-content;
+            max-width: 100%;
+            padding: 0.55rem 0.72rem;
+            border-radius: 999px;
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            background: rgba(255, 255, 255, 0.46);
+            font-family: 'IBM Plex Mono', 'Space Grotesk', monospace;
+            font-size: 0.78rem;
+            line-height: 1.35;
             color: var(--ink-muted);
         }
 
@@ -968,13 +1121,6 @@
             transform: translateY(12px) scale(0.98);
             animation: pillRise 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
             transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-        }
-
-        .forecast-pill:hover {
-            transform: translateY(-3px) scale(1.01);
-            box-shadow:
-                inset 0 1px 0 rgba(255, 255, 255, 0.84),
-                0 14px 24px rgba(17, 19, 34, 0.08);
         }
 
         .forecast-pill:nth-child(1) {
@@ -1033,7 +1179,7 @@
         .forecast-percent {
             font-size: 1.45rem;
             line-height: 1;
-            letter-spacing: -0.04em;
+            letter-spacing: 0;
         }
 
         .forecast-condition {
@@ -1051,15 +1197,17 @@
             left: 1.4rem;
             bottom: 1.3rem;
             z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
             font-size: 0.92rem;
             text-transform: lowercase;
             letter-spacing: 0.06em;
             color: #0b0b0f;
             text-decoration: none;
-        }
-
-        .brand-terminal:hover {
-            color: #5b21b6;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
         }
 
         .sparkle-layer {
@@ -1078,6 +1226,51 @@
             opacity: 0;
             animation: sparkle 1.1s ease-out forwards;
             box-shadow: 0 0 12px currentColor;
+        }
+
+        .tap-burst,
+        .sky-toast {
+            position: fixed;
+            pointer-events: none;
+            z-index: 40;
+        }
+
+        .tap-burst {
+            left: 0;
+            top: 0;
+            width: 1px;
+            height: 1px;
+        }
+
+        .tap-burst span {
+            position: absolute;
+            left: -4px;
+            top: -4px;
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: currentColor;
+            box-shadow: 0 0 14px currentColor;
+            animation: tapBurst 650ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .sky-toast {
+            left: 50%;
+            bottom: max(1.4rem, env(safe-area-inset-bottom));
+            max-width: min(320px, calc(100vw - 2rem));
+            padding: 0.75rem 0.95rem;
+            border-radius: 999px;
+            border: 1px solid rgba(17, 19, 34, 0.08);
+            background: rgba(255, 255, 255, 0.78);
+            box-shadow: 0 18px 32px rgba(17, 19, 34, 0.12);
+            backdrop-filter: blur(18px);
+            color: var(--ink);
+            font-family: 'IBM Plex Mono', 'Space Grotesk', monospace;
+            font-size: 0.78rem;
+            line-height: 1.3;
+            text-align: center;
+            transform: translateX(-50%) translateY(12px) scale(0.98);
+            animation: skyToast 2.3s ease forwards;
         }
 
         .sr-only {
@@ -1137,10 +1330,93 @@
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
+        @keyframes wordWobble {
+            0% {
+                opacity: 0.88;
+                transform: translateY(5px) rotate(-0.7deg) scale(0.992);
+            }
+            45% {
+                opacity: 1;
+                transform: translateY(-2px) rotate(0.55deg) scale(1.006);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+        }
+
+        @keyframes wordLilt {
+            0% {
+                opacity: 0.9;
+                transform: translateY(4px) rotate(0.65deg);
+            }
+            52% {
+                opacity: 1;
+                transform: translateY(-2px) rotate(-0.35deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg);
+            }
+        }
+
+        @keyframes wordRise {
+            0% {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes stampFloat {
+            0%, 100% { transform: rotate(-1.2deg) translateY(0); }
+            50% { transform: rotate(0.7deg) translateY(-3px); }
+        }
+
         @keyframes sparkle {
             0% { transform: scale(0.5) translateY(0); opacity: 0.9; }
             60% { transform: scale(1.1) translateY(-30px); opacity: 1; }
             100% { transform: scale(0.4) translateY(-60px); opacity: 0; }
+        }
+
+        @keyframes skyWink {
+            0%, 100% {
+                filter: saturate(1) brightness(1);
+                transform: perspective(900px) rotateX(var(--sky-tilt-y)) rotateY(var(--sky-tilt-x)) rotate(var(--scene-tilt)) translate3d(var(--sky-drift-x), var(--sky-drift-y), 0) scale(1);
+            }
+            42% {
+                filter: saturate(1.16) brightness(1.04);
+                transform: perspective(900px) rotateX(var(--sky-tilt-y)) rotateY(var(--sky-tilt-x)) rotate(var(--scene-tilt)) translate3d(var(--sky-drift-x), var(--sky-drift-y), 0) scale(1.025);
+            }
+        }
+
+        @keyframes tapBurst {
+            0% {
+                transform: translate3d(0, 0, 0) scale(0.6);
+                opacity: 0.9;
+            }
+            100% {
+                transform: translate3d(var(--burst-x), var(--burst-y), 0) scale(0.12);
+                opacity: 0;
+            }
+        }
+
+        @keyframes skyToast {
+            0% {
+                transform: translateX(-50%) translateY(12px) scale(0.98);
+                opacity: 0;
+            }
+            16%, 78% {
+                transform: translateX(-50%) translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-50%) translateY(8px) scale(0.98);
+                opacity: 0;
+            }
         }
 
         @keyframes auroraShift {
@@ -1185,7 +1461,11 @@
         @media (max-width: 768px) {
             body {
                 justify-content: center;
-                padding: 1rem 1rem 1.5rem;
+                padding:
+                    max(1rem, env(safe-area-inset-top))
+                    max(1rem, env(safe-area-inset-right))
+                    max(1.5rem, env(safe-area-inset-bottom))
+                    max(1rem, env(safe-area-inset-left));
             }
 
             .card {
@@ -1211,6 +1491,10 @@
                 font-size: 0.74rem;
                 letter-spacing: 0.22em;
                 line-height: 1.35;
+            }
+
+            .hero-title {
+                font-size: clamp(2.7rem, 13vw, 3.6rem);
             }
 
             .answer {
@@ -1242,6 +1526,142 @@
                 margin-top: 0.9rem;
                 font-size: 0.84rem;
                 opacity: 0.7;
+                justify-content: center;
+            }
+
+            .hero-card--manual-open .weather-scene-wrap {
+                display: none;
+            }
+        }
+
+        @media (max-width: 380px), (max-height: 680px) {
+            body {
+                justify-content: flex-start;
+            }
+
+            .card {
+                gap: 1rem;
+                padding: 1.25rem;
+                border-radius: 26px;
+            }
+
+            .hero-layout,
+            .result-header {
+                gap: 0.85rem;
+            }
+
+            .hero-stack,
+            .answer-wrap,
+            .details {
+                gap: 0.65rem;
+            }
+
+            .weather-scene {
+                min-height: 128px;
+                border-radius: 24px;
+            }
+
+            .hero-title {
+                font-size: clamp(2.35rem, 12vw, 3.05rem);
+            }
+
+            .hero-copy {
+                font-size: 0.96rem;
+                line-height: 1.42;
+            }
+
+            .hero-actions,
+            .manual-form,
+            .actions-row,
+            .error-actions {
+                gap: 0.65rem;
+            }
+
+            .sky-stamp {
+                min-height: 30px;
+                padding: 0.3rem 0.6rem;
+                font-size: 0.68rem;
+                letter-spacing: 0.1em;
+            }
+
+            .cta-button,
+            .ghost-button,
+            .utility-button,
+            .manual-input {
+                min-height: 50px;
+            }
+
+            .brand-terminal {
+                margin-top: 0.55rem;
+            }
+        }
+
+        @media (max-width: 340px) {
+            .card {
+                padding: 1.15rem;
+            }
+
+            .weather-scene {
+                min-height: 116px;
+            }
+
+            .hero-tag {
+                font-size: 0.68rem;
+            }
+
+            .hero-title {
+                font-size: clamp(2.2rem, 12vw, 2.75rem);
+            }
+
+            .hero-copy {
+                font-size: 0.92rem;
+            }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            .card:hover {
+                transform: translateY(-6px) scale(1.01);
+                box-shadow: 0 34px 74px rgba(15, 19, 43, 0.16);
+            }
+
+            .card:hover::after {
+                opacity: 1;
+            }
+
+            .cta-button:hover {
+                animation: none;
+                transform: translateY(-2px);
+                background-image: var(--cta-gradient-hover);
+                box-shadow: 0 24px 42px rgba(128, 81, 255, 0.24);
+            }
+
+            .cta-button:hover::before {
+                opacity: 1;
+                transform: scale(1.015);
+            }
+
+            .cta-button:hover::after {
+                opacity: 0.9;
+            }
+
+            .ghost-button:hover,
+            .utility-button:hover {
+                transform: translateY(-2px);
+            }
+
+            .answer-card:hover .answer {
+                transform: translateY(0) scale(1.02);
+            }
+
+            .forecast-pill:hover {
+                transform: translateY(-3px) scale(1.01);
+                box-shadow:
+                    inset 0 1px 0 rgba(255, 255, 255, 0.84),
+                    0 14px 24px rgba(17, 19, 34, 0.08);
+            }
+
+            .brand-terminal:hover {
+                color: #5b21b6;
             }
         }
 
@@ -1254,12 +1674,77 @@
                 transition-duration: 0.01ms !important;
                 scroll-behavior: auto !important;
             }
+
+            .sky-toast {
+                animation: none !important;
+                opacity: 1 !important;
+                transform: translateX(-50%) !important;
+            }
         }
     </style>
 </head>
 <body class="idle">
     <main class="container">
-        <div id="content" aria-live="polite"></div>
+        <div id="content">
+            <section class="card hero-card">
+                <div class="hero-layout">
+                    <div class="hero-stack">
+                        <p class="hero-tag">umbrella check / one tap</p>
+                        <h1 class="hero-title">Is it going to rain?</h1>
+                        <p class="hero-copy">Quick sky check. Cozy answer. Out the door.</p>
+                        <p class="sky-stamp">Window weather club</p>
+                    </div>
+                    <div class="weather-scene-wrap">
+                        <button class="sky-button" type="button" aria-label="Ask the tiny sky for a note">
+                            <span class="weather-scene weather-scene--idle" aria-hidden="true">
+                                <span class="scene-sun"></span>
+                                <span class="scene-cloud scene-cloud--one"></span>
+                                <span class="scene-cloud scene-cloud--two"></span>
+                                <span class="scene-cloud scene-cloud--three"></span>
+                                <span class="scene-rainbow"></span>
+                                <span class="scene-rain scene-rain--one"></span>
+                                <span class="scene-rain scene-rain--two"></span>
+                                <span class="scene-rain scene-rain--three"></span>
+                                <span class="scene-spark scene-spark--one"></span>
+                                <span class="scene-spark scene-spark--two"></span>
+                                <span class="scene-spark scene-spark--three"></span>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <button class="cta-button" id="checkButton" type="button">
+                        <span>Check my sky</span>
+                    </button>
+                    <button class="utility-button" id="toggleManualButton" type="button" aria-expanded="false" aria-controls="manualPanel">
+                        Type a city
+                    </button>
+                </div>
+                <div class="manual-panel" id="manualPanel" hidden>
+                    <form class="manual-form" id="manualForm">
+                        <label class="sr-only" for="cityInput">City name</label>
+                        <input
+                            class="manual-input"
+                            id="cityInput"
+                            name="city"
+                            type="text"
+                            inputmode="text"
+                            autocomplete="address-level2"
+                            autocapitalize="words"
+                            enterkeyhint="go"
+                            placeholder="Melbourne or Tokyo"
+                            minlength="2"
+                            maxlength="80"
+                            aria-describedby="manualHint"
+                            required
+                        >
+                        <button class="ghost-button" type="submit">Use this city</button>
+                    </form>
+                    <p class="manual-hint" id="manualHint">Type it in. Get the verdict.</p>
+                </div>
+            </section>
+        </div>
+        <div class="sr-only" id="statusAnnouncer" role="status" aria-live="polite" aria-atomic="true"></div>
         <noscript>
             <section class="card error-card" aria-labelledby="noscript-title">
                 <p class="hero-tag">signal missing</p>
@@ -1269,7 +1754,9 @@
         </noscript>
     </main>
 
-    <a class="brand-terminal" href="/" aria-label="isitgoingtorain home">isitgoingtorain.app</a>
+    <footer class="site-footer" aria-label="Site">
+        <a class="brand-terminal" href="/" aria-label="isitgoingtorain home">isitgoingtorain.app</a>
+    </footer>
 
     <script>
         const RAIN_THRESHOLD = {
@@ -1293,17 +1780,165 @@
         };
 
         const ANSWER_COPY = {
-            YES: 'Umbrella up. Keep the outfit dry.',
-            MAYBE: 'Could swing either way. Keep one nearby.',
-            NO: 'Looks clear. Hands free, shoulders light.'
+            YES: [
+                'Bring one. Keep the day easy.',
+                'Umbrella day. Nice and simple.',
+                'Take one. Future you says thanks.',
+                'Rain is saying hello. Pack the brolly.'
+            ],
+            MAYBE: [
+                'Could go either way. Pocket umbrella energy.',
+                'Soft maybe. Keep one close.',
+                'Tiny risk. Easy backup.',
+                'Clouds are being a bit mysterious.'
+            ],
+            NO: [
+                'Looks clear. Travel light.',
+                'No umbrella mood. Head out easy.',
+                'Clear enough. Keep your hands free.',
+                'Dry read. Lovely little win.'
+            ]
+        };
+
+        const RARE_SKY_ASIDES = {
+            YES: [
+                'Tiny sky note: rain wants a walk too.',
+                'Tiny sky note: umbrella by the door.',
+                'Tiny sky note: sock strategy advised.'
+            ],
+            MAYBE: [
+                'Tiny sky note: clouds are having a think.',
+                'Tiny sky note: pocket umbrella, casually.',
+                'Tiny sky note: fresh cloud read, soft maybe.'
+            ],
+            NO: [
+                'Tiny sky note: clear enough for a wander.',
+                'Tiny sky note: umbrella can stay cozy.',
+                'Tiny sky note: light bag day.'
+            ]
+        };
+
+        const SKY_TOASTS = [
+            'window weather checked',
+            'tiny sky read served',
+            'quick cuppa forecast',
+            'clouds gave a little nod',
+            'umbrella vibes checked',
+            'fresh sky note',
+            'weather club stamp',
+            'sky read, neatly folded',
+            'soft clouds, sharp answer',
+            'little window dispatch'
+        ];
+
+        const SKY_STAMPS = [
+            'Window weather club',
+            'Cozy rain check',
+            'Little sky shack',
+            'Fresh cloud read',
+            'Cuppa forecast',
+            'Window sky note',
+            'Pocket forecast desk',
+            'Soft weather receipt'
+        ];
+
+        const HERO_COPY = [
+            'Quick sky check. Cozy answer. Out the door.',
+            'One tap for the umbrella check. Let it find your patch of sky, or name the city.',
+            'A little rain read for your walk, window, or wherever you are headed.',
+            'Fresh forecast, soft landing. Just enough weather to leave the house.',
+            'Drop by, check the sky, carry on.'
+        ];
+
+        const CHECK_BUTTON_LABELS = [
+            'Check my sky',
+            'Check the sky',
+            'Do a rain check',
+            'Peek outside for me'
+        ];
+
+        const MANUAL_HINTS = [
+            'Type it in. Get the verdict.',
+            'Name a place. Tiny sky read.',
+            'City in, weather out.',
+            'Pick a window. We will check it.'
+        ];
+
+        const CITY_PLACEHOLDERS = [
+            'Melbourne or Tokyo',
+            'Brunswick or Kyoto',
+            'Hobart or Osaka',
+            'Auckland or Paris',
+            'Seattle or Lisbon'
+        ];
+
+        const STAMP_CLASSES = [
+            'sky-stamp--left',
+            'sky-stamp--right',
+            'sky-stamp--flat',
+            'sky-stamp--float'
+        ];
+
+        const WORD_MOTION_CLASSES = [
+            'word-wobble',
+            'word-lilt',
+            'word-rise',
+            ''
+        ];
+
+        const LOADING_LINES = {
+            auto: [
+                {
+                    headline: 'Checking the window weather...',
+                    subline: 'Quick sky read incoming.'
+                },
+                {
+                    headline: 'Brewing a tiny forecast...',
+                    subline: 'Back in a blink.'
+                },
+                {
+                    headline: 'Peeking at the clouds...',
+                    subline: 'Umbrella answer soon.'
+                },
+                {
+                    headline: 'Reading the little sky...',
+                    subline: 'Cozy verdict on the way.'
+                },
+                {
+                    headline: 'Tapping the window...',
+                    subline: 'Rain check warming up.'
+                }
+            ],
+            manual: [
+                {
+                    headline: (city) => `Checking ${city}...`,
+                    subline: 'Tiny rain read incoming.'
+                },
+                {
+                    headline: (city) => `Peeking at ${city}'s sky...`,
+                    subline: 'Back in a blink.'
+                },
+                {
+                    headline: (city) => `Brewing ${city}'s forecast...`,
+                    subline: 'Window weather incoming.'
+                },
+                {
+                    headline: (city) => `Reading ${city}'s little sky...`,
+                    subline: 'Cozy verdict on the way.'
+                },
+                {
+                    headline: (city) => `Tapping ${city}'s window...`,
+                    subline: 'Rain check warming up.'
+                }
+            ]
         };
 
         const HERO_LINES = [
             'umbrella check / one tap',
-            'your patch of sky',
-            'quick weather / low fuss',
+            'window weather club',
+            'quick sky / soft landing',
             'tap in / head out',
-            'small forecast / soft landing'
+            'little rain read'
         ];
 
         const THEME_COLORS = {
@@ -1314,11 +1949,141 @@
             no: '#fff7db'
         };
 
+        const VISIT_MOODS = [
+            {
+                name: 'peach window',
+                themeColor: '#fff1e8',
+                vars: {
+                    '--card-bg': 'rgba(255, 250, 245, 0.95)',
+                    '--panel-bg': 'rgba(255, 255, 255, 0.58)',
+                    '--cta-gradient': 'linear-gradient(120deg, #f7b172 0%, #ff82bf 52%, #9579ff 100%)',
+                    '--cta-gradient-hover': 'linear-gradient(120deg, #ffbe86 0%, #ff91c8 50%, #a58cff 100%)',
+                    '--button-shadow': '0 18px 32px rgba(255, 130, 191, 0.22)',
+                    '--haze-gradient': 'conic-gradient(from 150deg, #ffe9f7, #dff6ff, #fff0d8, #ead7ff, #ffe9f7)',
+                    '--haze-opacity': '0.5',
+                    '--haze-blur': '72px',
+                    '--dot-size': '140px',
+                    '--dot-opacity': '0.28',
+                    '--scene-sky-glow': 'rgba(255, 208, 163, 0.6)',
+                    '--scene-top': '#fff5ee',
+                    '--scene-mid': '#ffe8f4',
+                    '--scene-bottom': '#e7f5ff',
+                    '--scene-sun-core': '#fff8e6',
+                    '--scene-sun-mid': '#ffd8a2',
+                    '--scene-sun-rim': '#ff9db0',
+                    '--scene-cloud': '#fffaf6',
+                    '--scene-rain-a': '#96d4ff',
+                    '--scene-rain-b': '#7692ff',
+                    '--scene-rainbow-a': 'rgba(255, 143, 182, 0.34)',
+                    '--scene-rainbow-b': 'rgba(255, 209, 133, 0.34)',
+                    '--scene-rainbow-c': 'rgba(149, 121, 255, 0.22)',
+                    '--scene-tilt': '-0.4deg',
+                    '--card-radius': '34px'
+                }
+            },
+            {
+                name: 'mint drizzle',
+                themeColor: '#e7f7ef',
+                vars: {
+                    '--card-bg': 'rgba(249, 255, 247, 0.94)',
+                    '--panel-bg': 'rgba(255, 255, 255, 0.54)',
+                    '--cta-gradient': 'linear-gradient(120deg, #8fdcbe 0%, #7dcfff 54%, #ffa8c8 100%)',
+                    '--cta-gradient-hover': 'linear-gradient(120deg, #9deacb 0%, #8bd8ff 52%, #ffb6d2 100%)',
+                    '--button-shadow': '0 18px 32px rgba(103, 196, 174, 0.22)',
+                    '--haze-gradient': 'conic-gradient(from 120deg, #e7fff1, #e3f3ff, #fff4d9, #ffe5f3, #e7fff1)',
+                    '--haze-opacity': '0.46',
+                    '--haze-blur': '78px',
+                    '--dot-size': '118px',
+                    '--dot-opacity': '0.24',
+                    '--scene-sky-glow': 'rgba(189, 241, 210, 0.62)',
+                    '--scene-top': '#f3fff8',
+                    '--scene-mid': '#e8fff1',
+                    '--scene-bottom': '#e4f3ff',
+                    '--scene-sun-core': '#fffce7',
+                    '--scene-sun-mid': '#cdf3bf',
+                    '--scene-sun-rim': '#7fd5c5',
+                    '--scene-cloud': '#fbfff9',
+                    '--scene-rain-a': '#8ed8ff',
+                    '--scene-rain-b': '#6c9df8',
+                    '--scene-rainbow-a': 'rgba(127, 213, 197, 0.34)',
+                    '--scene-rainbow-b': 'rgba(255, 217, 132, 0.32)',
+                    '--scene-rainbow-c': 'rgba(255, 168, 200, 0.24)',
+                    '--scene-tilt': '0.35deg',
+                    '--card-radius': '32px'
+                }
+            },
+            {
+                name: 'tangerine haze',
+                themeColor: '#fff0dc',
+                vars: {
+                    '--card-bg': 'rgba(255, 249, 239, 0.95)',
+                    '--panel-bg': 'rgba(255, 255, 255, 0.56)',
+                    '--cta-gradient': 'linear-gradient(120deg, #ffbd7a 0%, #ff8fa7 52%, #8ccfff 100%)',
+                    '--cta-gradient-hover': 'linear-gradient(120deg, #ffc98f 0%, #ff9ab2 50%, #9ad8ff 100%)',
+                    '--button-shadow': '0 18px 32px rgba(255, 157, 112, 0.22)',
+                    '--haze-gradient': 'conic-gradient(from 170deg, #fff2cf, #ffe0d6, #e9f7ff, #ffdff0, #fff2cf)',
+                    '--haze-opacity': '0.52',
+                    '--haze-blur': '70px',
+                    '--dot-size': '154px',
+                    '--dot-opacity': '0.23',
+                    '--scene-sky-glow': 'rgba(255, 203, 128, 0.62)',
+                    '--scene-top': '#fff8df',
+                    '--scene-mid': '#ffe6dc',
+                    '--scene-bottom': '#edf7ff',
+                    '--scene-sun-core': '#fff9dd',
+                    '--scene-sun-mid': '#ffc875',
+                    '--scene-sun-rim': '#ff8f91',
+                    '--scene-cloud': '#fff8ef',
+                    '--scene-rain-a': '#9bdcff',
+                    '--scene-rain-b': '#8a87ff',
+                    '--scene-rainbow-a': 'rgba(255, 143, 145, 0.34)',
+                    '--scene-rainbow-b': 'rgba(255, 200, 117, 0.34)',
+                    '--scene-rainbow-c': 'rgba(140, 207, 255, 0.24)',
+                    '--scene-tilt': '-0.15deg',
+                    '--card-radius': '36px'
+                }
+            },
+            {
+                name: 'lilac puddle',
+                themeColor: '#efe7ff',
+                vars: {
+                    '--card-bg': 'rgba(253, 249, 255, 0.95)',
+                    '--panel-bg': 'rgba(255, 255, 255, 0.5)',
+                    '--cta-gradient': 'linear-gradient(120deg, #b39cff 0%, #ff91c8 54%, #ffd184 100%)',
+                    '--cta-gradient-hover': 'linear-gradient(120deg, #c1adff 0%, #ffa1d0 52%, #ffdc9a 100%)',
+                    '--button-shadow': '0 18px 32px rgba(179, 156, 255, 0.22)',
+                    '--haze-gradient': 'conic-gradient(from 145deg, #efe5ff, #dff6ff, #fff0d8, #ffddec, #efe5ff)',
+                    '--haze-opacity': '0.49',
+                    '--haze-blur': '84px',
+                    '--dot-size': '132px',
+                    '--dot-opacity': '0.3',
+                    '--scene-sky-glow': 'rgba(190, 174, 255, 0.5)',
+                    '--scene-top': '#f8f0ff',
+                    '--scene-mid': '#ffe8f5',
+                    '--scene-bottom': '#e8f5ff',
+                    '--scene-sun-core': '#fff9e8',
+                    '--scene-sun-mid': '#f0d1ff',
+                    '--scene-sun-rim': '#a79aff',
+                    '--scene-cloud': '#fff9ff',
+                    '--scene-rain-a': '#a9d8ff',
+                    '--scene-rain-b': '#8b7cff',
+                    '--scene-rainbow-a': 'rgba(179, 156, 255, 0.34)',
+                    '--scene-rainbow-b': 'rgba(255, 145, 200, 0.3)',
+                    '--scene-rainbow-c': 'rgba(255, 209, 132, 0.24)',
+                    '--scene-tilt': '0.5deg',
+                    '--card-radius': '34px'
+                }
+            }
+        ];
+
         const content = document.getElementById('content');
+        const statusAnnouncer = document.getElementById('statusAnnouncer');
         const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+        const LAST_CITY_STORAGE_KEY = 'isitgoingtorain:last-city';
         let isChecking = false;
         let lastLookup = {};
         let lastManualCity = '';
+        let visitMood = null;
 
         function escapeHtml(value) {
             return String(value ?? '').replace(/[&<>"']/g, (char) => {
@@ -1337,56 +2102,245 @@
             return String(value ?? '').replace(/\s+/g, ' ').trim();
         }
 
+        function readSavedManualCity() {
+            try {
+                return cleanText(localStorage.getItem(LAST_CITY_STORAGE_KEY));
+            } catch {
+                return '';
+            }
+        }
+
+        function rememberManualCity(city) {
+            const cleanCity = cleanText(city);
+            if (!cleanCity) {
+                return;
+            }
+
+            lastManualCity = cleanCity;
+
+            try {
+                localStorage.setItem(LAST_CITY_STORAGE_KEY, cleanCity);
+            } catch {
+                // Remembering the city is a convenience only; private modes can refuse storage.
+            }
+        }
+
+        function isReducedMotion() {
+            return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        }
+
+        function pickRandom(items) {
+            return items[Math.floor(Math.random() * items.length)];
+        }
+
+        function numberFrom(value, fallback = 0) {
+            const number = Number.parseFloat(value);
+            return Number.isFinite(number) ? number : fallback;
+        }
+
+        function announceStatus(message) {
+            if (!statusAnnouncer) {
+                return;
+            }
+
+            statusAnnouncer.textContent = '';
+            window.setTimeout(() => {
+                statusAnnouncer.textContent = message;
+            }, 30);
+        }
+
+        function getThemeColor(state) {
+            if (state === 'idle' || state === 'loading') {
+                return visitMood?.themeColor || THEME_COLORS[state] || THEME_COLORS.idle;
+            }
+
+            return THEME_COLORS[state] || visitMood?.themeColor || THEME_COLORS.idle;
+        }
+
+        function applyVisitMood() {
+            visitMood = pickRandom(VISIT_MOODS);
+            Object.entries(visitMood.vars).forEach(([name, value]) => {
+                document.documentElement.style.setProperty(name, value);
+            });
+            document.documentElement.dataset.mood = visitMood.name.replace(/\s+/g, '-');
+
+            if (themeColorMeta) {
+                const currentState = document.body.className.split(/\s+/)[0] || 'idle';
+                themeColorMeta.setAttribute('content', getThemeColor(currentState));
+            }
+        }
+
         function setBodyState(state) {
             document.body.className = state;
             if (themeColorMeta) {
-                themeColorMeta.setAttribute('content', THEME_COLORS[state] || THEME_COLORS.idle);
+                themeColorMeta.setAttribute('content', getThemeColor(state));
             }
         }
 
         function pickHeroLine() {
-            const index = Math.floor(Math.random() * HERO_LINES.length);
-            return HERO_LINES[index];
+            return pickRandom(HERO_LINES);
+        }
+
+        function pickAnswerCopy(answer) {
+            return pickRandom(ANSWER_COPY[answer] || ANSWER_COPY.MAYBE);
+        }
+
+        function addWordMotion(element) {
+            if (!element || isReducedMotion()) {
+                return;
+            }
+
+            const className = pickRandom(WORD_MOTION_CLASSES);
+            if (className) {
+                element.classList.add(className);
+            }
+        }
+
+        function personalizeStamp(stamp) {
+            if (!stamp) {
+                return;
+            }
+
+            stamp.textContent = pickRandom(SKY_STAMPS);
+            stamp.classList.remove(...STAMP_CLASSES);
+
+            const className = pickRandom(STAMP_CLASSES);
+            if (className) {
+                stamp.classList.add(className);
+            }
+        }
+
+        function personalizeIntro(root = document) {
+            const heroTag = root.querySelector('.hero-tag');
+            const heroTitle = root.querySelector('.hero-title');
+            const heroCopy = root.querySelector('.hero-copy');
+            const stamp = root.querySelector('.sky-stamp');
+            const checkLabel = root.querySelector('#checkButton span');
+            const cityInput = root.querySelector('#cityInput');
+            const manualHint = root.querySelector('.manual-hint');
+
+            if (heroTag) {
+                heroTag.textContent = pickHeroLine();
+            }
+
+            if (heroCopy) {
+                heroCopy.textContent = pickRandom(HERO_COPY);
+                addWordMotion(heroCopy);
+            }
+
+            personalizeStamp(stamp);
+
+            if (checkLabel) {
+                checkLabel.textContent = pickRandom(CHECK_BUTTON_LABELS);
+            }
+
+            if (cityInput && !cityInput.value) {
+                cityInput.placeholder = pickRandom(CITY_PLACEHOLDERS);
+            }
+
+            if (manualHint) {
+                manualHint.textContent = pickRandom(MANUAL_HINTS);
+            }
+
+            addWordMotion(heroTitle);
         }
 
         function getSceneMarkup(variant = 'idle') {
             return `
-                <div class="weather-scene weather-scene--${variant}" aria-hidden="true">
-                    <div class="scene-sun"></div>
-                    <div class="scene-cloud scene-cloud--one"></div>
-                    <div class="scene-cloud scene-cloud--two"></div>
-                    <div class="scene-cloud scene-cloud--three"></div>
+                <span class="weather-scene weather-scene--${variant}" aria-hidden="true">
+                    <span class="scene-sun"></span>
+                    <span class="scene-cloud scene-cloud--one"></span>
+                    <span class="scene-cloud scene-cloud--two"></span>
+                    <span class="scene-cloud scene-cloud--three"></span>
+                    <span class="scene-rainbow"></span>
                     <span class="scene-rain scene-rain--one"></span>
                     <span class="scene-rain scene-rain--two"></span>
                     <span class="scene-rain scene-rain--three"></span>
                     <span class="scene-spark scene-spark--one"></span>
                     <span class="scene-spark scene-spark--two"></span>
                     <span class="scene-spark scene-spark--three"></span>
-                </div>
+                </span>
             `;
+        }
+
+        function getSkyButtonMarkup(variant = 'idle') {
+            return `
+                <button class="sky-button" type="button" aria-label="Ask the tiny sky for a note">
+                    ${getSceneMarkup(variant)}
+                </button>
+            `;
+        }
+
+        function bindIntroEvents() {
+            const checkButton = document.getElementById('checkButton');
+            const toggleButton = document.getElementById('toggleManualButton');
+            const manualPanel = document.getElementById('manualPanel');
+            const manualForm = document.getElementById('manualForm');
+            const cityInput = document.getElementById('cityInput');
+            const skyButton = document.querySelector('.sky-button');
+
+            if (!checkButton || !toggleButton || !manualPanel || !manualForm || !cityInput) {
+                return;
+            }
+
+            checkButton.addEventListener('click', (event) => {
+                triggerTapBurst(event);
+                startCheck();
+            });
+
+            toggleButton.addEventListener('click', () => {
+                const willOpen = manualPanel.hidden;
+                manualPanel.hidden = !willOpen;
+                manualPanel.closest('.hero-card')?.classList.toggle('hero-card--manual-open', willOpen);
+                toggleButton.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+                if (willOpen) {
+                    cityInput.focus();
+                    cityInput.select();
+                    window.requestAnimationFrame(() => {
+                        manualPanel.scrollIntoView({ block: 'nearest' });
+                    });
+                }
+            });
+
+            manualForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+                triggerTapBurst({ currentTarget: event.submitter || manualForm });
+                const manualCity = cleanText(cityInput.value);
+                if (!manualCity) {
+                    cityInput.focus();
+                    return;
+                }
+                lastManualCity = manualCity;
+                startCheck({ manualCity });
+            });
+
+            bindSkyButton(skyButton);
+            attachSkyReactivity();
         }
 
         function renderIntro(options = {}) {
             const { manualOpen = false, city = lastManualCity } = options;
             setBodyState('idle');
+            content.removeAttribute('aria-busy');
 
             content.innerHTML = `
-                <section class="card hero-card">
+                <section class="card hero-card ${manualOpen ? 'hero-card--manual-open' : ''}">
                     <div class="hero-layout">
                         <div class="hero-stack">
                             <p class="hero-tag">${escapeHtml(pickHeroLine())}</p>
                             <h1 class="hero-title">Is it going to rain?</h1>
-                            <p class="hero-copy">One tap for the umbrella check. Let it find your patch of sky, or name the city.</p>
+                            <p class="hero-copy">Quick sky check. Cozy answer. Out the door.</p>
+                            <p class="sky-stamp">Window weather club</p>
                         </div>
                         <div class="weather-scene-wrap">
-                            ${getSceneMarkup('idle')}
+                            ${getSkyButtonMarkup('idle')}
                         </div>
                     </div>
                     <div class="hero-actions">
                         <button class="cta-button" id="checkButton" type="button">
                             <span>Check my sky</span>
                         </button>
-                        <button class="utility-button" id="toggleManualButton" type="button" aria-expanded="${manualOpen ? 'true' : 'false'}">
+                        <button class="utility-button" id="toggleManualButton" type="button" aria-expanded="${manualOpen ? 'true' : 'false'}" aria-controls="manualPanel">
                             Type a city
                         </button>
                     </div>
@@ -1400,50 +2354,29 @@
                                 type="text"
                                 inputmode="text"
                                 autocomplete="address-level2"
-                                placeholder="Melbourne, Tokyo, Mexico City"
+                                autocapitalize="words"
+                                enterkeyhint="go"
+                                placeholder="${escapeHtml(pickRandom(CITY_PLACEHOLDERS))}"
                                 value="${escapeHtml(city)}"
                                 minlength="2"
+                                maxlength="80"
+                                aria-describedby="manualHint"
                                 required
                             >
                             <button class="ghost-button" type="submit">Use this city</button>
                         </form>
-                        <p class="manual-hint">Type it in. Get the verdict.</p>
+                        <p class="manual-hint" id="manualHint">Type it in. Get the verdict.</p>
                     </div>
                 </section>
             `;
 
-            const checkButton = document.getElementById('checkButton');
-            const toggleButton = document.getElementById('toggleManualButton');
-            const manualPanel = document.getElementById('manualPanel');
-            const manualForm = document.getElementById('manualForm');
-            const cityInput = document.getElementById('cityInput');
-
-            checkButton.addEventListener('click', () => startCheck());
-
-            toggleButton.addEventListener('click', () => {
-                const willOpen = manualPanel.hidden;
-                manualPanel.hidden = !willOpen;
-                toggleButton.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
-                if (willOpen) {
-                    cityInput.focus();
-                    cityInput.select();
-                }
-            });
-
-            manualForm.addEventListener('submit', (event) => {
-                event.preventDefault();
-                const manualCity = cleanText(cityInput.value);
-                if (!manualCity) {
-                    cityInput.focus();
-                    return;
-                }
-                lastManualCity = manualCity;
-                startCheck({ manualCity });
-            });
+            personalizeIntro(content);
+            bindIntroEvents();
         }
 
         function showLoading(headline, subline) {
             setBodyState('loading');
+            content.setAttribute('aria-busy', 'true');
             content.innerHTML = `
                 <section class="card loading-card" role="status" aria-label="Loading weather">
                     <div class="loading-orb" aria-hidden="true"></div>
@@ -1451,6 +2384,8 @@
                     <p class="loading-sub">${escapeHtml(subline)}</p>
                 </section>
             `;
+            announceStatus(`${headline} ${subline}`);
+            addWordMotion(content.querySelector('.loading-text'));
         }
 
         async function fetchJson(url, timeout = 9000) {
@@ -1470,6 +2405,17 @@
                 }
 
                 return await response.json();
+            } catch (error) {
+                const message = error instanceof Error ? error.message : String(error);
+                const isNetworkMiss = !navigator.onLine ||
+                    error instanceof TypeError ||
+                    /failed to fetch|load failed|networkerror/i.test(message);
+
+                if (isNetworkMiss) {
+                    throw new Error('NETWORK_UNAVAILABLE');
+                }
+
+                throw error;
             } finally {
                 clearTimeout(timeoutId);
             }
@@ -1503,8 +2449,7 @@
         async function getAutoLocation() {
             try {
                 return await getBrowserLocation();
-            } catch (geoError) {
-                console.info('Geolocation unavailable.', geoError);
+            } catch {
                 throw new Error('LOCATION_UNAVAILABLE');
             }
         }
@@ -1516,29 +2461,64 @@
             return cleanText(location.city);
         }
 
+        function parseForecastDate(dateText) {
+            const match = String(dateText || '').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            if (!match) {
+                return null;
+            }
+
+            return {
+                year: Number(match[1]),
+                monthIndex: Number(match[2]) - 1,
+                day: Number(match[3])
+            };
+        }
+
+        function slotUtcMs(day, slot) {
+            const date = parseForecastDate(day.date);
+            if (!date) {
+                return NaN;
+            }
+
+            const hour = Math.floor(numberFrom(slot.time, 0) / 100);
+            return Date.UTC(date.year, date.monthIndex, date.day, hour, 0, 0);
+        }
+
+        function parseObservationUtcMs(observationTime, fallbackDay) {
+            const date = parseForecastDate(fallbackDay?.date);
+            const match = String(observationTime || '').trim().match(/^(\d{1,2}):(\d{2})\s*(AM|PM)$/i);
+            if (!date || !match) {
+                return Date.now();
+            }
+
+            let hour = Number(match[1]) % 12;
+            if (match[3].toUpperCase() === 'PM') {
+                hour += 12;
+            }
+
+            return Date.UTC(date.year, date.monthIndex, date.day, hour, Number(match[2]), 0);
+        }
+
         function buildTimeline(days) {
             return (days || []).flatMap((day) =>
                 (day.hourly || []).map((slot) => {
-                    const hour = Math.floor(Number.parseInt(slot.time || '0', 10) / 100);
-                    const when = new Date(`${day.date}T${String(hour).padStart(2, '0')}:00:00`);
+                    const when = new Date(slotUtcMs(day, slot));
                     return {
                         when,
-                        chance: Number.parseInt(slot.chanceofrain || '0', 10),
-                        precipMm: Number.parseFloat(slot.precipMM || '0'),
+                        chance: Math.round(numberFrom(slot.chanceofrain, 0)),
                         condition: cleanText(slot.weatherDesc?.[0]?.value || '')
                     };
                 })
-            );
+            ).filter((slot) => Number.isFinite(slot.when.getTime()));
         }
 
-        function pickUpcomingSlots(timeline) {
-            const cutoff = Date.now() - (FORECAST_LOOKBACK_MINUTES * 60 * 1000);
+        function pickUpcomingSlots(timeline, referenceTime = Date.now()) {
+            const cutoff = referenceTime - (FORECAST_LOOKBACK_MINUTES * 60 * 1000);
             const upcoming = timeline.filter((slot) => slot.when.getTime() >= cutoff).slice(0, FORECAST_SLOT_COUNT);
             const base = upcoming.length ? upcoming : timeline.slice(0, FORECAST_SLOT_COUNT);
-            const now = Date.now();
 
             return base.map((slot) => {
-                const diffHours = Math.max(0, Math.round((slot.when.getTime() - now) / (60 * 60 * 1000)));
+                const diffHours = Math.max(0, Math.round((slot.when.getTime() - referenceTime) / (60 * 60 * 1000)));
                 const label = diffHours <= 1 ? 'Now' : `+${Math.ceil(diffHours / 3) * 3}h`;
 
                 return {
@@ -1592,6 +2572,10 @@
             return 'City set by hand.';
         }
 
+        function isWetCondition(condition) {
+            return /\b(rain|drizzle|shower|sleet|snow|thunder|storm)\b/i.test(condition);
+        }
+
         async function getWeather(location) {
             const query = buildLocationQuery(location);
             if (!query) {
@@ -1601,15 +2585,25 @@
             const data = await fetchJson(`https://wttr.in/${encodeURIComponent(query)}?format=j1`);
             const current = data.current_condition?.[0];
             const nearestArea = data.nearest_area?.[0];
-            const timeline = buildTimeline((data.weather || []).slice(0, 2));
+            const weatherDays = (data.weather || []).slice(0, 2);
+            const timeline = buildTimeline(weatherDays);
 
             if (!current || !timeline.length) {
                 throw new Error('Weather data missing');
             }
 
-            const upcoming = pickUpcomingSlots(timeline);
-            const summary = summarizeWindow(upcoming);
-            const isCurrentlyWet = Number.parseFloat(current.precipMM || '0') > 0;
+            const referenceTime = parseObservationUtcMs(current.observation_time, weatherDays[0]);
+            const upcoming = pickUpcomingSlots(timeline, referenceTime);
+            const windowSummary = summarizeWindow(upcoming);
+            const condition = cleanText(current.weatherDesc?.[0]?.value || 'Unknown');
+            const isCurrentlyWet = numberFrom(current.precipMM, 0) > 0 || isWetCondition(condition);
+            const summary = isCurrentlyWet
+                ? {
+                    ...windowSummary,
+                    precipChance: Math.max(windowSummary.precipChance, 80),
+                    headline: 'Rain is already in the room.'
+                }
+                : windowSummary;
             const precipChance = isCurrentlyWet ? Math.max(summary.precipChance, 80) : summary.precipChance;
             const city = cleanText(nearestArea?.areaName?.[0]?.value || location.city || 'Your area');
             const country = cleanText(nearestArea?.country?.[0]?.value || location.country || '');
@@ -1618,7 +2612,7 @@
             return {
                 precipChance,
                 isCurrentlyWet,
-                condition: cleanText(current.weatherDesc?.[0]?.value || 'Unknown'),
+                condition,
                 tempC: cleanText(current.temp_C || '--'),
                 location: {
                     city,
@@ -1629,6 +2623,7 @@
                 upcoming,
                 windowHours: summary.windowHours,
                 headline: summary.headline,
+                observedAt: cleanText(current.observation_time || ''),
                 sourceNote: getSourceNote(location.source || 'manual')
             };
         }
@@ -1643,19 +2638,32 @@
             return 'NO';
         }
 
+        function getRareSkyAside(answer) {
+            if (Math.random() > 0.22) {
+                return '';
+            }
+
+            return pickRandom(RARE_SKY_ASIDES[answer] || RARE_SKY_ASIDES.MAYBE);
+        }
+
         function renderAnswer(answer, weather) {
             setBodyState(answer.toLowerCase());
+            content.removeAttribute('aria-busy');
 
             const label = ANSWER_LABELS[answer];
             const emoji = ANSWER_EMOJI[answer];
-            const vibeCopy = ANSWER_COPY[answer];
+            const vibeCopy = pickAnswerCopy(answer);
+            const rareAside = getRareSkyAside(answer);
             const timestamp = new Date().toLocaleTimeString([], {
                 hour: 'numeric',
                 minute: '2-digit'
             });
+            const updatedText = weather.observedAt
+                ? `Weather updated ${weather.observedAt} UTC`
+                : `Updated ${timestamp}`;
 
             const upcomingMarkup = weather.upcoming.map((slot) => `
-                <div class="forecast-pill">
+                <div class="forecast-pill" role="listitem">
                     <span class="forecast-time">${escapeHtml(slot.label)}</span>
                     <strong class="forecast-percent">${slot.chance}%</strong>
                     <span class="forecast-condition">${escapeHtml(slot.condition || 'Clear')}</span>
@@ -1663,19 +2671,20 @@
             `).join('');
 
             content.innerHTML = `
-                <section class="card answer-card">
+                <section class="card answer-card" aria-labelledby="answerTitle">
                     <div class="result-header">
                         <div class="answer-wrap">
-                            <p class="location">📍 ${escapeHtml(weather.location.label)}</p>
+                            <p class="location"><span aria-hidden="true">📍</span> ${escapeHtml(weather.location.label)}</p>
                             <span class="answer-kicker">Umbrella verdict</span>
-                            <div class="answer">
-                                <span class="answer-icon-wrap"><span class="answer-icon">${emoji}</span></span>
+                            <h1 class="answer" id="answerTitle" aria-label="Umbrella verdict: ${escapeHtml(label)}">
+                                <span class="answer-icon-wrap" aria-hidden="true"><span class="answer-icon">${emoji}</span></span>
                                 <span class="answer-word">${label}</span>
-                            </div>
+                            </h1>
                             <p class="result-copy">${escapeHtml(vibeCopy)}</p>
+                            <p class="sky-stamp">Window weather club</p>
                         </div>
                         <div class="weather-scene-wrap">
-                            ${getSceneMarkup(answer.toLowerCase())}
+                            ${getSkyButtonMarkup(answer.toLowerCase())}
                         </div>
                     </div>
                     <div class="result-meta">
@@ -1684,9 +2693,10 @@
                     </div>
                     <div class="details">
                         <p class="detail-main">${weather.precipChance}% umbrella odds · ${escapeHtml(weather.condition)} · ${escapeHtml(weather.tempC)}°C</p>
-                        <p class="detail-secondary">${escapeHtml(weather.headline)} · Updated ${escapeHtml(timestamp)}</p>
+                        <p class="detail-secondary">${escapeHtml(weather.headline)} · ${escapeHtml(updatedText)}</p>
+                        ${rareAside ? `<p class="sky-aside">${escapeHtml(rareAside)}</p>` : ''}
                     </div>
-                    <div class="forecast-strip" aria-label="Upcoming forecast windows">
+                    <div class="forecast-strip" role="list" aria-label="Upcoming forecast windows">
                         ${upcomingMarkup}
                     </div>
                     <div class="actions-row">
@@ -1695,24 +2705,37 @@
                     </div>
                 </section>
             `;
+            announceStatus(
+                `Umbrella verdict: ${label}. ${vibeCopy} ${weather.precipChance}% umbrella odds. ${weather.headline}`,
+            );
 
-            document.getElementById('checkAgainButton').addEventListener('click', () => startCheck(lastLookup));
-            document.getElementById('manualAgainButton').addEventListener('click', () => {
+            document.getElementById('checkAgainButton').addEventListener('click', (event) => {
+                triggerTapBurst(event);
+                startCheck(lastLookup);
+            });
+            document.getElementById('manualAgainButton').addEventListener('click', (event) => {
+                triggerTapBurst(event);
                 renderIntro({
                     manualOpen: true,
                     city: lastManualCity || weather.location.city
                 });
             });
 
+            personalizeStamp(content.querySelector('.sky-stamp'));
+            addWordMotion(content.querySelector('.answer-word'));
+            addWordMotion(content.querySelector('.result-copy'));
+            bindSkyButton(document.querySelector('.sky-button'));
+            attachSkyReactivity();
             triggerSparkles(answer.toLowerCase());
         }
 
         function renderError(message) {
             setBodyState('idle');
+            content.removeAttribute('aria-busy');
             content.innerHTML = `
-                <section class="card error-card">
+                <section class="card error-card" role="alert" aria-labelledby="errorTitle">
                     <p class="hero-tag">little recalibration</p>
-                    <h2 class="error-title">That sky check drifted.</h2>
+                    <h1 class="error-title" id="errorTitle">That sky check drifted.</h1>
                     <p class="error-copy">${escapeHtml(message)}</p>
                     <div class="error-actions">
                         <button class="ghost-button" id="retryButton" type="button">Try again</button>
@@ -1720,41 +2743,50 @@
                     </div>
                 </section>
             `;
+            announceStatus(`That sky check drifted. ${message}`);
 
-            document.getElementById('retryButton').addEventListener('click', () => startCheck(lastLookup));
-            document.getElementById('manualButton').addEventListener('click', () => {
+            document.getElementById('retryButton').addEventListener('click', (event) => {
+                triggerTapBurst(event);
+                startCheck(lastLookup);
+            });
+            document.getElementById('manualButton').addEventListener('click', (event) => {
+                triggerTapBurst(event);
                 renderIntro({
                     manualOpen: true,
                     city: lastManualCity
                 });
             });
+
+            attachSkyReactivity();
         }
 
         function getLoadingMessage(manualCity) {
             if (manualCity) {
+                const line = pickRandom(LOADING_LINES.manual);
                 return {
-                    headline: `Checking ${manualCity}...`,
-                    subline: 'Pulling the forecast. Keeping it simple.'
+                    headline: line.headline(manualCity),
+                    subline: line.subline
                 };
             }
 
-            return {
-                headline: 'Finding your patch of sky...',
-                subline: 'Give me your location, or type a city.'
-            };
+            return pickRandom(LOADING_LINES.auto);
         }
 
         function getErrorMessage(error, manualCity) {
+            if (error.message === 'NETWORK_UNAVAILABLE') {
+                return "You are offline. The app is here, but the sky line needs internet. Try again when the signal is back.";
+            }
+
+            if (error.name === 'AbortError') {
+                return 'That check took too long. The sky line might be busy, so give it another shot.';
+            }
+
             if (manualCity) {
                 return `Could not place "${manualCity}". Check the spelling and try again.`;
             }
 
             if (error.message === 'LOCATION_UNAVAILABLE') {
                 return 'Location did not land. Allow it, or type a city instead.';
-            }
-
-            if (error.name === 'AbortError') {
-                return 'That check took too long. Give it another shot.';
             }
 
             return 'The weather line drifted. Try again in a sec.';
@@ -1781,10 +2813,13 @@
                     : await getAutoLocation();
 
                 const weather = await getWeather(location);
+                if (manualCity) {
+                    rememberManualCity(manualCity);
+                }
+
                 const answer = determineAnswer(weather.precipChance, weather.isCurrentlyWet);
                 renderAnswer(answer, weather);
             } catch (error) {
-                console.error('Weather check failed.', error);
                 renderError(getErrorMessage(error, manualCity));
             } finally {
                 isChecking = false;
@@ -1792,7 +2827,7 @@
         }
 
         function triggerSparkles(answer) {
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (isReducedMotion()) {
                 return;
             }
 
@@ -1822,7 +2857,167 @@
             setTimeout(() => layer.remove(), 1300);
         }
 
-        renderIntro();
+        function triggerTapBurst(event) {
+            if (isReducedMotion()) {
+                return;
+            }
+
+            const source = event?.currentTarget;
+            const rect = source?.getBoundingClientRect?.();
+            const originX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
+            const originY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;
+            const colors = ['#ff82bf', '#f7b172', '#9579ff', '#8ed8ff'];
+            const layer = document.createElement('div');
+            layer.className = 'tap-burst';
+            layer.style.transform = `translate3d(${originX}px, ${originY}px, 0)`;
+
+            for (let index = 0; index < 10; index += 1) {
+                const dot = document.createElement('span');
+                const angle = (Math.PI * 2 * index) / 10;
+                const distance = 24 + Math.random() * 18;
+                dot.style.setProperty('--burst-x', `${Math.cos(angle) * distance}px`);
+                dot.style.setProperty('--burst-y', `${Math.sin(angle) * distance}px`);
+                dot.style.color = colors[index % colors.length];
+                dot.style.animationDelay = `${index * 12}ms`;
+                layer.appendChild(dot);
+            }
+
+            document.body.appendChild(layer);
+            setTimeout(() => layer.remove(), 800);
+        }
+
+        function showSkyToast(message) {
+            document.querySelector('.sky-toast')?.remove();
+
+            const toast = document.createElement('div');
+            toast.className = 'sky-toast';
+            toast.setAttribute('role', 'status');
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2400);
+        }
+
+        function triggerSkyWhimsy() {
+            if (!isReducedMotion()) {
+                document.body.classList.add('delight');
+                triggerSparkles('maybe');
+                setTimeout(() => document.body.classList.remove('delight'), 1800);
+            }
+
+            showSkyToast(pickRandom(SKY_TOASTS));
+        }
+
+        function bindSkyButton(button) {
+            if (!button || button.dataset.skyBound === 'true') {
+                return;
+            }
+
+            button.dataset.skyBound = 'true';
+            button.addEventListener('click', () => {
+                button.classList.remove('sky-wink');
+                void button.offsetWidth;
+                button.classList.add('sky-wink');
+                triggerSkyWhimsy();
+                setTimeout(() => button.classList.remove('sky-wink'), 760);
+            });
+        }
+
+        function attachSkyReactivity() {
+            if (isReducedMotion() || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+                return;
+            }
+
+            document.querySelectorAll('.card').forEach((card) => {
+                if (card.dataset.skyReactive === 'true') {
+                    return;
+                }
+
+                card.dataset.skyReactive = 'true';
+                let animationFrame = 0;
+
+                card.addEventListener('pointermove', (event) => {
+                    cancelAnimationFrame(animationFrame);
+                    animationFrame = requestAnimationFrame(() => {
+                        const rect = card.getBoundingClientRect();
+                        const x = ((event.clientX - rect.left) / rect.width) - 0.5;
+                        const y = ((event.clientY - rect.top) / rect.height) - 0.5;
+
+                        card.style.setProperty('--sky-drift-x', `${x * 8}px`);
+                        card.style.setProperty('--sky-drift-y', `${y * 6}px`);
+                        card.style.setProperty('--sky-tilt-x', `${x * 4}deg`);
+                        card.style.setProperty('--sky-tilt-y', `${y * -4}deg`);
+                    });
+                });
+
+                card.addEventListener('pointerleave', () => {
+                    cancelAnimationFrame(animationFrame);
+                    card.style.setProperty('--sky-drift-x', '0px');
+                    card.style.setProperty('--sky-drift-y', '0px');
+                    card.style.setProperty('--sky-tilt-x', '0deg');
+                    card.style.setProperty('--sky-tilt-y', '0deg');
+                });
+            });
+        }
+
+        function bindBrandEasterEgg() {
+            const brand = document.querySelector('.brand-terminal');
+            if (!brand) {
+                return;
+            }
+
+            let pressTimer = 0;
+            let didLongPress = false;
+
+            const clearPress = () => {
+                clearTimeout(pressTimer);
+            };
+
+            brand.addEventListener('pointerdown', () => {
+                didLongPress = false;
+                clearPress();
+                pressTimer = setTimeout(() => {
+                    didLongPress = true;
+                    triggerSkyWhimsy();
+                }, 720);
+            });
+
+            brand.addEventListener('pointerup', clearPress);
+            brand.addEventListener('pointercancel', clearPress);
+            brand.addEventListener('pointerleave', clearPress);
+            brand.addEventListener('click', (event) => {
+                if (didLongPress) {
+                    event.preventDefault();
+                    didLongPress = false;
+                }
+            });
+        }
+
+        function shouldOpenManualFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return params.get('manual') === '1';
+        }
+
+        function registerServiceWorker() {
+            if (!('serviceWorker' in navigator) || window.location.protocol === 'file:') {
+                return;
+            }
+
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(() => {});
+            });
+        }
+
+        lastManualCity = readSavedManualCity();
+        applyVisitMood();
+
+        if (shouldOpenManualFromUrl()) {
+            renderIntro({ manualOpen: true });
+        } else {
+            personalizeIntro(content);
+            bindIntroEvents();
+        }
+        bindBrandEasterEgg();
+        registerServiceWorker();
     </script>
 </body>
 </html>
