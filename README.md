@@ -29,18 +29,19 @@ Live: https://isitgoingtorain.app
 
 ## Deploy
 
-**Netlify/Vercel/Cloudflare Pages:**
-- Drag and drop the folder
-- Done
+Production is served from the Raspberry Pi static checkout at
+`/home/pibulus/apps/isitgoingtorain`.
 
-**GitHub Pages:**
 ```bash
-git remote add origin https://github.com/pibulus/isitgoingtorain.git
-git add .
-git commit -m "feat: ✨ Initial commit - one file weather app"
-git push -u origin main
-# Enable GitHub Pages in repo settings
+ssh pibulus@pibulus.local
+cd /home/pibulus/apps/isitgoingtorain
+git pull --ff-only origin main
+sudo systemctl restart isitgoingtorain.service
 ```
+
+Cloudflare Tunnel routes `isitgoingtorain.app` and `www.isitgoingtorain.app` to
+`localhost:9007` on the Pi. The app can still be hosted by any static host, but
+the live production path is the Pi service.
 
 ## Local Development
 
@@ -68,7 +69,7 @@ Open http://localhost:8080
 
 - `robots.txt` points crawlers at `sitemap.xml`.
 - `sitemap.xml` lists the canonical production URL.
-- `CNAME` pins GitHub Pages to `isitgoingtorain.app`.
+- `CNAME` keeps a GitHub Pages/static-host fallback aligned with `isitgoingtorain.app`, but production currently runs through the Pi and Cloudflare Tunnel.
 - The IndexNow key file lives at the repo root and should be deployed before rerunning the announce pass.
 - GitHub Actions runs a static health check for required files, metadata, manifest wiring, image dimensions, sitemap, and IndexNow key shape.
 - Dependabot checks GitHub Actions monthly. There are no npm dependencies to monitor.
