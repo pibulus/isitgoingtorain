@@ -1139,6 +1139,14 @@
             animation-delay: 0.26s;
         }
 
+        .forecast-pill:nth-child(5) {
+            animation-delay: 0.33s;
+        }
+
+        .forecast-pill:nth-child(6) {
+            animation-delay: 0.40s;
+        }
+
         body.yes .answer-card {
             box-shadow: 0 30px 70px rgba(86, 94, 196, 0.16);
         }
@@ -1758,14 +1766,17 @@
         <a class="brand-terminal" href="/" aria-label="isitgoingtorain home">isitgoingtorain.app</a>
     </footer>
 
+    <script src="weightless.js"></script>
     <script>
         const RAIN_THRESHOLD = {
             YES: 65,
             MAYBE: 30
         };
 
-        const FORECAST_SLOT_COUNT = 4;
+        const FORECAST_HOURS = 6;
+        const FORECAST_SLOT_COUNT = 6;
         const FORECAST_LOOKBACK_MINUTES = 90;
+        const MIN_PRECIP_MM = 0.3;
 
         const ANSWER_LABELS = {
             YES: 'Yes',
@@ -2084,6 +2095,113 @@
         let lastLookup = {};
         let lastManualCity = '';
         let visitMood = null;
+
+        const sounds = new Weightless({
+            volume: 0.6,
+            voices: {
+                drop: {
+                    type: "triangle",
+                    lowpass: 950,
+                    attack: 0.003,
+                    bendCents: -80,
+                },
+                puddle: {
+                    type: "sine",
+                    lowpass: 600,
+                    attack: 0.004,
+                    bendCents: -40,
+                    partials: [{ ratio: 0.5, gain: 0.28, type: "triangle" }],
+                },
+                chime: {
+                    type: "sine",
+                    lowpass: 6800,
+                    attack: 0.003,
+                    partials: [
+                        { ratio: 2.76, gain: 0.18, type: "sine" },
+                        { ratio: 5.40, gain: 0.08, type: "sine" },
+                    ],
+                },
+                hush: {
+                    type: "sine",
+                    lowpass: 2000,
+                    attack: 0.022,
+                    partials: [{ ratio: 1.5, gain: 0.10, type: "sine" }],
+                },
+            },
+            cues: {
+                tap: {
+                    cooldownMs: 45,
+                    detuneCents: 5,
+                    variants: [
+                        [{ frequency: 680, duration: 0.048, gain: 0.022, voice: "drop" }],
+                        [{ frequency: 800, duration: 0.042, gain: 0.019, voice: "drop" }],
+                        [{ frequency: 570, duration: 0.052, gain: 0.024, voice: "drop" }],
+                    ],
+                },
+                listen: {
+                    cooldownMs: 500,
+                    detuneCents: 4,
+                    variants: [
+                        [
+                            { frequency: 440, duration: 0.16, gain: 0.015, voice: "hush" },
+                            { frequency: 554, offset: 0.08, duration: 0.18, gain: 0.012, voice: "hush" },
+                        ],
+                    ],
+                },
+                yes: {
+                    cooldownMs: 600,
+                    detuneCents: 6,
+                    variants: [
+                        [
+                            { frequency: 1175, duration: 0.07, gain: 0.018, voice: "drop" },
+                            { frequency: 880, offset: 0.09, duration: 0.08, gain: 0.022, voice: "drop" },
+                            { frequency: 660, offset: 0.18, duration: 0.09, gain: 0.024, voice: "puddle" },
+                            { frequency: 520, offset: 0.28, duration: 0.10, gain: 0.020, voice: "puddle" },
+                        ],
+                        [
+                            { frequency: 1047, duration: 0.07, gain: 0.018, voice: "drop" },
+                            { frequency: 784, offset: 0.10, duration: 0.08, gain: 0.020, voice: "drop" },
+                            { frequency: 587, offset: 0.20, duration: 0.09, gain: 0.022, voice: "puddle" },
+                            { frequency: 440, offset: 0.30, duration: 0.11, gain: 0.018, voice: "puddle" },
+                        ],
+                    ],
+                },
+                maybe: {
+                    cooldownMs: 500,
+                    detuneCents: 18,
+                    variants: [
+                        [
+                            { frequency: 554, duration: 0.15, gain: 0.018, voice: "hush" },
+                            { frequency: 440, offset: 0.10, duration: 0.17, gain: 0.015, voice: "hush" },
+                        ],
+                        [
+                            { frequency: 494, duration: 0.14, gain: 0.018, voice: "hush" },
+                            { frequency: 587, offset: 0.09, duration: 0.16, gain: 0.015, voice: "hush" },
+                        ],
+                    ],
+                },
+                no: {
+                    cooldownMs: 500,
+                    detuneCents: 5,
+                    variants: [
+                        [
+                            { frequency: 659, duration: 0.09, gain: 0.022, voice: "chime" },
+                            { frequency: 831, offset: 0.08, duration: 0.10, gain: 0.018, voice: "chime" },
+                            { frequency: 988, offset: 0.16, duration: 0.14, gain: 0.015, voice: "chime" },
+                        ],
+                    ],
+                },
+                whoops: {
+                    cooldownMs: 250,
+                    variants: [
+                        [
+                            { frequency: 330, duration: 0.10, gain: 0.016, voice: "hush" },
+                            { frequency: 294, offset: 0.07, duration: 0.12, gain: 0.013, voice: "hush" },
+                        ],
+                    ],
+                },
+            },
+        });
 
         function escapeHtml(value) {
             return String(value ?? '').replace(/[&<>"']/g, (char) => {
@@ -2506,16 +2624,18 @@
                     return {
                         when,
                         chance: Math.round(numberFrom(slot.chanceofrain, 0)),
+                        precipMM: numberFrom(slot.precipMM, 0),
+                        weatherCode: numberFrom(slot.weatherCode, null),
                         condition: cleanText(slot.weatherDesc?.[0]?.value || '')
                     };
                 })
             ).filter((slot) => Number.isFinite(slot.when.getTime()));
         }
 
-        function pickUpcomingSlots(timeline, referenceTime = Date.now()) {
+        function pickUpcomingSlots(timeline, referenceTime = Date.now(), limit = 4) {
             const cutoff = referenceTime - (FORECAST_LOOKBACK_MINUTES * 60 * 1000);
-            const upcoming = timeline.filter((slot) => slot.when.getTime() >= cutoff).slice(0, FORECAST_SLOT_COUNT);
-            const base = upcoming.length ? upcoming : timeline.slice(0, FORECAST_SLOT_COUNT);
+            const upcoming = timeline.filter((slot) => slot.when.getTime() >= cutoff).slice(0, limit);
+            const base = upcoming.length ? upcoming : timeline.slice(0, limit);
 
             return base.map((slot) => {
                 const diffHours = Math.max(0, Math.round((slot.when.getTime() - referenceTime) / (60 * 60 * 1000)));
@@ -2526,43 +2646,6 @@
                     label
                 };
             });
-        }
-
-        function summarizeWindow(upcoming) {
-            if (!upcoming.length) {
-                return {
-                    precipChance: 0,
-                    windowHours: 6,
-                    headline: 'Forecast signal is thin, but it looks dry enough.'
-                };
-            }
-
-            const peakSlot = upcoming.reduce((best, slot) => (slot.chance > best.chance ? slot : best), upcoming[0]);
-            const windowHours = Math.max(3, upcoming.length * 3);
-
-            if (peakSlot.chance >= RAIN_THRESHOLD.YES) {
-                return {
-                    precipChance: peakSlot.chance,
-                    windowHours,
-                    headline: peakSlot.label === 'Now'
-                        ? 'Rain is already in the room.'
-                        : `Rain looks most likely around ${peakSlot.label}.`
-                };
-            }
-
-            if (peakSlot.chance >= RAIN_THRESHOLD.MAYBE) {
-                return {
-                    precipChance: peakSlot.chance,
-                    windowHours,
-                    headline: `Could swing wet in the next ${windowHours} hours.`
-                };
-            }
-
-            return {
-                precipChance: peakSlot.chance,
-                windowHours,
-                headline: `Nothing rude in the next ${windowHours} hours.`
-            };
         }
 
         function getSourceNote(source) {
@@ -2576,7 +2659,185 @@
             return /\b(rain|drizzle|shower|sleet|snow|thunder|storm)\b/i.test(condition);
         }
 
-        async function getWeather(location) {
+        function isRainCode(code) {
+            if (code == null) return false;
+            return (code >= 51 && code <= 57) ||
+                (code >= 61 && code <= 67) ||
+                (code >= 80 && code <= 82) ||
+                (code >= 95 && code <= 99);
+        }
+
+        function weatherCodeToLabel(code) {
+            if (code == null) return '';
+            if (code === 0) return 'Clear';
+            if (code <= 3) return 'Partly cloudy';
+            if (code === 45 || code === 48) return 'Fog';
+            if (code >= 51 && code <= 55) return 'Drizzle';
+            if (code === 56 || code === 57) return 'Freezing drizzle';
+            if (code >= 61 && code <= 65) return 'Rain';
+            if (code === 66 || code === 67) return 'Freezing rain';
+            if (code >= 71 && code <= 77) return 'Snow';
+            if (code >= 80 && code <= 82) return 'Rain showers';
+            if (code >= 85 && code <= 86) return 'Snow showers';
+            if (code >= 95 && code <= 99) return 'Thunderstorm';
+            return 'Cloudy';
+        }
+
+        function computeRainPrediction(slots, isCurrentlyWet) {
+            if (!slots.length) {
+                return { precipChance: 0, headline: 'Forecast signal is thin, but it looks dry enough.' };
+            }
+
+            let cumulative = 0;
+            let maxChance = 0;
+            let maxPrecip = 0;
+            let hasMeaningfulRain = false;
+
+            for (const slot of slots) {
+                const p = slot.chance / 100;
+                cumulative = 1 - (1 - cumulative) * (1 - p);
+                if (slot.chance > maxChance) maxChance = slot.chance;
+                if (slot.precipMM > maxPrecip) maxPrecip = slot.precipMM;
+
+                const code = slot.weatherCode;
+                const condition = slot.condition || '';
+                const rainSignal = slot.precipMM >= MIN_PRECIP_MM &&
+                    (isRainCode(code) || (!code && isWetCondition(condition)));
+                if (rainSignal) {
+                    hasMeaningfulRain = true;
+                }
+            }
+
+            let precipChance = Math.round(cumulative * 60 + maxChance * 0.4);
+
+            if (!hasMeaningfulRain && maxPrecip < MIN_PRECIP_MM) {
+                precipChance = Math.round(precipChance * 0.8);
+            }
+
+            if (isCurrentlyWet) {
+                precipChance = Math.max(precipChance, 80);
+            }
+
+            precipChance = Math.min(100, Math.max(0, precipChance));
+
+            let headline;
+            if (isCurrentlyWet) {
+                headline = 'Rain is already in the room.';
+            } else if (precipChance >= RAIN_THRESHOLD.YES) {
+                headline = hasMeaningfulRain
+                    ? 'Rain looks likely. Brolly territory.'
+                    : 'Rain odds are running high.';
+            } else if (precipChance >= RAIN_THRESHOLD.MAYBE) {
+                headline = 'Could swing wet. Pocket umbrella energy.';
+            } else {
+                headline = 'Nothing rude on the radar.';
+            }
+
+            return { precipChance, headline };
+        }
+
+        async function geocodeCityOpenMeteo(city) {
+            const url = `https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=en`;
+            const data = await fetchJson(url, 6000);
+            if (!data?.results?.length) return null;
+            const result = data.results[0];
+            return {
+                lat: result.latitude,
+                lon: result.longitude,
+                name: result.name || city,
+                country: result.country || ''
+            };
+        }
+
+        async function fetchOpenMeteoForecast(lat, lon) {
+            const params = new URLSearchParams({
+                latitude: lat,
+                longitude: lon,
+                hourly: 'precipitation_probability,precipitation,weather_code,temperature_2m',
+                current: 'precipitation,weather_code,temperature_2m',
+                timezone: 'auto',
+                forecast_hours: FORECAST_HOURS
+            });
+            return await fetchJson(`https://api.open-meteo.com/v1/forecast?${params}`, 8000);
+        }
+
+        async function fetchOpenMeteoWeather(location) {
+            let lat, lon, cityLabel, countryLabel;
+
+            if (Number.isFinite(Number(location.lat)) && Number.isFinite(Number(location.lon))) {
+                lat = location.lat;
+                lon = location.lon;
+                cityLabel = 'Your area';
+                countryLabel = '';
+            } else if (location.city) {
+                const geo = await geocodeCityOpenMeteo(location.city);
+                if (!geo) return null;
+                lat = geo.lat;
+                lon = geo.lon;
+                cityLabel = geo.name;
+                countryLabel = geo.country;
+            } else {
+                return null;
+            }
+
+            const data = await fetchOpenMeteoForecast(lat, lon);
+            if (!data?.hourly) return null;
+
+            const hourly = data.hourly;
+            const current = data.current || {};
+
+            const slots = [];
+            for (let i = 0; i < hourly.time.length; i++) {
+                slots.push({
+                    when: new Date(hourly.time[i]),
+                    chance: Math.round(numberFrom(hourly.precipitation_probability?.[i], 0)),
+                    precipMM: numberFrom(hourly.precipitation?.[i], 0),
+                    weatherCode: numberFrom(hourly.weather_code?.[i], null),
+                    condition: weatherCodeToLabel(numberFrom(hourly.weather_code?.[i], null))
+                });
+            }
+
+            const currentPrecip = numberFrom(current.precipitation, 0);
+            const currentCode = numberFrom(current.weather_code, null);
+            const isCurrentlyWet = currentPrecip > 0 || isRainCode(currentCode);
+            const condition = weatherCodeToLabel(currentCode) || 'Unknown';
+            const tempValue = numberFrom(current.temperature_2m, null);
+
+            const prediction = computeRainPrediction(slots, isCurrentlyWet);
+
+            const now = Date.now();
+            const labeled = slots.map((slot, i) => ({
+                ...slot,
+                label: i === 0 ? 'Now' : `+${i}h`
+            }));
+
+            const locationLabel = [cityLabel, countryLabel].filter(Boolean).join(', ');
+
+            const nowUtc = new Date();
+            const hour12 = nowUtc.getUTCHours() % 12 || 12;
+            const minStr = String(nowUtc.getUTCMinutes()).padStart(2, '0');
+            const ampm = nowUtc.getUTCHours() >= 12 ? 'PM' : 'AM';
+
+            return {
+                precipChance: prediction.precipChance,
+                isCurrentlyWet,
+                condition,
+                tempC: typeof tempValue === 'number' ? `${Math.round(tempValue)}°C` : '--',
+                location: {
+                    city: cityLabel || 'Your area',
+                    country: countryLabel || '',
+                    label: locationLabel || 'Unknown',
+                    source: location.source || 'manual'
+                },
+                upcoming: labeled,
+                windowHours: FORECAST_HOURS,
+                headline: prediction.headline,
+                observedAt: `${hour12}:${minStr} ${ampm}`,
+                sourceNote: getSourceNote(location.source || 'manual')
+            };
+        }
+
+        async function fetchWttrWeather(location) {
             const query = buildLocationQuery(location);
             if (!query) {
                 throw new Error('No location query available');
@@ -2594,23 +2855,16 @@
 
             const referenceTime = parseObservationUtcMs(current.observation_time, weatherDays[0]);
             const upcoming = pickUpcomingSlots(timeline, referenceTime);
-            const windowSummary = summarizeWindow(upcoming);
             const condition = cleanText(current.weatherDesc?.[0]?.value || 'Unknown');
             const isCurrentlyWet = numberFrom(current.precipMM, 0) > 0 || isWetCondition(condition);
-            const summary = isCurrentlyWet
-                ? {
-                    ...windowSummary,
-                    precipChance: Math.max(windowSummary.precipChance, 80),
-                    headline: 'Rain is already in the room.'
-                }
-                : windowSummary;
-            const precipChance = isCurrentlyWet ? Math.max(summary.precipChance, 80) : summary.precipChance;
+            const prediction = computeRainPrediction(upcoming, isCurrentlyWet);
+            const windowHours = Math.max(3, upcoming.length * 3);
             const city = cleanText(nearestArea?.areaName?.[0]?.value || location.city || 'Your area');
             const country = cleanText(nearestArea?.country?.[0]?.value || location.country || '');
             const locationLabel = [city, country].filter(Boolean).join(', ');
 
             return {
-                precipChance,
+                precipChance: prediction.precipChance,
                 isCurrentlyWet,
                 condition,
                 tempC: cleanText(current.temp_C || '--'),
@@ -2621,11 +2875,22 @@
                     source: location.source || 'manual'
                 },
                 upcoming,
-                windowHours: summary.windowHours,
-                headline: summary.headline,
+                windowHours,
+                headline: prediction.headline,
                 observedAt: cleanText(current.observation_time || ''),
                 sourceNote: getSourceNote(location.source || 'manual')
             };
+        }
+
+        async function getWeather(location) {
+            try {
+                const result = await fetchOpenMeteoWeather(location);
+                if (result) return result;
+            } catch {
+                // Fall through to wttr.in
+            }
+
+            return await fetchWttrWeather(location);
         }
 
         function determineAnswer(precipChance, isCurrentlyWet) {
@@ -2662,13 +2927,16 @@
                 ? `Weather updated ${weather.observedAt} UTC`
                 : `Updated ${timestamp}`;
 
-            const upcomingMarkup = weather.upcoming.map((slot) => `
+            const upcomingMarkup = weather.upcoming.map((slot) => {
+                const precipNote = slot.precipMM > 0 ? ` · ${slot.precipMM.toFixed(1)}mm` : '';
+                return `
                 <div class="forecast-pill" role="listitem">
                     <span class="forecast-time">${escapeHtml(slot.label)}</span>
                     <strong class="forecast-percent">${slot.chance}%</strong>
-                    <span class="forecast-condition">${escapeHtml(slot.condition || 'Clear')}</span>
+                    <span class="forecast-condition">${escapeHtml(slot.condition || 'Clear')}${precipNote}</span>
                 </div>
-            `).join('');
+            `;
+            }).join('');
 
             content.innerHTML = `
                 <section class="card answer-card" aria-labelledby="answerTitle">
@@ -2726,6 +2994,7 @@
             addWordMotion(content.querySelector('.result-copy'));
             bindSkyButton(document.querySelector('.sky-button'));
             attachSkyReactivity();
+            sounds[answer.toLowerCase()]();
             triggerSparkles(answer.toLowerCase());
         }
 
@@ -2757,6 +3026,7 @@
                 });
             });
 
+            sounds.whoops();
             attachSkyReactivity();
         }
 
@@ -2806,6 +3076,7 @@
             const loadingCopy = getLoadingMessage(manualCity);
             isChecking = true;
             showLoading(loadingCopy.headline, loadingCopy.subline);
+            sounds.listen();
 
             try {
                 const location = manualCity
@@ -2862,7 +3133,7 @@
                 return;
             }
 
-            const source = event?.currentTarget;
+            sounds.tap();
             const rect = source?.getBoundingClientRect?.();
             const originX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
             const originY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;

@@ -1,9 +1,10 @@
-const CACHE_NAME = 'isitgoingtorain-shell-v2';
+const CACHE_NAME = 'isitgoingtorain-shell-v3';
 const OFFLINE_URL = '/index.html';
 
 const CORE_ASSETS = [
     '/',
     OFFLINE_URL,
+    '/weightless.js',
     '/site.webmanifest',
     '/favicon.svg',
     '/favicon-32.png',
