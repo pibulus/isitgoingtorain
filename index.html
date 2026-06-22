@@ -1452,10 +1452,14 @@
             body {
                 justify-content: center;
                 padding:
-                    max(1rem, env(safe-area-inset-top))
-                    max(1rem, env(safe-area-inset-right))
-                    max(1.5rem, env(safe-area-inset-bottom))
-                    max(1rem, env(safe-area-inset-left));
+                    max(0.85rem, env(safe-area-inset-top))
+                    max(0.85rem, env(safe-area-inset-right))
+                    max(0.85rem, env(safe-area-inset-bottom))
+                    max(0.85rem, env(safe-area-inset-left));
+            }
+
+            .container {
+                width: 100%;
             }
 
             .card {
@@ -1604,6 +1608,62 @@
 
             .hero-copy {
                 font-size: 0.92rem;
+            }
+        }
+
+        /* Installed PWA on a phone — go full-bleed, like a native app screen. */
+        @media (display-mode: standalone) and (max-width: 768px),
+               (display-mode: fullscreen) and (max-width: 768px) {
+            body {
+                padding: 0;
+                justify-content: flex-start;
+                align-items: stretch;
+            }
+
+            .container {
+                width: 100%;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            #content {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .card {
+                flex: 1;
+                width: 100%;
+                border: none;
+                border-radius: 0;
+                box-shadow: none;
+                justify-content: center;
+                gap: 1.5rem;
+                padding:
+                    max(2rem, env(safe-area-inset-top))
+                    max(1.4rem, env(safe-area-inset-right))
+                    1.2rem
+                    max(1.4rem, env(safe-area-inset-left));
+            }
+
+            /* Hover-lift makes no sense edge-to-edge. */
+            .card:hover {
+                transform: none;
+                box-shadow: none;
+            }
+
+            .site-footer {
+                padding-bottom: max(1.1rem, env(safe-area-inset-bottom));
+            }
+
+            .brand-terminal {
+                position: static;
+                margin: 0;
+                justify-content: center;
+                width: 100%;
+                opacity: 0.7;
             }
         }
 
