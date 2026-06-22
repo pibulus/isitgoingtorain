@@ -181,7 +181,7 @@
         options = options || {};
         var voice = this.voices[note.voice] || this.voices.tap;
         var delay = (note.offset || 0) + (options.delay || 0) + this.randomBetween(-0.005, 0.005);
-        var startAt = context.currentTime + delay;
+        var startAt = Math.max(context.currentTime, context.currentTime + delay);
         var duration = note.duration || 0.05;
 
         var detuneRatio = centsToRatio(this.randomBetween(-(cue.detuneCents || 0), (cue.detuneCents || 0)));

@@ -3134,6 +3134,7 @@
             }
 
             sounds.tap();
+            const source = event?.currentTarget || event?.target;
             const rect = source?.getBoundingClientRect?.();
             const originX = rect ? rect.left + rect.width / 2 : window.innerWidth / 2;
             const originY = rect ? rect.top + rect.height / 2 : window.innerHeight / 2;

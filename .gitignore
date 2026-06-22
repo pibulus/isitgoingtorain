@@ -20,3 +20,6 @@ coverage/
 playwright-report/
 test-results/
 *.tmp
+
+# Playwright MCP test artifacts
+.playwright-mcp/
