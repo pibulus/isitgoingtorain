@@ -1040,6 +1040,14 @@
             color: var(--ink-soft);
         }
 
+        .result-charm {
+            max-width: 27ch;
+            margin: 0;
+            font-size: 0.9rem;
+            line-height: 1.45;
+            color: var(--ink-muted);
+        }
+
         .answer-note {
             font-size: 0.98rem;
             line-height: 1.45;
@@ -1103,97 +1111,149 @@
             color: var(--ink-muted);
         }
 
-        .forecast-strip {
+        /* ===== Rain forecast — gradient mood-bar + likelihood curve + panels ===== */
+        .rain-ribbon-wrap {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-            gap: 0.75rem;
+            gap: 0.55rem;
         }
 
-        .forecast-pill {
+        .ribbon-chart {
+            position: relative;
+            height: 60px;
+            opacity: 0;
+            transform: scaleX(0.96);
+            transform-origin: left center;
+            animation: ribbonRise 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s forwards;
+        }
+
+        .rain-ribbon {
+            position: absolute;
+            inset: 0;
+            border-radius: 18px;
+            box-shadow: inset 0 1px 3px rgba(17, 19, 34, 0.14), 0 1px 0 rgba(255, 255, 255, 0.7);
+        }
+
+        .rain-ribbon--empty {
+            background: rgba(206, 209, 224, 0.5);
+        }
+
+        .rain-curve {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 18px;
+            overflow: hidden;
+        }
+
+        .curve-area {
+            fill: rgba(255, 255, 255, 0.28);
+        }
+
+        .curve-line {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.92);
+            stroke-width: 1.6;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            vector-effect: non-scaling-stroke;
+            filter: drop-shadow(0 1px 1px rgba(17, 19, 34, 0.22));
+        }
+
+        .curve-dot {
+            fill: #fff;
+            stroke: rgba(17, 19, 34, 0.22);
+            stroke-width: 0.5;
+            vector-effect: non-scaling-stroke;
+        }
+
+        .ribbon-scale {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.66rem;
+            letter-spacing: 0.1em;
+            text-transform: lowercase;
+            color: var(--ink-muted);
+        }
+
+        .hour-panels {
             display: grid;
-            gap: 0.3rem;
-            padding: 0.9rem 0.95rem;
-            border-radius: 20px;
-            border: 1px solid rgba(17, 19, 34, 0.08);
-            background: rgba(255, 255, 255, 0.56);
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.5rem;
+        }
+
+        .hour-panel {
+            display: grid;
+            justify-items: center;
+            gap: 0.2rem;
+            padding: 0.6rem 0.4rem;
+            border-radius: 16px;
+            border: 1px solid rgba(17, 19, 34, 0.07);
+            background: rgba(255, 255, 255, 0.5);
             box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
             opacity: 0;
-            transform: translateY(12px) scale(0.98);
-            animation: pillRise 0.55s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+            transform: translateY(10px);
+            animation: panelRise 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
 
-        .forecast-pill:nth-child(1) {
-            animation-delay: 0.05s;
+        .hour-panel:nth-child(1) { animation-delay: 0.18s; }
+        .hour-panel:nth-child(2) { animation-delay: 0.26s; }
+        .hour-panel:nth-child(3) { animation-delay: 0.34s; }
+        .hour-panel:nth-child(4) { animation-delay: 0.42s; }
+
+        .hour-time {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.66rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: var(--ink-muted);
         }
 
-        .forecast-pill:nth-child(2) {
-            animation-delay: 0.12s;
+        .hour-icon {
+            font-size: 1.5rem;
+            line-height: 1;
         }
 
-        .forecast-pill:nth-child(3) {
-            animation-delay: 0.19s;
+        .hour-odds {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--ink-soft);
         }
 
-        .forecast-pill:nth-child(4) {
-            animation-delay: 0.26s;
+        .day-bits {
+            margin: 0;
+            text-align: center;
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.74rem;
+            letter-spacing: 0.04em;
+            color: var(--ink-muted);
         }
 
-        .forecast-pill:nth-child(5) {
-            animation-delay: 0.33s;
+        @keyframes ribbonRise {
+            to {
+                opacity: 1;
+                transform: scaleX(1);
+            }
         }
 
-        .forecast-pill:nth-child(6) {
-            animation-delay: 0.40s;
+        @keyframes panelRise {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         body.yes .answer-card {
             box-shadow: 0 30px 70px rgba(86, 94, 196, 0.16);
         }
 
-        body.yes .answer-kicker,
-        body.yes .meta-chip:first-child,
-        body.yes .forecast-pill {
-            background: rgba(236, 237, 255, 0.74);
-        }
-
         body.maybe .answer-card {
             box-shadow: 0 30px 70px rgba(79, 123, 214, 0.14);
         }
 
-        body.maybe .answer-kicker,
-        body.maybe .meta-chip:first-child,
-        body.maybe .forecast-pill {
-            background: rgba(232, 244, 255, 0.74);
-        }
-
         body.no .answer-card {
             box-shadow: 0 30px 70px rgba(221, 138, 73, 0.16);
-        }
-
-        body.no .answer-kicker,
-        body.no .meta-chip:first-child,
-        body.no .forecast-pill {
-            background: rgba(255, 243, 219, 0.74);
-        }
-
-        .forecast-time {
-            font-size: 0.76rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--ink-muted);
-        }
-
-        .forecast-percent {
-            font-size: 1.45rem;
-            line-height: 1;
-            letter-spacing: 0;
-        }
-
-        .forecast-condition {
-            font-size: 0.92rem;
-            color: var(--ink-soft);
-            line-height: 1.35;
         }
 
         .error-actions {
@@ -2911,62 +2971,199 @@
             return pickRandom(RARE_SKY_ASIDES[answer] || RARE_SKY_ASIDES.MAYBE);
         }
 
+        // ===================================================================
+        // Visual rain forecast — gradient mood-bar + a likelihood curve on top,
+        // plus four glanceable panels (icon · time · odds).
+        // ===================================================================
+
+        // A rain probability (0-100) becomes a colour. Dry = warm sun gold,
+        // wet = cool rain blue, with a soft haze through the unsure middle.
+        // A gentle gamma keeps low values from flattening into one slab.
+        function rainColor(chance) {
+            const t = Math.max(0, Math.min(1, chance / 100));
+            const eased = Math.pow(t, 0.78);
+            if (eased < 0.35) {
+                // dry: warm gold -> soft haze
+                const k = eased / 0.35;
+                return mixColor([255, 209, 122], [205, 210, 228], k);
+            }
+            // damp -> soaked: haze -> rain blue
+            const k = (eased - 0.35) / 0.65;
+            return mixColor([205, 210, 228], [96, 144, 224], k);
+        }
+
+        function mixColor(a, b, k) {
+            const c = a.map((v, i) => Math.round(v + (b[i] - v) * k));
+            return `rgb(${c[0]}, ${c[1]}, ${c[2]})`;
+        }
+
+        // Condition + odds -> a friendly weather glyph for the panels.
+        function rainIcon(slot) {
+            const c = (slot.condition || '').toLowerCase();
+            if (/thunder|storm/.test(c)) return '⛈️';
+            if (/snow|sleet/.test(c)) return '🌨️';
+            if (/(^|\s)rain|shower/.test(c) || slot.chance >= 65) return '🌧️';
+            if (/drizzle/.test(c) || slot.chance >= 40) return '🌦️';
+            if (/fog|mist|haze/.test(c)) return '🌫️';
+            if (/cloud|overcast/.test(c) || slot.chance >= 20) return '⛅';
+            return '☀️';
+        }
+
+        // Pick four evenly spaced slots (e.g. Now, +2h, +4h, +5h) from the six.
+        function pickPanelSlots(slots) {
+            const list = (slots || []).slice(0, 6);
+            if (list.length <= 4) return list;
+            const idx = [0, 2, 4, list.length - 1];
+            return idx.map((i) => list[i]);
+        }
+
+        // One short, honest sentence derived from the data — when rain shows
+        // up and when it clears — instead of flowery filler.
+        function buildRainLine(answer, slots) {
+            if (!slots || !slots.length) {
+                return answer === 'NO' ? 'Looks clear out there.' : 'Keep an umbrella handy.';
+            }
+
+            const wet = slots.map((s) => s.chance >= 45);
+            const firstWet = wet.indexOf(true);
+            const lastWet = wet.lastIndexOf(true);
+
+            const whenWord = (i) => {
+                if (i <= 0) return 'right now';
+                if (i === 1) return 'within the hour';
+                return `around +${i}h`;
+            };
+
+            if (firstWet === -1) {
+                return 'Dry all the way through.';
+            }
+            if (wet[0] && wet[wet.length - 1]) {
+                return 'Wet most of the next few hours.';
+            }
+            if (wet[0]) {
+                return `Wet now, easing ${whenWord(lastWet + 1)}.`;
+            }
+            if (lastWet === wet.length - 1) {
+                return `Dry until ${whenWord(firstWet)}, then wet.`;
+            }
+            return `A wet patch ${whenWord(firstWet)}, dry after.`;
+        }
+
+        // Turn points into a smooth SVG path (Catmull-Rom -> cubic Bézier).
+        function smoothPath(pts) {
+            if (pts.length < 2) {
+                return pts.length ? `M${pts[0][0]} ${pts[0][1]}` : '';
+            }
+            let d = `M${pts[0][0]} ${pts[0][1]}`;
+            for (let i = 0; i < pts.length - 1; i++) {
+                const p0 = pts[i - 1] || pts[i];
+                const p1 = pts[i];
+                const p2 = pts[i + 1];
+                const p3 = pts[i + 2] || p2;
+                const c1x = p1[0] + (p2[0] - p0[0]) / 6;
+                const c1y = p1[1] + (p2[1] - p0[1]) / 6;
+                const c2x = p2[0] - (p3[0] - p1[0]) / 6;
+                const c2y = p2[1] - (p3[1] - p1[1]) / 6;
+                d += ` C${c1x.toFixed(2)} ${c1y.toFixed(2)}, ${c2x.toFixed(2)} ${c2y.toFixed(2)}, ${p2[0]} ${p2[1]}`;
+            }
+            return d;
+        }
+
+        // Gradient mood-bar + a rain-likelihood curve drawn over it, then
+        // four glanceable panels underneath (icon · time · odds).
+        function buildRainRibbon(slots) {
+            const list = (slots || []).slice(0, 6);
+            if (!list.length) {
+                return '<div class="rain-ribbon rain-ribbon--empty" aria-hidden="true"></div>';
+            }
+
+            // --- gradient bar (one band per hour) ---
+            const stops = list.map((slot, i) => {
+                const start = (i / list.length) * 100;
+                const end = ((i + 1) / list.length) * 100;
+                const color = rainColor(slot.chance);
+                return `${color} ${start}%, ${color} ${end}%`;
+            }).join(', ');
+
+            // --- likelihood curve (smooth Catmull-Rom spline over the bar) ---
+            const W = 100;
+            const H = 40;
+            const padTop = 5;
+            const padBot = 4;
+            const pts = list.map((slot, i) => {
+                const x = list.length === 1 ? W / 2 : (i / (list.length - 1)) * W;
+                const y = padTop + (1 - Math.max(0, Math.min(1, slot.chance / 100))) * (H - padTop - padBot);
+                return [Number(x.toFixed(2)), Number(y.toFixed(2))];
+            });
+            const linePath = smoothPath(pts);
+            const areaPath = `${linePath} L${W} ${H} L0 ${H} Z`;
+            const dots = pts.map((p) => `<circle cx="${p[0]}" cy="${p[1]}" r="1.6" class="curve-dot" />`).join('');
+
+            const curve = `
+                <svg class="rain-curve" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true">
+                    <path class="curve-area" d="${areaPath}" />
+                    <path class="curve-line" d="${linePath}" />
+                    ${dots}
+                </svg>`;
+
+            // --- four glanceable panels ---
+            const panelSlots = pickPanelSlots(list);
+            const panels = panelSlots.map((slot) => {
+                const odds = `${slot.chance}%`;
+                return `
+                    <div class="hour-panel" role="listitem">
+                        <span class="hour-time">${escapeHtml(slot.label)}</span>
+                        <span class="hour-icon" aria-hidden="true">${rainIcon(slot)}</span>
+                        <span class="hour-odds">${odds}</span>
+                    </div>`;
+            }).join('');
+
+            return `
+                <div class="rain-ribbon-wrap">
+                    <div class="ribbon-chart">
+                        <div class="rain-ribbon" style="background: linear-gradient(90deg, ${stops});" aria-hidden="true"></div>
+                        ${curve}
+                    </div>
+                    <div class="ribbon-scale" aria-hidden="true"><span>now</span><span>+6h</span></div>
+                    <div class="hour-panels" role="list" aria-label="Rain through the next six hours">${panels}</div>
+                </div>
+            `;
+        }
+
+        // Panels are static now; kept as a hook for future interactivity.
+        function bindRibbon() {}
+
         function renderAnswer(answer, weather) {
             setBodyState(answer.toLowerCase());
             content.removeAttribute('aria-busy');
 
             const label = ANSWER_LABELS[answer];
             const emoji = ANSWER_EMOJI[answer];
-            const vibeCopy = pickAnswerCopy(answer);
-            const rareAside = getRareSkyAside(answer);
-            const timestamp = new Date().toLocaleTimeString([], {
-                hour: 'numeric',
-                minute: '2-digit'
-            });
-            const updatedText = weather.observedAt
-                ? `Weather updated ${weather.observedAt} UTC`
-                : `Updated ${timestamp}`;
-
-            const upcomingMarkup = weather.upcoming.map((slot) => {
-                const precipNote = slot.precipMM > 0 ? ` · ${slot.precipMM.toFixed(1)}mm` : '';
-                return `
-                <div class="forecast-pill" role="listitem">
-                    <span class="forecast-time">${escapeHtml(slot.label)}</span>
-                    <strong class="forecast-percent">${slot.chance}%</strong>
-                    <span class="forecast-condition">${escapeHtml(slot.condition || 'Clear')}${precipNote}</span>
-                </div>
-            `;
-            }).join('');
+            const rainLine = buildRainLine(answer, weather.upcoming);
+            const charm = pickAnswerCopy(answer);
+            const ribbonMarkup = buildRainRibbon(weather.upcoming);
+            const dayBits = [escapeHtml(weather.condition), escapeHtml(weather.tempC)]
+                .filter((bit) => bit && bit !== '--')
+                .join(' · ');
 
             content.innerHTML = `
                 <section class="card answer-card" aria-labelledby="answerTitle">
                     <div class="result-header">
                         <div class="answer-wrap">
                             <p class="location"><span aria-hidden="true">📍</span> ${escapeHtml(weather.location.label)}</p>
-                            <span class="answer-kicker">Umbrella verdict</span>
                             <h1 class="answer" id="answerTitle" aria-label="Umbrella verdict: ${escapeHtml(label)}">
                                 <span class="answer-icon-wrap" aria-hidden="true"><span class="answer-icon">${emoji}</span></span>
                                 <span class="answer-word">${label}</span>
                             </h1>
-                            <p class="result-copy">${escapeHtml(vibeCopy)}</p>
-                            <p class="sky-stamp">Window weather club</p>
+                            <p class="result-copy">${escapeHtml(rainLine)}</p>
+                            <p class="result-charm">${escapeHtml(charm)}</p>
                         </div>
                         <div class="weather-scene-wrap">
                             ${getSkyButtonMarkup(answer.toLowerCase())}
                         </div>
                     </div>
-                    <div class="result-meta">
-                        <span class="meta-chip">Next ${weather.windowHours} hours</span>
-                        <span class="meta-chip meta-chip--muted">${escapeHtml(weather.sourceNote)}</span>
-                    </div>
-                    <div class="details">
-                        <p class="detail-main">${weather.precipChance}% umbrella odds · ${escapeHtml(weather.condition)} · ${escapeHtml(weather.tempC)}°C</p>
-                        <p class="detail-secondary">${escapeHtml(weather.headline)} · ${escapeHtml(updatedText)}</p>
-                        ${rareAside ? `<p class="sky-aside">${escapeHtml(rareAside)}</p>` : ''}
-                    </div>
-                    <div class="forecast-strip" role="list" aria-label="Upcoming forecast windows">
-                        ${upcomingMarkup}
-                    </div>
+                    ${ribbonMarkup}
+                    ${dayBits ? `<p class="day-bits">${dayBits}</p>` : ''}
                     <div class="actions-row">
                         <button class="ghost-button" id="checkAgainButton" type="button">Check again</button>
                         <button class="utility-button" id="manualAgainButton" type="button">Try another city</button>
@@ -2974,7 +3171,7 @@
                 </section>
             `;
             announceStatus(
-                `Umbrella verdict: ${label}. ${vibeCopy} ${weather.precipChance}% umbrella odds. ${weather.headline}`,
+                `Umbrella verdict: ${label}. ${rainLine}`,
             );
 
             document.getElementById('checkAgainButton').addEventListener('click', (event) => {
@@ -2989,10 +3186,10 @@
                 });
             });
 
-            personalizeStamp(content.querySelector('.sky-stamp'));
             addWordMotion(content.querySelector('.answer-word'));
             addWordMotion(content.querySelector('.result-copy'));
             bindSkyButton(document.querySelector('.sky-button'));
+            bindRibbon(content);
             attachSkyReactivity();
             sounds[answer.toLowerCase()]();
             triggerSparkles(answer.toLowerCase());
