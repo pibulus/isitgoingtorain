@@ -943,9 +943,21 @@
         }
 
         .location {
+            display: flex;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.4rem 0.7rem;
             font-size: 1rem;
             font-weight: 600;
             color: var(--ink-soft);
+        }
+
+        .location-now {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.72rem;
+            font-weight: 400;
+            letter-spacing: 0.04em;
+            color: var(--ink-muted);
         }
 
         .answer {
@@ -1149,15 +1161,6 @@
             font-size: 0.82rem;
             font-weight: 600;
             color: var(--ink-soft);
-        }
-
-        .day-bits {
-            margin: 0;
-            text-align: center;
-            font-family: 'IBM Plex Mono', monospace;
-            font-size: 0.74rem;
-            letter-spacing: 0.04em;
-            color: var(--ink-muted);
         }
 
         @keyframes ribbonRise {
@@ -3005,12 +3008,12 @@
 
             return `
                 <div class="rain-ribbon-wrap">
+                    <div class="hour-panels" role="list" aria-label="Rain through the next six hours">${panels}</div>
                     <div class="ribbon-chart">
                         <div class="rain-ribbon" style="background: linear-gradient(90deg, ${stops});" aria-hidden="true"></div>
                         ${curve}
                     </div>
                     <div class="ribbon-scale" aria-hidden="true"><span>now</span><span>+6h</span></div>
-                    <div class="hour-panels" role="list" aria-label="Rain through the next six hours">${panels}</div>
                 </div>
             `;
         }
@@ -3035,7 +3038,10 @@
                 <section class="card answer-card" aria-labelledby="answerTitle">
                     <div class="result-header">
                         <div class="answer-wrap">
-                            <p class="location"><span aria-hidden="true">📍</span> ${escapeHtml(weather.location.label)}</p>
+                            <p class="location">
+                                <span class="location-place"><span aria-hidden="true">📍</span> ${escapeHtml(weather.location.label)}</span>
+                                ${dayBits ? `<span class="location-now">${dayBits}</span>` : ''}
+                            </p>
                             <h1 class="answer" id="answerTitle" aria-label="Umbrella verdict: ${escapeHtml(label)}">
                                 <span class="answer-icon-wrap" aria-hidden="true"><span class="answer-icon">${emoji}</span></span>
                                 <span class="answer-word">${label}</span>
@@ -3048,28 +3054,11 @@
                         </div>
                     </div>
                     ${ribbonMarkup}
-                    ${dayBits ? `<p class="day-bits">${dayBits}</p>` : ''}
-                    <div class="actions-row">
-                        <button class="ghost-button" id="checkAgainButton" type="button">Check again</button>
-                        <button class="utility-button" id="manualAgainButton" type="button">Try another city</button>
-                    </div>
                 </section>
             `;
             announceStatus(
                 `Umbrella verdict: ${label}. ${rainLine}`,
             );
-
-            document.getElementById('checkAgainButton').addEventListener('click', (event) => {
-                triggerTapBurst(event);
-                startCheck(lastLookup);
-            });
-            document.getElementById('manualAgainButton').addEventListener('click', (event) => {
-                triggerTapBurst(event);
-                renderIntro({
-                    manualOpen: true,
-                    city: lastManualCity || weather.location.city
-                });
-            });
 
             addWordMotion(content.querySelector('.answer-word'));
             addWordMotion(content.querySelector('.result-copy'));
