@@ -1,4 +1,4 @@
-const CACHE_NAME = 'isitgoingtorain-shell-v7';
+const CACHE_NAME = 'isitgoingtorain-shell-v8';
 const OFFLINE_URL = '/index.html';
 
 const CORE_ASSETS = [
