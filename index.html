@@ -3082,9 +3082,6 @@
             `;
         }
 
-        // Panels are static now; kept as a hook for future interactivity.
-        function bindRibbon() {}
-
         function renderAnswer(answer, weather) {
             setBodyState(answer.toLowerCase());
             content.removeAttribute('aria-busy');
@@ -3127,7 +3124,6 @@
             addWordMotion(content.querySelector('.answer-word'));
             addWordMotion(content.querySelector('.result-copy'));
             bindSkyButton(document.querySelector('.sky-button'));
-            bindRibbon(content);
             attachSkyReactivity();
             sounds[answer.toLowerCase()]();
             triggerSparkles(answer.toLowerCase());
