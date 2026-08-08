@@ -1,4 +1,4 @@
-const CACHE_NAME = 'isitgoingtorain-shell-v11';
+const CACHE_NAME = 'isitgoingtorain-shell-v12';
 const OFFLINE_URL = '/index.html';
 
 const CORE_ASSETS = [
@@ -11,7 +11,7 @@ const CORE_ASSETS = [
     '/apple-touch-icon.png',
     '/icon-192.png',
     '/icon-512.png',
-    '/icon-maskable-512.png',
+    '/icon-512-maskable.png',
     '/og-image.png',
     '/screenshot-mobile.png',
     '/screenshot-wide.png'

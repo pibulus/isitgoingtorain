@@ -1,14 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title desc">
-  <title id="title">Is it going to rain? icon</title>
-  <desc id="desc">A soft rounded square with an umbrella emoji.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="bg" x1="0%" x2="100%" y1="0%" y2="100%">
-      <stop offset="0%" stop-color="#fff0e2"/>
-      <stop offset="50%" stop-color="#ffe2f1"/>
-      <stop offset="100%" stop-color="#e6efff"/>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#7fd5c5"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="132" fill="url(#bg)"/>
-  <rect x="18" y="18" width="476" height="476" rx="114" fill="none" stroke="#111322" stroke-opacity="0.08"/>
-  <text x="50%" y="56%" text-anchor="middle" dominant-baseline="middle" font-size="248">☔</text>
+  <path d="M240,126.63A112.21,112.21,0,0,0,128,24h0A112.21,112.21,0,0,0,16.05,126.63,16,16,0,0,0,32,144h88v56a32,32,0,0,0,64,0,8,8,0,0,0-16,0,16,16,0,0,1-32,0V144h88a16,16,0,0,0,16-17.37ZM32,128a96.15,96.15,0,0,1,76.2-85.89C96.48,58,81.85,86.11,80.17,128H32Zm143.83,0c-1.68-41.89-16.31-70-28-85.94A96.07,96.07,0,0,1,224,128Z" fill="url(#g)" stroke="#1e1714" stroke-width="20" stroke-linejoin="round" paint-order="stroke"/>
 </svg>
